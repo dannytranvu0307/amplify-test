@@ -9,8 +9,6 @@ const Table = ({tableData})=>{
     const { t } = useTranslation();
     const dispatch = useDispatch()
 
-  console.log(tableData )
-
     const renderTable = () => {
         const table = [];
         for (let i = 0; i < (8-tableData.length); i++) {
@@ -35,7 +33,6 @@ const Table = ({tableData})=>{
         },withCredentials: true
       } )
       .then(response => {
-        console.log(response.data)
         dispatch(authenticate())
      
       })

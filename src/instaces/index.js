@@ -48,7 +48,6 @@ export const start = {
     name:"start",
     type: "text",
     htmlFor: "start",
-    required: true,
 }
 
 export const goal = {
@@ -57,7 +56,6 @@ export const goal = {
     name:"goal",
     type: "text",
     htmlFor: "goal",
-    required: true,
 }
 export const via = {
     id:"via",
@@ -65,7 +63,6 @@ export const via = {
     name:"via",
     type: "text",
     htmlFor: "via",
-    required: true,
 }
 
 export const new_password = {
@@ -75,7 +72,6 @@ export const new_password = {
         type: "password",
         htmlFor: "password",
         placeholder: "password_pla",
-        required: true,
     }
 //  export const confirm_password = 
 //     {

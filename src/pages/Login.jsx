@@ -16,12 +16,12 @@ function Login(){
     
     // change language
     const { t } = useTranslation();
-
     // message store
     const error = useSelector(selectErrorLogin);
     const isActiveMessage= useSelector(selectIsActiveMessage)
     const isActiveError = useSelector(selectActiveError)
     const isActive = useSelector(selectIsActive)
+    console.log(isActive)
 
     // input elements
     const inputs = [{...email,type:'text'}, password]
@@ -51,7 +51,6 @@ function Login(){
         const submitEmail = $("input#email")
         const submitPassword = $("input#password")
         const formSubmit = $("#login")
-
         // pass or not
         if (ValidatorSubmit(formSubmit,[submitEmail,submitPassword])){
             dispatch(login({...form, ["remember"]:remember}))
@@ -59,11 +58,12 @@ function Login(){
             .then(res=>{
                 if (res.status !== 401){
                     dispatch(authenticate())
-                    .unwrap()
                 }})}
     }
 
     return (
+        <>
+       
         <section 
         data-aos="fade-right"
         data-aos-offset="3"
@@ -118,9 +118,11 @@ function Login(){
                 </div>
             </div>
             </div>
-          {isActive&&  <ErrorNotification>{isActiveMessage}</ErrorNotification>}
-        {isActiveError &&  <Modal />}
-    </section>
+       
+        </section>  
+        {isActive &&  <ErrorNotification>{isActiveMessage}</ErrorNotification>}
+        {isActiveError && <Modal />}
+    </>
     )
 }
 export default Login

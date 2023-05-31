@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next";
 function SearchResult({search,data ,onPrice , isOn}){
-  console.log(search)
     
     const{t}=useTranslation()
     const [selectedObject, setSelectedObject] = useState(null);

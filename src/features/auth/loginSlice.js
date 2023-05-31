@@ -143,13 +143,15 @@ const authSlice = createSlice({
             state.checkPass = false
         }),
         builder.addCase(login.fulfilled, (state,action)=> {
-            console.log(action.payload)
             if(action.payload.status === 200){
                 state.error = null
                 state.errorLogin = null
                 state.isAuthenticated = true
             }else if (action.payload.status === 401){
                 state.errorLogin = 'Unauthorized'
+            }
+            else if (action.payload.status === 400){
+                state.errorLogin = 'ActiveError'
             }
         }),
 
@@ -180,6 +182,7 @@ const authSlice = createSlice({
             if(action.payload.status === 200){
                 state.isLoading = false
                 state.isSuccess = true
+                state.registerError = null
             }else if (action.payload.status === 400){
                 state.isLoading = false
                 state.registerError = 'API002_ER'
@@ -192,6 +195,7 @@ const authSlice = createSlice({
             state.isLoading = true
         }),
         builder.addCase(verify.fulfilled, (state, action)=>{
+            console.log(action.payload)
             if(action.payload.status === 200){
                 state.isLoading = false
                 state.isActive = true

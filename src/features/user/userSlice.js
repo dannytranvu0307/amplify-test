@@ -10,7 +10,6 @@ export const userUpdate = createAsyncThunk(
             const response = await axios.put(`${baseURL}/users`,form,{withCredentials: true})
             return response
         }catch(err){
-            console.log(err.response)
             return err.response
         }
     }
@@ -26,7 +25,6 @@ const userSlice = createSlice({
             state.updateMessage = null
         }),
         builder.addCase(userUpdate.fulfilled, (state,action)=> {
-            console.log(action.payload)
             if(action.payload.status === 200){
                 state.updateSuccess = true
                 state.updateMessage = null

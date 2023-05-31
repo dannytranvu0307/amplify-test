@@ -65,7 +65,6 @@ function App() {
                         {/* <Route path='/verify?verifyCode=:verifyCode' element={<Active />} /> */}
                         <Route path='/verify/:verifyCode' element={<Active />} />
                         <Route path='/*' element={<Navigate to="/login"/>} />
-
                       </>
                       )}
                   </Routes>

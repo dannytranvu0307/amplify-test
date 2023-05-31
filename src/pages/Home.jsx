@@ -24,7 +24,6 @@ function Home() {
     const [isOn, setIsOn] = useState(true);
     const dispatch = useDispatch()
     const [warning , setWarning ]= useState('');
-     console.log(warning)
 
 
     const  user= useSelector(state =>state.login.user)
@@ -93,7 +92,7 @@ function Home() {
       const base64 = await convertToBase64(file);
       base64Images.push({name:file.name,fileURL:base64});
     } catch (error) {
-      console.error('Error converting file to base64:', error);
+      return error
     }
   }
       setImage([...image,...base64Images])
@@ -102,7 +101,6 @@ function Home() {
             };
           try { const dataJSON = JSON.stringify(data);
             localStorage.setItem('imageData', dataJSON);
-            console.log('Data saved to localStorage.');
           } catch (error) {
             console.error('Error saving data to localStorage:', error);
           }
@@ -120,7 +118,6 @@ function Home() {
     
         const dataJSON = JSON.stringify(data);
         localStorage.setItem('imageData', dataJSON);
-        console.log('Data saved to localStorage.');
       } catch (error) {
         console.error('Error saving data to localStorage:', error);
       }

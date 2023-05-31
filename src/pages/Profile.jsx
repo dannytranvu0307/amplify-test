@@ -1,4 +1,5 @@
-import { useState, useMemo, memo, useEffect } from "react";
+import { useState, memo, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { fullName, email, department, password, start, goal } from '../instaces';
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, authenticate } from "../features/auth/loginSlice";
@@ -9,6 +10,7 @@ import { baseURL } from "../features/auth/loginSlice";
 import axios from "axios";
 import FormInput from "../components/FormInput";
 import ValidatorSubmit from "../functional/ValidatorSubmit";
+import Validators from "../functional/Validators";
 
 
 const Profile = () => {
@@ -34,7 +36,8 @@ const Profile = () => {
     const inputTickets = [start, goal]
 
     //  password update instances
-    const passwords = [{
+    const passwords = [
+        {
             id: "current_password",
             label: "current_password",
             name: "current_password",
@@ -164,6 +167,7 @@ const Profile = () => {
     // onclick change state mount btn
     const handleToggleTicket = () => {
         setMounted(!mounted)
+        setCommuterPass({...commuterPass,start:"",goal:""})
     }
 
     // submit to search commuter pass 
@@ -201,12 +205,14 @@ const Profile = () => {
         const formSubmit = $('#profile')
         const eName =  document.querySelector("#fullName")
         const eDepartmentId =  document.querySelector("#departmentId")
-
         const eOldPassword =  document.querySelector("#current_password")
         const eNewPassword =  document.querySelector("#new_password")
         const eConfirmNewPassword=  document.querySelector("#confirm_new_password")
+        const eGoal =  document.querySelector("#start")
+        const eStart=  document.querySelector("#goal")
         const { departmentId, fullName, email, current_password, new_password, confirm_new_password,...userData } = form
-        if (ValidatorSubmit(formSubmit, [eName, eDepartmentId, eOldPassword, eNewPassword, eConfirmNewPassword]))
+        if (
+            (formSubmit, [eName, eDepartmentId, eOldPassword, eNewPassword, eConfirmNewPassword,eGoal,eStart]))
             dispatch(userUpdate({
                 fullName: fullName,
                 email: email,
@@ -217,7 +223,11 @@ const Profile = () => {
                     departure:commuterPass.start, 
                     destination:commuterPass.goal, 
                     viaDetails: commuterPass.viaDetails}
-            }));
+            })).unwrap().then(res=>{
+                if(res.status === 200){
+                    dispatch(authenticate())
+                }
+            })
     }
 
     return (
@@ -229,9 +239,9 @@ const Profile = () => {
                             {t("profile")}
                         </h1>
                         <div className="flex">
-                            <form id="profile" className="flex flex-wrap min-w-[500px]" onSubmit={e => onSubmit(e)}>
-                                <div className="flex flex-col  w-full flex-none">
-                                    <div className="relative mt-6">
+                            <form className="flex flex-wrap min-w-[500px]" onSubmit={e => onSubmit(e)}>
+                                {/* <div className="flex flex-col  w-full flex-none"> */}
+                                    <div id="profile" className="relative mt-6 flex flex-col  w-full flex-none">
                                         <FormInput onChange={(e) => onChange(e)} value={form.fullName} {...infor[0]} />
                                         {disabledName && <svg onClick={() => setDisabledname(false)} fill="none" viewBox="0 0 24 24"
                                             strokeWidth={1.5} stroke="currentColor"
@@ -246,11 +256,11 @@ const Profile = () => {
                                             </svg>}
                                         </div>
                                         <div className="relative mt-6">
-                                            <FormInput value={form.email} {...infor[2]} />
+                                            <FormInput  onChange={(e) => onChange(e)} value={form.email} {...infor[2]} />
                                         </div>
                                         {disabledPassWord ?
                                             <div className="relative mt-6">
-                                                <FormInput {...infor[3]} />
+                                                <FormInput value="" onChange={(e) => onChange(e)}  {...infor[3]} />
                                                 <svg onClick={() => setDisabledPassword(false)} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
                                                     className="w-6 h-6 absolute right-0 top-0 translate-y-[35px]  cursor-pointer mr-2 hover:text-gray-600">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
@@ -274,12 +284,12 @@ const Profile = () => {
                                             </div>)
                                         }
                                     </div>
-                                </div>
+                                {/* </div> */}
                             </form>
                             <div id="computerPass" className="flex flex-wrap" >
-                                <div className="ml-6 mt-6 flex-1">
+                                <div className="ml-6 flex-1">
                                     <span
-                                        className="flex mb-2 text-sm font-medium text-gray-900 grow-0 items-end">
+                                        className="flex mb-2 text-lg font-medium text-gray-900 grow-0 items-end">
                                         {t("reason_ticket")}
                                     </span>
                                     {mounted ? (
@@ -312,17 +322,15 @@ const Profile = () => {
                                                 </div>
                                             </div>
                                     ) : (
-                                        <>
-                                            <div className="relative">
-                                                <svg onClick={handleToggleTicket} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor"
-                                                    className="w-5 h-5 hover:cursor-pointer hover:text-gray-500 absolute flex ml-auto top-0 right-0">
+                                        <div id="searchTrain" className="relative">
+                                            <svg onClick={handleToggleTicket} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor"
+                                                    className="w-5 h-5 hover:cursor-pointer hover:text-gray-500 absolute flex ml-auto -top-10 right-0">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
+                                            </svg>
+                                            <div className="relative">
                                                 <div className="flex justify-between space-x-[20px]" id="ReasonTicket">
                                                     <div className="relative">
                                                         <FormInput value={commuterPass.start} onChange={e => onChangeStation(e)} {...inputTickets[0]} />
-
-                                                        {/* <SearchCommuterPass name="start" setPoint={setStartPoint} onSuggestion={setStartSuggestion} value={commuterPass.start}/> */}
                                                         <div className="absolute bg-white rounded drop-shadow-lg">
                                                             {startSuggestion.map((item, i) => (
                                                                 <p className="px-2 py-1 duration-100 
@@ -341,9 +349,7 @@ const Profile = () => {
 
 
                                                     <div className="relative">
-                                                        <FormInput value={commuterPass.goal} onChange={e => onChangeStation(e)} {...inputTickets[1]} />
-
-                                                        {/* <SearchCommuterPass name="goal" setPoint={setGoalPoint} onSuggestion={setGoalSuggestion} value={commuterPass.goal} /> */}
+                                                        <FormInput value={commuterPass.goal}  onChange={e => onChangeStation(e)} {...inputTickets[1]} />
                                                         <div className="absolute bg-white rounded drop-shadow-lg">
                                                             {goaltSuggestion.map((item, i) => (
                                                                 <p className="px-2 py-1 duration-100 
@@ -362,7 +368,7 @@ const Profile = () => {
                                                     </div>
                                                 </div>
                                                 <button
-                                                    onClick={onSubmitSearch}
+                                                   onClick={e =>onSubmitSearch(e)} 
                                                     className="my-4 flex text-white bg-primary-600 mx-auto hover:bg-primary-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">{t("search")}</button>
                                             </div>
                                             <div className="space-y-3">
@@ -382,22 +388,22 @@ const Profile = () => {
                                                             <span className="pointer-events-none flex my-auto ">{item.summary.goal.stationName}</span>
                                                             <span className="pointer-events-none flex my-auto pl-3 ml-auto">{t("transfer")}：{item.summary.move.transitCount}{t('times')}</span>
                                                         </div>
-                                                        <div className="absolute flex flex-col hidden group-hover:block z-99 bg-white drop-shadow-lg px-3 py-2 rounded">
+                                                        <div className="absolute flex flex-col hidden group-hover:block z-99 bg-white drop-shadow-lg rounded max-h-[150px] overflow-y-auto">
                                                             {item.sections.map((e, i) => {
                                                                 if (e.type === "move" && e.transport) {
-                                                                    return <div key={i} className="pointer-events-none flex my-auto after:px-1"><span  className="border border-2 rounded mx-2" style={{borderColor: e.transport.lineColor}}></span>{e.transport.lineName}</div>
+                                                                    return <div key={i} style={{color: e.transport.lineColor}} className="pointer-events-none px-3 flex my-auto after:px-1"><span  className="border border-2 rounded mx-2" style={{borderColor: e.transport.lineColor}}></span >{e.transport.lineName}</div>
                                                                 } else if (e.type === "point") {
-                                                                    return <div key={i} className="pointer-events-none flex my-auto after:px-1">{e.stationName}</div>
+                                                                    return <div key={i} className="sticky px-3 py-2 top-0 bg-gray-50 pointer-events-none flex my-auto after:px-1">{e.stationName}</div>
                                                                 }
                                                                 else {
-                                                                    return <spanp className="text-gray-500 border border-2 rounded mx-2"></spanp>
+                                                                    return <spanp className="text-gray-500  border border-2 rounded mx-2"></spanp>
                                                                 }
                                                             })}
                                                         </div>
                                                     </div>
                                                 ))}
                                             </div>
-                                        </>
+                                        </div>
                                     )}
                                 </div>
                             </div>
@@ -405,10 +411,10 @@ const Profile = () => {
                     </div>
                 </div>
                 <div className="w-full px-8 mb-4 mt-20 flex col-span-2 justify-between">
-                    <button
-                        type="submit"
+                    <Link
+                       to="/"
                         className="w-auto text-white bg-primary-600 hover:bg-primary-500 focus:ring-4 focus:outline-none  focus:ring-primary-300 font-medium rounded-lg  text-sm px-5 py-2.5 text-center ">
-                        {t("cancel")}</button>
+                        {t("cancel")}</Link>
                     <button
                         onClick={e => onSubmit(e)}
                         type="submit"
