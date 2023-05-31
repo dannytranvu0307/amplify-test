@@ -7,7 +7,6 @@ function Validators (formId,options,value){
     const regex_name_vietnamese = /^[A-Z ]{1,}[A-Z]$/m;
     const regex_password = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W){8,24}/g; //regex cần có dấu kí tự đặt biệt
     const regex_japanese = /^[ぁ-んァ-ヶｱ-ﾝﾞﾟ一-龠ー]*$/g
-    console.log(options)
     if (formId){
         if (options.name === "fullName"){
             if (value === ""){

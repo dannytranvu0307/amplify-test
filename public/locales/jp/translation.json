@@ -121,5 +121,8 @@
     "D16": "採用",
     "D17": "経理・会計ー財務部",
     "warning":"各項目は選択または入力必須です。",
-    "oldPasswordNotMatch":"現在のパスワードが正しくありません。"
+    "oldPasswordNotMatch":"現在のパスワードが正しくありません。",
+    "requiredSearchBtn":"検索ボタンをクリックてください。",
+    "requiredChoose":"該当する項目を選択してください。"
+
 }

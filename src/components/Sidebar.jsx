@@ -104,7 +104,6 @@ const Sidebar = () => {
                                             hover:bg-gradient-to-r from-cyan-200 to-blue-300 flex  
                                             duration-300
                                             `}>
-                                                {/*                                               */}
                                                 <>
                                                     {item.icon}
                                                 </>
