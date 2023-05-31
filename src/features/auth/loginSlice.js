@@ -151,7 +151,7 @@ const authSlice = createSlice({
                 state.errorLogin = 'Unauthorized'
             }
             else if (action.payload.status === 400){
-                state.errorLogin = 'ActiveError'
+                state.errorLogin = 'Unauthorized'
             }
         }),
 
