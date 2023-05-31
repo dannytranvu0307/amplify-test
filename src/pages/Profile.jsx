@@ -3,14 +3,13 @@ import { Link } from "react-router-dom";
 import { fullName, email, department, password, start, goal } from '../instaces';
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, authenticate } from "../features/auth/loginSlice";
-import { userUpdate, selectUpdateSuccess,setNullMessage } from "../features/user/userSlice";
+import { userUpdate, selectUpdateSuccess, selectUpdateMessage } from "../features/user/userSlice";
 import { useTranslation } from 'react-i18next';
 import ErrorNotification from "../components/ErrorNotification";
 import { baseURL } from "../features/auth/loginSlice";
 import axios from "axios";
 import FormInput from "../components/FormInput";
 import ValidatorSubmit from "../functional/ValidatorSubmit";
-import Validators from "../functional/Validators";
 
 
 const Profile = () => {
@@ -26,6 +25,7 @@ const Profile = () => {
     const [lstCp, setLstCp] = useState([])
     // user ticket mount or not
     const [mounted, setMounted] = useState(true);
+    const [checkTicket, setCheckTicket] = useState(true);
 
     // user infor state [dependences ①]
     const infor = [
@@ -82,6 +82,7 @@ const Profile = () => {
     })
     // update success message state
     const isSuccess = useSelector(selectUpdateSuccess);
+    const message = useSelector(selectUpdateMessage);
     // form input for user infomation
     const [form, setForm] = useState({});
 
@@ -93,13 +94,10 @@ const Profile = () => {
     // set init value for user and input form
     useEffect(() => {
         if (user) {
-            setForm({
+            setForm({...form,
                 fullName: user.fullName,
                 departmentId: user.department.departmentId,
                 email: user.email,
-                current_password: null,
-                new_password: null,
-                confirm_new_password: null,
             });
             if (user.commuterPass) {
                 setCommuterPass({
@@ -109,7 +107,6 @@ const Profile = () => {
                 })
             }
         }
-        return ()=>dispatch(setNullMessage())
     }, [user])
 
     // side effect proccess
@@ -117,10 +114,6 @@ const Profile = () => {
         dispatch(authenticate())
     }, [])
 
-    // value start and goal point was changed will be call api
-
-    useEffect(()=>{
-    },[mounted])
 
     const ApiSearchStation = async (name, value) => {
         try {
@@ -129,19 +122,11 @@ const Profile = () => {
                 setStartSuggestion([...res.data.data])
             } else {
                 setGoalSuggestion([...res.data.data])
-                
             }
         } catch (err) {
-            console.log(err.response)
+            return err.response
         }
     }
-
-    useEffect(() => {
-        // if(mounted)
-        // {
-
-        // }
-    }, [mounted])
 
     const handleStartPoint = (stationCode, stationName) => {
         setStartPoint({ stationCode: stationCode, stationName: stationName })
@@ -169,8 +154,12 @@ const Profile = () => {
 
     // onclick change state mount btn
     const handleToggleTicket = () => {
-        setMounted(prev=>!prev)
-
+        setCheckTicket(true)
+        setMounted(!mounted)
+        setLstCp([])
+        if (!mounted){
+            setCommuterPass({...commuterPass, start:commuterPass.start, goal:commuterPass.goal})
+        }
     }
 
     // submit to search commuter pass 
@@ -179,11 +168,11 @@ const Profile = () => {
             const res = await axios.get(`${baseURL}/cp-routes?start=${startPoint.stationCode}&goal=${goaltPoint.stationCode}`,{withCredentials: true})
             setLstCp(res.data.data)
         } catch (err) {
-            console.log(err)
+            return err.response
         }
     }
 
-
+    // select item
     const handleUpdateItem = (e,start_,goal_,links_ ) => {
         setCommuterPass({start:start_,goal:goal_, viaDetails:links_})
         const Elements = document.querySelectorAll('div.divCp')
@@ -197,8 +186,18 @@ const Profile = () => {
 
     // update commuter pass value start and goal
     const onChangeStation = e => {
-        setCommuterPass({ ...commuterPass, [e.target.name]: e.target.value })
-        ApiSearchStation(e.target.name,e.target.value)
+            setCheckTicket(false)
+            setCommuterPass({ ...commuterPass, [e.target.name]: e.target.value })
+            ApiSearchStation(e.target.name,e.target.value)
+            if (e.target.value === ""){
+                setStartSuggestion([])
+                setGoalSuggestion([])
+            }
+        }
+    if (!checkTicket || commuterPass.viaDetails !== undefined){
+        console.log(2)
+    }else{
+        console.log()
     }
 
     // submit all record on form
@@ -211,11 +210,11 @@ const Profile = () => {
         const eOldPassword =  document.querySelector("#current_password")
         const eNewPassword =  document.querySelector("#new_password")
         const eConfirmNewPassword=  document.querySelector("#confirm_new_password")
-        const eGoal =  document.querySelector("#start")
-        const eStart=  document.querySelector("#goal")
+
+ 
         const { departmentId, fullName, email, current_password, new_password, confirm_new_password,...userData } = form
-        if (
-            (formSubmit, [eName, eDepartmentId, eOldPassword, eNewPassword, eConfirmNewPassword,eGoal,eStart]))
+        if (ValidatorSubmit(formSubmit, [eName, eDepartmentId, eOldPassword, eNewPassword, eConfirmNewPassword]))
+  
             dispatch(userUpdate({
                 fullName: fullName,
                 email: email,
@@ -229,8 +228,7 @@ const Profile = () => {
             })).unwrap().then(res=>{
                 if(res.status === 200){
                     dispatch(authenticate())
-                    .unwrap().then(()=>setMounted(!mounted))
-
+                    .unwrap().then(()=>setMounted(true))
                 }
             })
     }
@@ -270,7 +268,9 @@ const Profile = () => {
                                                     className="w-6 h-6 absolute right-0 top-0 translate-y-[35px]  cursor-pointer mr-2 hover:text-gray-600">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                                 </svg>
-                                            </div> : (<div className="relative">
+                                            </div> : (
+                                                <>
+                                            <div className="relative">
                                                 <div className="relative  mt-6" >
                                                     <FormInput onChange={(e) => onChange(e)} value={form.current_password}  {...passwords[0]} />
                                                 </div>
@@ -286,9 +286,11 @@ const Profile = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
                                                     </svg>
                                                 </div>
-                                            </div>)
+                                               
+                                            </div> <span className="text-red-500  pt-8 text-xs">{message && t(message)}</span></>)
                                         }
                                     </div>
+                                    
                                 {/* </div> */}
                             </form>
                             <div id="computerPass" className="flex flex-wrap" >
@@ -333,12 +335,13 @@ const Profile = () => {
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                                             </svg>
                                             <div className="relative">
-                                                <div className="flex justify-between space-x-[20px]" id="ReasonTicket">
+                                                <div className="flex justify-between space-x-5" id="ReasonTicket">
                                                     <div className="relative">
                                                         <FormInput value={commuterPass.start} onChange={e => onChangeStation(e)} {...inputTickets[0]} />
-                                                        <div className="absolute bg-white rounded drop-shadow-lg">
+                                        
+                                                            <div className="absolute bg-white w-full rounded drop-shadow-lg">
                                                             {startSuggestion.map((item, i) => (
-                                                                <p className="px-2 py-1 duration-100 
+                                                                <p className="px-2 py-1  duration-100 
                                                         transision-all cursor-pointer 
                                                         hover:bg-blue-200
                                                         last:rounded-b
@@ -349,13 +352,15 @@ const Profile = () => {
                                                                 </p>
                                                             ))}
                                                         </div>
+                                                     
+                                                        
 
                                                     </div>
 
 
                                                     <div className="relative">
                                                         <FormInput value={commuterPass.goal}  onChange={e => onChangeStation(e)} {...inputTickets[1]} />
-                                                        <div className="absolute bg-white rounded drop-shadow-lg">
+                                                        <div className="absolute bg-white w-full rounded drop-shadow-lg">
                                                             {goaltSuggestion.map((item, i) => (
                                                                 <p className="px-2 py-1 duration-100 
                                                             transision-all cursor-pointer 
@@ -415,7 +420,7 @@ const Profile = () => {
                         </div>
                     </div>
                 </div>
-                <div className="w-full px-8 mb-4 mt-20 flex col-span-2 justify-between">
+                <div className="w-full px-8 mb-4 mt-4 flex col-span-2 justify-between">
                     <Link
                        to="/"
                         className="w-auto text-white bg-primary-600 hover:bg-primary-500 focus:ring-4 focus:outline-none  focus:ring-primary-300 font-medium rounded-lg  text-sm px-5 py-2.5 text-center ">

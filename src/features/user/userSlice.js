@@ -5,7 +5,6 @@ import { baseURL } from "../auth/loginSlice";
 export const userUpdate = createAsyncThunk(
     'user/userUpdate',
     async (form) => {
-        console.log(form)
         try {
             const response = await axios.put(`${baseURL}/users`,form,{withCredentials: true})
             return response
@@ -19,20 +18,18 @@ export const userUpdate = createAsyncThunk(
 const userSlice = createSlice({
     name:'user',
     initialState: { updateSuccess: false, updateMessage: null },
-    reducers:{
-        setNullMessage: (state) => {
-            state.updateSuccess = false
-        }
-    },
     extraReducers:(builder) =>  {
         builder.addCase(userUpdate.pending, (state)=> {
             state.updateSuccess = false
             state.updateMessage = null
         }),
         builder.addCase(userUpdate.fulfilled, (state,action)=> {
-            if(action.payload.status === 200){
+            console.log(action.payload)
+            if(action.payload.status === 200 &&  action.payload.data.type ==="ERROR" && action.payload.data.message === "Old password is not match"){
+                state.updateSuccess = false
+                state.updateMessage = "oldPasswordNotMatch"
+            }else if (action.payload.status === 200 &&  action.payload.data.type ==="INFO" && action.payload.data.message === "Update successfull") {
                 state.updateSuccess = true
-                state.updateMessage = null
             }else if (action.payload === 401){
                 state.error = []
             }

@@ -47,13 +47,13 @@ function History() {
                     </h1>
                     <div className="xl:py-8 xl:px-8 sm:py-1 sm:px-1 md:py-8 md:px-8">
                         <div className="mx-auto">
-                            <div className="bg-white overflow-hidden  onSroll">
+                            <div className="bg-white overflow-hidden">
                                 <div className="item mb-2 md:flex md:flex-wrap md:justify-between">
-                                    <div className="container  onSroll">
-                                            <div className="overflow-x-hidden  onSroll">
-                                                <div className="border-borderTable-borderTable  onSroll">
+                                    <div className="container">
+                                            <div className="overflow-x-hidden">
+                                                <div className="border-borderTable-borderTable">
                                                     <div className="table-wrp  max-h-[420px]">
-                                                        <table className="border table-fixed w-full border-borderTable-borderTable  onSroll">
+                                                        <table className="border table-fixed w-full border-borderTable-borderTable">
                                                             <thead className="border sticky top-0">
                                                                 <tr>
                                                                     <th  className="bg-gray-300 text-md w-1/4 text-center border border-borderTable-borderTable font-medium text-gray-900 px-6 py-2 text-left">

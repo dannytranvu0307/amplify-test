@@ -86,6 +86,10 @@ function Validators (formId,options,value){
                 error.id = "current_password"
                 error.name = "er_input_empty"
             }
+            else{
+                error.id = ""
+                error.name =""
+            }
         };
 
         if ( options.name === "new_password"){
@@ -179,8 +183,6 @@ function Validators (formId,options,value){
             else {
                 error.name = ""
             }
-            console.log(options.getAttribute("exclude"))
-            console.log(`${options.getAttribute("exclude")}`.includes(formId.id))
             if (options.name === "email"){
                 if (value === ""){
                     error.id = "email"
@@ -197,7 +199,7 @@ function Validators (formId,options,value){
             }
         }
     }
-    console.log(error)
+
     return error
 };  
 
