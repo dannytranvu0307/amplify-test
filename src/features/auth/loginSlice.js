@@ -8,6 +8,7 @@ export const login = createAsyncThunk(
     async (form) => {
         try {
             const response = await axios.post(`${baseURL}/auth/login`,form,{withCredentials: true})
+            console.log(response)
             return response
         }catch(err){
             return err.response
@@ -51,6 +52,7 @@ export const verify = createAsyncThunk(
     async (form) => {
         try {
             const response = await axios.post(`${baseURL}/users/active`,form,{withCredentials: true})
+            console.log(response)
             return response
         }catch(err){
             return err.response
@@ -64,6 +66,7 @@ export const refreshToken =  createAsyncThunk(
 
         try {
             const response = await axios.get(`${baseURL}/auth/refreshToken`,{withCredentials: true})
+            console.log(response)
             return response
         }catch(err){
             console.log(err.response)
@@ -195,7 +198,6 @@ const authSlice = createSlice({
             state.isLoading = true
         }),
         builder.addCase(verify.fulfilled, (state, action)=>{
-            console.log(action.payload)
             if(action.payload.status === 200){
                 state.isLoading = false
                 state.isActive = true

@@ -11,9 +11,7 @@ const VerifyCode = () => {
         if(param){  
         dispatch(verify(param))
             .unwrap().then((res)=>{
-                if(res.status === 200)
-                console.log("navigate")
-                navigate("/login")
+                    navigate("/login")
             })
         }
     },[])

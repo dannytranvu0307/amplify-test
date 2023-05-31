@@ -21,7 +21,6 @@ function Login(){
     const isActiveMessage= useSelector(selectIsActiveMessage)
     const isActiveError = useSelector(selectActiveError)
     const isActive = useSelector(selectIsActive)
-    console.log(isActive)
 
     // input elements
     const inputs = [{...email,type:'text'}, password]

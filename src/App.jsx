@@ -40,7 +40,7 @@ function App() {
 
   return (
     <Router>
-      <div className="flex h-screen">
+      <div className="flex  text-sm h-screen">
         <div className="flex-1 flex flex-col overflow-hidden">
           <header className="flex justify-between items-center">
             <Navbar />
@@ -56,15 +56,14 @@ function App() {
                     <Route path='/profile' element={<Profile />} />
                       <Route path='' element={<Home />} />
                       <Route path='/history' element={<History />} />
-                      <Route path='/*' element={<Navigate to="/"/>} />
+                      <Route path='/*' element={<Navigate to={location}/>} />
                     </>):(<>
                         <Route path='/login' element={<Login />} />
                         <Route path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}></Route>
                         <Route path='/register' element={<SignUp />} />
                         <Route path='/passwordreset' element={<PasswordReset />} />
-                        {/* <Route path='/verify?verifyCode=:verifyCode' element={<Active />} /> */}
                         <Route path='/verify/:verifyCode' element={<Active />} />
-                        <Route path='/*' element={<Navigate to="/login"/>} />
+                        <Route path='/*' element={<Navigate to={location} />} />
                       </>
                       )}
                   </Routes>

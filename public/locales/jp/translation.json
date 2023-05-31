@@ -123,6 +123,6 @@
     "warning":"各項目は選択または入力必須です。",
     "oldPasswordNotMatch":"現在のパスワードが正しくありません。",
     "requiredSearchBtn":"検索ボタンをクリックてください。",
-    "requiredChoose":"該当する項目を選択してください。"
-
+    "requiredChoose":"該当する項目を選択してください。",
+    "notFoundCp":"検索結果がありません。"
 }

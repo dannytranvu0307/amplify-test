@@ -26,6 +26,7 @@ const Profile = () => {
     // user ticket mount or not
     const [mounted, setMounted] = useState(true);
     const [checkTicket, setCheckTicket] = useState(true);
+    const [notFound, setNotFound] = useState('')
 
     // user infor state [dependences ①]
     const infor = [
@@ -152,8 +153,6 @@ const Profile = () => {
         setForm({ ...form, current_password: null, new_password: null, confirm_new_password: null })
     }
 
-    console.log(checkTicket)
-
     // onclick change state mount btn
     const handleToggleTicket = () => {
         if(checkTicket){
@@ -168,11 +167,23 @@ const Profile = () => {
 
     // submit to search commuter pass 
     const onSubmitSearch = async () => {
-        try {
-            const res = await axios.get(`${baseURL}/cp-routes?start=${startPoint.stationCode}&goal=${goaltPoint.stationCode}`, { withCredentials: true })
-            setLstCp(res.data.data)
-        } catch (err) {
-            return err.response
+        if (startPoint.stationCode !== "" && goaltPoint.stationCode !== ""){
+            try {
+                const res = await axios.get(`${baseURL}/cp-routes?start=${startPoint.stationCode}&goal=${goaltPoint.stationCode}`, { withCredentials: true })
+                setLstCp(res.data.data)
+            } catch (err) {
+                setLstCp([])
+                if (err.response.data.message === "The specified route is not found."){
+                    setNotFound('notFoundCp')
+                }
+            }
+        }else{
+            setLstCp([])
+            if (startPoint.stationCode === ""){
+                document.querySelector("#start").focus()
+            }else{
+                document.querySelector("#goal").focus()
+            }
         }
     }
 
@@ -190,6 +201,8 @@ const Profile = () => {
 
     // update commuter pass value start and goal
     const onChangeStation = e => {
+        setNotFound('')
+        setInvalidError('')
         setCheckTicket(false)
         setCommuterPass({ ...commuterPass, [e.target.name]: e.target.value })
         ApiSearchStation(e.target.name, e.target.value)
@@ -241,6 +254,8 @@ const Profile = () => {
             }
 
     }
+    // ERROR
+    // Not found valid commuter pass
 
     return (
         <div className="flex lg:text-lg sm:text-sm md:text-md xl:text-xl flex-col items-center px-6 py-8 h-full md:h-full lg:py-0 mb-16">
@@ -304,12 +319,12 @@ const Profile = () => {
                             <div id="computerPass" className="flex flex-wrap" >
                                 <div className="ml-6 flex-1">
                                     <span
-                                        className="flex mb-2 text-lg font-medium text-gray-900 grow-0 items-end">
+                                        className="flex mb-2 text-sm font-medium text-gray-900 grow-0 items-end">
                                         {t("reason_ticket")}
                                     </span>
                                     {mounted ? (
                                         commuterPass.start === null && commuterPass.goal === null ?
-                                            <div onClick={handleToggleTicket} className="group flex w-[80px] border border-gray-500 border-solid rounded-[10px] px-2 py-1 items-center bg-gray-100 text-gray-900 cursor-pointer">
+                                            <div onClick={handleToggleTicket} className="group flex w-[80px] border text-sm border-gray-500 border-solid rounded-[10px] px-2 py-1 items-center bg-gray-100 text-gray-900 cursor-pointer">
                                                 <div className="duration-300 transition w-[20px] h-[20px] bg-green-500 text-white rounded-full flex items-center mr-2 group-hover:bg-gray-100 group-hover:text-green-500 group-hover:rotate-180">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-4 h-4 flex mx-auto">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -320,13 +335,13 @@ const Profile = () => {
                                                     <div className="flex flex-col min-w-[150px]">
                                                         <h1 className="text-sm font-medium">{t("start")}</h1>
                                                         <span className="mt-2 border flex rounded-[10px] h-[40px] text-stone-500">
-                                                            <p className="flex my-auto px-2.5">{commuterPass && commuterPass.start}</p>
+                                                            <p className="flex text-sm my-auto px-2.5">{commuterPass && commuterPass.start}</p>
                                                         </span>
                                                     </div>
                                                     <div className="flex flex-col min-w-[150px]">
                                                         <h1 className="text-sm font-medium">{t("goal")}</h1>
                                                         <span className="mt-2 border flex rounded-[10px] h-[40px] text-stone-500">
-                                                            <p className="flex my-auto px-2.5">{commuterPass && commuterPass.goal}</p>
+                                                            <p className="flex text-sm my-auto px-2.5">{commuterPass && commuterPass.goal}</p>
                                                         </span>
                                                     </div>
                                                     <button
@@ -383,7 +398,8 @@ const Profile = () => {
                                                     onClick={e => onSubmitSearch(e)}
                                                     className="my-4 flex text-white bg-primary-600 mx-auto hover:bg-primary-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">{t("search")}</button>
                                             </div>
-                                            <span className="text-red-500  pt-8 text-xs">{t(validError)}</span>
+                                            <span className="text-red-500  pt-8 text-md">{t(validError)}</span>
+                                            <span className="text-red-500  pt-8 text-md">{t(notFound)}</span>
                                             <div className="space-y-3 lg:text-lg sm:text-sm md:text-md xl:text-xl">
                                                 {lstCp && lstCp.map((item, i) => (
                                                     <div key={i} className="group cursor-pointer">
