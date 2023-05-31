@@ -4,31 +4,22 @@
 :root {
     --primary: #000;
 }
-* {
-    scrollbar-width: thin;
-    /* scrollbar-color: linear-gradient(to bottom right, red, yellow); */
-  }
-  
-  /* Chrome, Edge, and Safari */
-  *::-webkit-scrollbar {
-    width: 4px;
-  }
-  
-  *::-webkit-scrollbar-track {
-    /* background:  linear-gradient(0deg, #a5f3fc 0%, #93c5fd 100%); */
-    background: #a7a7a7;
-    border-radius: 5px;
-  }
-  
-  *::-webkit-scrollbar-thumb {
-      /* background-color: #000;
-      background-color: linear-gradient(to bottom right, red, yellow); */
-      background: transparent; /* opacity: 0; should do the thing either */
-  box-shadow: 0px 0px 0px 100000vh #cfcfcf;
-    /* border-radius: 14px; */
-    /* border: 3px solid linear-gradient(to bottom right, red, yellow); */
-  }
 
-  .d-none {
-    display: none;
-  }
+* {
+  scrollbar-width: thin;
+}
+/* Chrome, Edge, and Safari */
+* ::-webkit-scrollbar {
+  width: 0.125rem;
+}
+
+* ::-webkit-scrollbar-track {
+  background: #a7a7a7;
+  border-radius: 0.13rem;
+}
+
+* ::-webkit-scrollbar-thumb {
+    
+    background: transparent;
+    box-shadow: 0px 0px 0px 0.01em #cfcfcf;
+}

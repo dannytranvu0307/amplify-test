@@ -19,6 +19,11 @@ export const userUpdate = createAsyncThunk(
 const userSlice = createSlice({
     name:'user',
     initialState: { updateSuccess: false, updateMessage: null },
+    reducers:{
+        setNullMessage: (state) => {
+            state.updateSuccess = false
+        }
+    },
     extraReducers:(builder) =>  {
         builder.addCase(userUpdate.pending, (state)=> {
             state.updateSuccess = false
@@ -35,6 +40,7 @@ const userSlice = createSlice({
     }
 })
 
+export const { setNullMessage } = userSlice.actions;
 export default userSlice.reducer
 
 export const selectUpdateSuccess = (state) => state.user.updateSuccess;

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { fullName, email, department, password, start, goal } from '../instaces';
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, authenticate } from "../features/auth/loginSlice";
-import { userUpdate, selectUpdateSuccess } from "../features/user/userSlice";
+import { userUpdate, selectUpdateSuccess,setNullMessage } from "../features/user/userSlice";
 import { useTranslation } from 'react-i18next';
 import ErrorNotification from "../components/ErrorNotification";
 import { baseURL } from "../features/auth/loginSlice";
@@ -24,6 +24,8 @@ const Profile = () => {
     const [disabledDepartment, setDisabledDepartment] = useState(true);
     const [disabledPassWord, setDisabledPassword] = useState(true);
     const [lstCp, setLstCp] = useState([])
+    // user ticket mount or not
+    const [mounted, setMounted] = useState(true);
 
     // user infor state [dependences ①]
     const infor = [
@@ -65,7 +67,7 @@ const Profile = () => {
         }]
 
     // commuter pass state
-    const [commuterPass, setCommuterPass] = useState({ start: "", goal: "", viaDetails: [] })
+    const [commuterPass, setCommuterPass] = useState({ start: null, goal: null, viaDetails: [] })
 
     // start point 
     const [startPoint, setStartPoint] = useState({
@@ -107,6 +109,7 @@ const Profile = () => {
                 })
             }
         }
+        return ()=>dispatch(setNullMessage())
     }, [user])
 
     // side effect proccess
@@ -117,8 +120,7 @@ const Profile = () => {
     // value start and goal point was changed will be call api
 
     useEffect(()=>{
-
-    },[])
+    },[mounted])
 
     const ApiSearchStation = async (name, value) => {
         try {
@@ -135,8 +137,11 @@ const Profile = () => {
     }
 
     useEffect(() => {
+        // if(mounted)
+        // {
 
-    }, [commuterPass.start, commuterPass.goal])
+        // }
+    }, [mounted])
 
     const handleStartPoint = (stationCode, stationName) => {
         setStartPoint({ stationCode: stationCode, stationName: stationName })
@@ -161,13 +166,11 @@ const Profile = () => {
         setForm({ ...form, current_password: null, new_password: null, confirm_new_password: null })
     }
 
-    // user ticket mount or not
-    const [mounted, setMounted] = useState(true);
 
     // onclick change state mount btn
     const handleToggleTicket = () => {
-        setMounted(!mounted)
-        setCommuterPass({...commuterPass,start:"",goal:""})
+        setMounted(prev=>!prev)
+
     }
 
     // submit to search commuter pass 
@@ -226,6 +229,8 @@ const Profile = () => {
             })).unwrap().then(res=>{
                 if(res.status === 200){
                     dispatch(authenticate())
+                    .unwrap().then(()=>setMounted(!mounted))
+
                 }
             })
     }
@@ -293,7 +298,7 @@ const Profile = () => {
                                         {t("reason_ticket")}
                                     </span>
                                     {mounted ? (
-                                        commuterPass.start === "" && commuterPass.goal === "" ?
+                                        commuterPass.start === null && commuterPass.goal === null ?
                                             <div onClick={handleToggleTicket} className="group flex w-[80px] border border-gray-500 border-solid rounded-[10px] px-2 py-1 items-center bg-gray-100 text-gray-900 cursor-pointer">
                                                 <div className="duration-300 transition w-[20px] h-[20px] bg-green-500 text-white rounded-full flex items-center mr-2 group-hover:bg-gray-100 group-hover:text-green-500 group-hover:rotate-180">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-4 h-4 flex mx-auto">

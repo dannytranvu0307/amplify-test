@@ -50,7 +50,7 @@ function App() {
             {isAuthenticated && <Sidebar />}
             <main className="flex flex-col w-full overflow-x-hidden overflow-y-auto ml-16 left-16 -z-1">
               <div className="w-full px-6 py-8 ">
-                <div className=" flex flex-col w-full h-full">
+                <div className="onSroll flex flex-col w-full h-full">
                   <Routes>
                     {isAuthenticated ? (<>
                     <Route path='/profile' element={<Profile />} />

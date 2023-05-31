@@ -16,30 +16,6 @@ function History() {
             return err.response
         }
     }
-    // const handleDowload = async (id,name) => 
-    // {   console.log(name)
-    //     try {
-    //         console.log(`${baseURL}/files/${id}`)
-    //         const res = await axios.get(`${baseURL}/files/${id}`,{withCredentials: true})
-    //         console.log(res.data)
-    //         // const file = new File([res.data], `交通費_${user.fullname}_${toDay.getMonth()+1}月.xlsx`, {type: blob.type });
-    //         // const a = document.createElement("a") 
-    //         const blob = new Blob([res.data],{name},
-    //             {
-    //             type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    //         })
-    //     //     const file = new File([blob],`${name}`,{type: blob.type });
-    //         const url = window.URL.createObjectURL(blob);
-            
-    //         const anchor = document.createElement("a");
-    //     anchor.href = url;
-    //     anchor.download;
-    //     anchor.click()
-    //     }catch(err){
-    //         return err.response
-    //     }
-
-    // }
 
 
     useEffect(()=>{
@@ -61,68 +37,7 @@ function History() {
     
         return table;
       };
-    // const files = [
-    //     {
-    //         fileName: "aaaa",
-    //         fileURI: "交通費精算書_PHUCLH_4月分",
-    //         uploadedTime: "2023年10月03日"
-    //     },
-    //     {
-    //         fileName: "bbbb",
-    //         fileURI: "交通費精算書_PHUCLH_3月分",
-    //         uploadedTime: "2023年10月04日"
-    //     },
-    //     {
-    //         fileName: "ccc",
-    //         fileURI: "交通費精算書_PHUCLH_2月分",
-    //         uploadedTime: "2023年10月05日"
-    //     },
-    //     {
-    //         fileName: "aaaa",
-    //         fileURI: "交通費精算書_PHUCLH_4月分",
-    //         uploadedTime: "2023年10月03日"
-    //     },
-    //     {
-    //         fileName: "bbbb",
-    //         fileURI: "交通費精算書_PHUCLH_3月分",
-    //         uploadedTime: "2023年10月04日"
-    //     },
-    //     {
-    //         fileName: "ccc",
-    //         fileURI: "交通費精算書_PHUCLH_2月分",
-    //         uploadedTime: "2023年10月05日"
-    //     },
-    //     {
-    //         fileName: "交通費精算書_NGUYEN_NGUYEN_NGUYEN_NGUYEN_4月分.xlxs",
-    //         fileURI: "交通費精算書_NGUYEN_NGUYEN_NGUYEN_NGUYEN_4月分.xlxs",
-    //         uploadedTime: "2023年10月03日"
-    //     },
-    //     {
-    //         fileName: "bbbb",
-    //         fileURI: "交通費精算書_PHUCLH_3月分",
-    //         uploadedTime: "2023年10月04日"
-    //     },
-    //     {
-    //         fileName: "ccc asd asd asdasdas das das das das das dasd asd as asdas das das das dasd asd asd asd asd asd asdas dasd asd as dasd sad asd sdf sdf sdf sdfsd fsdf ds",
-    //         fileURI: "交通費精算書_PHUCLH_2月分",
-    //         uploadedTime: "2023年10月05日"
-    //     },
-    //     {
-    //         fileName: "aaaa",
-    //         fileURI: "交通費精算書_PHUCLH_4月分",
-    //         uploadedTime: "2023年10月03日"
-    //     },
-    //     {
-    //         fileName: "bbbb",
-    //         fileURI: "交通費精算書_PHUCLH_3月分",
-    //         uploadedTime: "2023年10月04日"
-    //     },
-    //     {
-    //         fileName: "ccc",
-    //         fileURI: "交通費精算書_PHUCLH_2月分",
-    //         uploadedTime: "2023年10月05日"
-    //     }
-    // ]
+  
     return (
         <div className="flex flex-col mx-auto items-center -sm:py-4 sm:px-6 mb-16 py-8 h-full xl:w-3/5 lg:w-full sm:w-full 2xl:w-3/5 md:w-full lg:py-0">
             <div className="bg-white rounded-lg shadow md:mt-0 2xl:w-full sm:w-full h-full xl:p-0">
@@ -132,13 +47,13 @@ function History() {
                     </h1>
                     <div className="xl:py-8 xl:px-8 sm:py-1 sm:px-1 md:py-8 md:px-8">
                         <div className="mx-auto">
-                            <div className="bg-white overflow-hidden">
+                            <div className="bg-white overflow-hidden  onSroll">
                                 <div className="item mb-2 md:flex md:flex-wrap md:justify-between">
-                                    <div className="container">
-                                            <div className="overflow-x-hidden">
-                                                <div className="border-borderTable-borderTable">
+                                    <div className="container  onSroll">
+                                            <div className="overflow-x-hidden  onSroll">
+                                                <div className="border-borderTable-borderTable  onSroll">
                                                     <div className="table-wrp  max-h-[420px]">
-                                                        <table className="border table-fixed w-full border-borderTable-borderTable">
+                                                        <table className="border table-fixed w-full border-borderTable-borderTable  onSroll">
                                                             <thead className="border sticky top-0">
                                                                 <tr>
                                                                     <th  className="bg-gray-300 text-md w-1/4 text-center border border-borderTable-borderTable font-medium text-gray-900 px-6 py-2 text-left">
