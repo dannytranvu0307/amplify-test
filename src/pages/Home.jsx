@@ -38,7 +38,10 @@ function Home() {
       setData({ ...data,date:newData});
       };
       const handleVehicleChange = (option) => {
-        setData({ ...data,vehicle:option});
+        setData({date:"",vehicle:option, Destination:"", price:"" , round:t('1way'),departure:"",arrival:"", payment:"" ,transport:""});
+        setError({date:false ,payment:false,Destination:false,departure:false,arrival:false , price:false});
+        setSearching([])
+        setWarning('')
       };
       const handlePayment = (option) => {
         setData({ ...data,payment:option});
@@ -127,13 +130,17 @@ function Home() {
        const  handleAddTable= () => {
         if(data.vehicle==='train'){
           const { date, Destination, departure, arrival, payment , price} = data;
-          const updatedError = {
+
+          const updatedError ={
           date: date === "",
           Destination: Destination === "",
           departure: departure === "",
           arrival: arrival === "",
           payment: payment === "",
-          price: price ===""
+          price: price ==="",
+          priceLength:price.length >8,
+          priceType:isNaN(price)
+         
         };
         setError(updatedError);
         if(Object.values(updatedError).every((value)=> value===false)){
@@ -166,9 +173,12 @@ function Home() {
             });
 
           
+        }else if(updatedError.priceLength){
+          setWarning(t('warningLength'))
+        }else if(isNaN(price)){
+          setWarning(t('warningType'))
         }else{
           setWarning(t('warning'))
-    
         }
       }
       else{
@@ -178,7 +188,9 @@ function Home() {
           Destination: Destination === "",
           departure: departure === "",
           arrival: arrival === "",
-          price: price ===""
+          price: price ==="",
+          priceLength:price.length >8,
+          priceType:isNaN(price)
         };
         setError(updatedError);
         if(Object.values(updatedError).every((value)=> value===false)){
@@ -205,13 +217,18 @@ function Home() {
            
           })
           .catch(error => {
-            // Handle errors
             console.error(error);
           })
+
+        }else if(updatedError.priceLength){
+          setWarning(t('warningLength'))
+        }else if(isNaN(price)){
+          setWarning(t('warningType'))
         }else{
           setWarning(t('warning'))
         }
-      } }
+      }
+    }
        
 
 useEffect(()=>{
@@ -231,7 +248,7 @@ useEffect(()=>{
           
          
           <div className='flex  sm:flex-col md:flex-row h-full  mb-auto'>  
-             <div className='flex flex-col basis-1/3 border-r-2 border-gray-500 px-3 h-full '>
+             <div className='flex flex-col md:basis-1/3 border-r-2 border-gray-500 px-3 h-full '>
               <div className='flex '>
                 <HeaderInput onDateChange={handleDateChange} data ={data} 
                              onVehiclechange={handleVehicleChange} 
@@ -251,22 +268,22 @@ useEffect(()=>{
                </div>
                <SearchResult search={searching} data={data} onPrice={handlePrice} isOn ={isOn} />
               <div className='flex mt-auto pb-[150px]'>
-                <HomeFooter warning={warning} onPrice={handlePrice} data ={data} onAdd={handleAddTable} error ={error} setError={setError}/>
+          {data.vehicle ==='train' ? (searching.length>0&&<HomeFooter warning={warning} onPrice={handlePrice} data ={data} onAdd={handleAddTable} error ={error} setError={setError}/>): <HomeFooter warning={warning} onPrice={handlePrice} data ={data} onAdd={handleAddTable} error ={error} setError={setError}/>}
                 </div>
              
              </div>
 
 
 
-             <div className='pl-5 w-full flex-1 h-full'>
+             <div className='pl-5 bh-full md:basis-2/3'>
               <div className='flex flex-col h-full'>
                 <div className='flex'><HomeUserData /></div>
                 <div className='max-w-[700px]'> <Table tableData={TableData}/>
                 
-                <div className='w-full my-2 h-[30%]'>{TableData.length>=1&&<PreviewImage image={image} onDelete ={handleDeleteImage}/>}</div>
+                <div className='w-full my-2 h-32'>{TableData.length>=1&&<PreviewImage image={image} onDelete ={handleDeleteImage}/>}</div>
                 </div>
                
-                <div className='flex mt-auto pb-[150px] max-w-[750px]' ><HomeFooter2 img={image} deleteAllFile={setImage} onFileChange={handleFileChange} tableData={TableData}/></div>
+                <div className='max-w-[750px]' ><HomeFooter2 img={image} deleteAllFile={setImage} onFileChange={handleFileChange} tableData={TableData}/></div>
               </div>
                
              </div>

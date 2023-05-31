@@ -13,7 +13,16 @@ function SearchResult({search,data ,onPrice , isOn}){
       const handleObjectClick = (object) => {
         setSelectedObject2(object);
         if(isOn){
-         onPrice(object.summary.move.fare.unit114)
+          if(data.payment===t('ic')&&data.round===t('1way')){
+            onPrice(object.summary.move.fare.unit114)
+        }else if(data.payment===t('ic')&&data.round===t('2way')){
+            onPrice(object.summary.move.fare.unit114*2)
+        }else  if(data.payment===t('cash')&&data.round===t('1way')){
+            onPrice(object.summary.move.fare.unit112)
+        }else if(data.payment===t('cash')&&data.round===t('2way')){
+            onPrice(object.summary.move.fare.unit112*2)
+        }
+
         }else{
           if(data.payment===t('ic')&&data.round===t('1way')){
             onPrice(object.summary.move.fare.IC)
@@ -34,26 +43,31 @@ return(
         {search.map((search,i)=>(
             <div 
             key={i}
-            className={`group relative ${selectedObject2 === search ?'bg-primary-500 rounded border border-black' : ''}`}
+            className={`my-2 group relative border  ${selectedObject2 === search ?'bg-primary-500 rounded border border-black text-white' : ''}`}
             onMouseEnter={() => handleObjectHover(search)}
             onMouseLeave={() => handleObjectHover(null)}
             onClick={() => handleObjectClick(search)}
             >
-          <div  className="flex  px-4 py-2 rounded hover:border border-black " >
+          <div  className="flex  px-4 py-2 rounded hover:border border-black  flex flex-nowrap" >
             
            {
           search.sections.length===3&&<div>{search.sections[0].stationName}ー{search.sections[2].stationName}</div>
           }
           {
-          search.sections.length>=7&&<div>{search.sections[0].stationName}ー{search.sections[2].stationName}...{search.sections[search.sections.length-3].stationName}ー{search.sections[search.sections.length-1].stationName}</div>
+          search.sections.length>5&&<div>{search.sections[0].stationName} ー {search.sections[2].stationName}...{search.sections[search.sections.length-1].stationName}</div>
           }
           {
-          search.sections.length===5&&<div>{search.sections[0].stationName}ー{search.sections[2].stationName}ー{search.sections[search.sections.length-1].stationName}</div>
+          search.sections.length===5&&<div>{search.sections[0].stationName}ー{search.sections[2].stationName} ー {search.sections[search.sections.length-1].stationName}</div>
           }
 
-          <div className="mx-2">{t('transit')}:{search.summary.move.transitCount}回</div>
+          <div className="mx-2 flex-none absolute right-16">{t('transit')}:{search.summary.move.transitCount}回</div>
           
-          {isOn?<div>Price:{search.summary.move.fare.unit114}</div>:<div>
+          {isOn?<div className="flex-none  absolute right-1">
+          {data.payment===t('ic')&&<div>{data.round===t('1way')?<span>{data.payment}:{search.summary.move.fare.unit114}</span>:<span>{data.payment}:{search.summary.move.fare.unit114*2}</span>}</div>}
+          {data.payment===t('cash')&&<div>{data.round===t('1way')?<span>{data.payment}:{search.summary.move.fare.unit112}</span>:<span>{data.payment}:{search.summary.move.fare.unit112*2}</span>}</div>}
+            
+          </div>
+          :<div  className="flex-none absolute right-1">
           {data.payment===t('ic')&&<div>{data.round===t('1way')?<span>{data.payment}:{search.summary.move.fare.IC}</span>:<span>{data.payment}:{search.summary.move.fare.IC*2}</span>}</div>}
           {data.payment===t('cash')&&<div>{data.round===t('1way')?<span>{data.payment}:{search.summary.move.fare.現金}</span>:<span>{data.payment}:{search.summary.move.fare.現金*2}</span>}</div>}
           </div>}

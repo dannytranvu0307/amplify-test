@@ -64,11 +64,6 @@ const handleSearch =()=>{
   payment: payment === ""
 };
 setError(updatedError);
-if(departure===arrival){
-  setAlert("同じ駅名は連続して設定できません")
-}else{
-  setAlert('')
-}
 
 if(Object.values(updatedError).every((value)=> value===false)){
   axios.get(`${baseURL}/routes`,{
@@ -80,21 +75,25 @@ if(Object.values(updatedError).every((value)=> value===false)){
   .then(response => {
     // Handle the response
     console.log(response.data)
-   onSearching(response.data.data)
+    onSearching(response.data.data)
+    setAlert('')
   })
   .catch(error => {
     // Handle the error
     console.error(error)
   });
-}else{
-  console.log("dame")
+}
+else if(departure === arrival){
+  setAlert(t('AlertSame'))
+}else {
+  setAlert(t('alert'))
 }
 }
 
 
 
 useEffect(()=>{
-  if( data.departure.length>2 && focus.departure){
+  if( data.departure.length>1 && focus.departure){
     
      console.log('call departure')
     axios.get(`${baseURL}/stations`,{
@@ -121,7 +120,7 @@ useEffect(()=>{
 //Arrival
 useEffect(()=>{
 
-  if( data.arrival.length>2 && focus.arrival){
+  if( data.arrival.length>1 && focus.arrival){
     console.log('call arrival')
     console.log(data.arrival.length)
     axios.get(`${baseURL}/stations`,{
@@ -144,7 +143,7 @@ useEffect(()=>{
 // transport 
 
 useEffect(()=>{
-  if( data.transport.length>2 && focus.transport){
+  if( data.transport.length>1 && focus.transport){
     console.log('call trans')
     axios.get(`${baseURL}/stations`,{
       params: {
