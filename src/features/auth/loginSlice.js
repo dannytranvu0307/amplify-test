@@ -1,6 +1,8 @@
 import {  createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-export const baseURL = 'http://localhost:8080/api/v1';
+// import process from 'node:process';
+// export const baseURL = env.LINK
+export const baseURL = 'https://api.vtitransports.link/api/v1';
 
 // get cookie accesstoken/ refresh token
 export const login = createAsyncThunk(
