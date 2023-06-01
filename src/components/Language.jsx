@@ -3,7 +3,6 @@ import {useEffect, useState} from 'react';
 const Language = () => {
     const {t,i18n} = useTranslation();
     const [select,setSelect] = useState(localStorage.getItem('language') || 'ja'); 
-    console.log(select)
     const handleChange = (e) => {
         setSelect(e.target.value)
     }

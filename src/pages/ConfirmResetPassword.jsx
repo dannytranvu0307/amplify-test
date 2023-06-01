@@ -70,8 +70,7 @@ return (
                         <Link to="/login">
                         <button 
                             type="submit" 
-                            className="w-auto text-white
-                            
+                            className="w-auto text-white 
                             bg-primary-600
                             hover:bg-primary-500
                             focus:ring-4 focus:outline-none 

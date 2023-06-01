@@ -1,24 +1,20 @@
-import { useSelector, useDispatch } from "react-redux";
-import { verify, selectIsActive, selectError } from "../features/auth/loginSlice";
-import { useTranslation } from 'react-i18next';
+import { useDispatch } from "react-redux";
+import { verify, selectError } from "../features/auth/loginSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
 const VerifyCode = () => {
-    const {t} = useTranslation()
     const navigate = useNavigate()
-    const error = useSelector(selectError)
     const dispatch = useDispatch()
     const param = useParams ('verifyCode')
     
     useEffect(()=>{
+        if(param){  
         dispatch(verify(param))
-        .unwrap().then(()=>{
-            navigate("/login")
-        })
+            .unwrap().then((res)=>{
+                    navigate("/login")
+            })
+        }
     },[])
     // npm install --save-dev vite-plugin-rewrite-all
-    return <>{t(error)}
-        <Link to="/login">{t("back")}</Link></>
 }
 export default VerifyCode

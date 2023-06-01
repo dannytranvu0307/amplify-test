@@ -8,6 +8,7 @@ export const login = createAsyncThunk(
     async (form) => {
         try {
             const response = await axios.post(`${baseURL}/auth/login`,form,{withCredentials: true})
+            console.log(response)
             return response
         }catch(err){
             return err.response
@@ -51,6 +52,7 @@ export const verify = createAsyncThunk(
     async (form) => {
         try {
             const response = await axios.post(`${baseURL}/users/active`,form,{withCredentials: true})
+            console.log(response)
             return response
         }catch(err){
             return err.response
@@ -64,6 +66,7 @@ export const refreshToken =  createAsyncThunk(
 
         try {
             const response = await axios.get(`${baseURL}/auth/refreshToken`,{withCredentials: true})
+            console.log(response)
             return response
         }catch(err){
             console.log(err.response)
@@ -143,12 +146,14 @@ const authSlice = createSlice({
             state.checkPass = false
         }),
         builder.addCase(login.fulfilled, (state,action)=> {
-            console.log(action.payload)
             if(action.payload.status === 200){
                 state.error = null
                 state.errorLogin = null
                 state.isAuthenticated = true
             }else if (action.payload.status === 401){
+                state.errorLogin = 'Unauthorized'
+            }
+            else if (action.payload.status === 400){
                 state.errorLogin = 'Unauthorized'
             }
         }),
@@ -180,6 +185,7 @@ const authSlice = createSlice({
             if(action.payload.status === 200){
                 state.isLoading = false
                 state.isSuccess = true
+                state.registerError = null
             }else if (action.payload.status === 400){
                 state.isLoading = false
                 state.registerError = 'API002_ER'

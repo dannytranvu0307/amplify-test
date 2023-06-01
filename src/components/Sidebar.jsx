@@ -57,10 +57,11 @@ const Sidebar = () => {
             lg:w-16
             md:w-16
             text-gray-700 bg-white 
+            transition-all
             ${mounted ? ("lg:w-[300px] md:w-[300px] w-[300px]") : "lg:w-16 md:w-16"} 
             duration-200
             overflow-hidden
-            z-50
+            z-40
             `}>
             {!mounted ?
                 (<div className={`flex items-center ml-2 px-3 pt-3 cursor-pointer 
@@ -103,7 +104,6 @@ const Sidebar = () => {
                                             hover:bg-gradient-to-r from-cyan-200 to-blue-300 flex  
                                             duration-300
                                             `}>
-                                                {/*                                               */}
                                                 <>
                                                     {item.icon}
                                                 </>

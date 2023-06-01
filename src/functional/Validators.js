@@ -2,7 +2,7 @@
 
 function Validators (formId,options,value){
     const error = {}
-    const loginEmail = /^[a-z.]{1,15}[a-z]{1,30}([0-9]{0,3})@[A-Za-z]*\.]*([A-Za-z])/gm
+    const loginEmail = /.+@.+\..+/gm
     const regex_email = /^[a-z]{1,15}[.][a-z]{1,30}([0-9]{0,3})@(vti.com.vn)$/gm;
     const regex_name_vietnamese = /^[A-Z ]{1,}[A-Z]$/m;
     const regex_password = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W){8,24}/g; //regex cần có dấu kí tự đặt biệt
@@ -25,7 +25,6 @@ function Validators (formId,options,value){
         };
 
         if (options.name === "email" && !(`${options.getAttribute("exclude")}`.includes(formId.id))){
-            console.log("a")
             if (value === ""){
                 error.id = "email"
                 error.name =  "er_input_empty"
@@ -37,7 +36,6 @@ function Validators (formId,options,value){
                 error.id = "email"
                 error.name =  "er_email_undi"
             }
-            console.log(error)
         };
         
         if (options.name === "password" ){
@@ -86,6 +84,10 @@ function Validators (formId,options,value){
             if (value === ""){
                 error.id = "current_password"
                 error.name = "er_input_empty"
+            }
+            else{
+                error.id = ""
+                error.name =""
             }
         };
 
@@ -196,7 +198,7 @@ function Validators (formId,options,value){
             }
         }
     }
-    console.log(error)
+
     return error
 };  
 

@@ -5,7 +5,6 @@ import { departments  ,selectDepartments} from '../features/department/departmen
 import { useSelector, useDispatch } from 'react-redux';
 
 const FormInput = (props) => {
-    const [focused, setFocused] = useState("hidden");
     const {label, placeholder,forHtml,value,onChange,invalidError,...inputProps} = props
     const dispatch = useDispatch()
     const departments_lst = useSelector(selectDepartments)
@@ -13,22 +12,13 @@ const FormInput = (props) => {
     useEffect(()=>{
         dispatch(departments())
     },[])
-    const [error, setError]= useState({
-        id:"",
-        name:"",
-    });
+    const [error, setError]= useState({ id:"", name:"",});
     const ref = useRef();
 
     const { t } = useTranslation();
 
-    const handleFocus = () => {
-        setFocused("");
-    }
     const onBlur = () => {
-        setError(
-            Validators(ref.current.parentElement.parentElement,ref.current,ref.current.value)
-        )
-    }
+        setError(Validators(ref.current.parentElement.parentElement,ref.current,ref.current.value))}
     return (
         <div id="input-field"  className= "grid">
             <label 
@@ -43,8 +33,6 @@ const FormInput = (props) => {
                         ref={ref}
                         {...inputProps}
                         onBlur={onBlur}
-                        onFocus={(e) =>handleFocus(e)
-                        }
                         onChange={onChange}
                         value={value}
                         placeholder={t(placeholder)}
@@ -59,7 +47,6 @@ const FormInput = (props) => {
                 />):(
                 <select
                     onBlur={onBlur}
-                    onFocus={(e) =>handleFocus(e)}
                     onChange = {onChange}
                     value ={value}
                     ref={ref}
@@ -76,7 +63,7 @@ const FormInput = (props) => {
                     ))}
                 </select>)}
                 
-                <span className={`${focused} text-red-500 text-xs`}>{t("") || t(error.name)}</span>
+                <span className={`text-red-500 text-xs`}>{t("") || t(error.name)}</span>
            
         </div>
     )

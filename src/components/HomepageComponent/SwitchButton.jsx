@@ -23,11 +23,11 @@ const SwitchButton = ({isOn,setIsOn}) => {
  <label className="relative inline-flex items-center mr-5 cursor-pointer ">
   <input type="checkbox" value="" className="sr-only peer"  onChange={()=>setIsOn(!isOn)} disabled ={isDisable} />
   <div className={`w-11 h-6 bg-[#4B5563] rounded-full peer  
-   peer-checked:after:translate-x-full peer-checked:after:border-white after:content-['']
-   after:absolute after:top-0.5 after:left-[2px] 
+   peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-['']
+   after:absolute after:top-0.5 after:left-[22px] 
    after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all
     
-   ${isDisable?('bg-gray-300 after:bg-gray-500'):('after:bg-green-500 peer-checked:after:bg-white ')}`}></div>
+   ${isDisable?('bg-gray-300 after:bg-gray-500'):('after:bg-green-500 peer-checked:after:bg-gray-200 ')}`}></div>
 </label>
 </div>
 <div>
