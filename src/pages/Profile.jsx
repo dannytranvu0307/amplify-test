@@ -212,6 +212,8 @@ const Profile = () => {
 
         const { departmentId, fullName, email, current_password, new_password, confirm_new_password, ...userData } = form
         if (ValidatorSubmit(formSubmit, [eName, eDepartmentId, eOldPassword, eNewPassword, eConfirmNewPassword]))
+            console.log(commuterPass)
+            console.log(checkTicket)
             if ((checkTicket && commuterPass.viaDetails === undefined) || (!checkTicket && commuterPass.viaDetails !== undefined)) {
                 dispatch(userUpdate({
                     fullName: fullName,
@@ -227,9 +229,14 @@ const Profile = () => {
                 })).unwrap().then(res => {
                     if (res.status === 200) {
                         dispatch(authenticate())
-                            .unwrap().then(() => setMounted(true))
+                            .unwrap().then(() => {
+                            });
+                            setMounted(true)
+                                setCheckTicket(true)
+                                setCommuterPass({...commuterPass, viaDetails: ""})
                     }
                 })
+            
             } else {
                 if (lstCp.length === 0){
                     setInvalidError('requiredSearchBtn')
@@ -385,7 +392,7 @@ const Profile = () => {
                                             </div>
                                             <span className="text-red-500  pt-8 text-md">{t(validError)}</span>
                                             <span className="text-red-500  pt-8 text-md">{t(notFound)}</span>
-                                            <div className="space-y-3 lg:text-lg sm:text-sm md:text-md xl:text-xl">
+                                            <div className="space-y-3 text-lg  sm:text-sm ">
                                                 {lstCp && lstCp.map((item, i) => (
                                                     <div key={i} className="group cursor-pointer">
                                                         <div className={`divCp justify-items-stretch w-full border rounded-[10px] border-black flex h-10 px-3 pointer`}
@@ -402,7 +409,7 @@ const Profile = () => {
                                                             <span className="pointer-events-none flex my-auto ">{item.summary.goal.stationName}</span>
                                                             <span className="pointer-events-none flex my-auto pl-3 ml-auto">{t("transfer")}：{item.summary.move.transitCount}{t('times')}</span>
                                                         </div>
-                                                        <div className="absolute flex flex-col hidden group-hover:block z-99 bg-white drop-shadow-lg rounded max-h-[150px] overflow-y-auto">
+                                                        <div className="absolute w-full flex flex-col hidden group-hover:block z-99 bg-white drop-shadow-lg rounded max-h-[150px] overflow-y-auto">
                                                             {item.sections.map((e, i) => {
                                                                 if (e.type === "move" && e.transport) {
                                                                     return <div key={i} style={{ color: e.transport.lineColor }} className="pointer-events-none px-3 flex my-auto after:px-1"><span className="border border-2 rounded mx-2" style={{ borderColor: e.transport.lineColor }}></span >{e.transport.lineName}</div>
