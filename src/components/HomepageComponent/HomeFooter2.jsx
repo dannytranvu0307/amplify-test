@@ -62,7 +62,7 @@ console.log(exportOptions)
             
     })
     const url = window.URL.createObjectURL(blob);
-    const file = new File([blob], `交通費_${user.fullname.replace(/\s/g)}_${toDay.getMonth()+1}月.xlsx`, {type: blob.type });
+    const file = new File([blob], `交通費_${user.fullname.replace(/\s/g,'')}_${toDay.getMonth()+1}月分.xlsx`, {type: blob.type });
     const formData = new FormData();
     formData.append('file', file);
 
@@ -73,7 +73,7 @@ console.log(exportOptions)
        localStorage.clear()
        const anchor = document.createElement("a");
        anchor.href = url;
-       anchor.download = `交通費_${user.fullname.replace(/\s/g)}_${toDay.getMonth()+1}月.xlsx`;
+       anchor.download = `交通費_${user.fullname.replace(/\s/g,'')}_${toDay.getMonth()+1}月分.xlsx`;
        anchor.download;
        anchor.click()
        dispatch(authenticate())

@@ -66,12 +66,21 @@ export const via = {
 }
 
 export const new_password = {
-        id:"password",
+        id:"new_password",
         label:"new_password",
-        name:"password",
+        name:"new_password",
         type: "password",
-        htmlFor: "password",
+        htmlFor: "new_password",
         placeholder: "password_pla",
+    }
+
+  export const confirm_new_password =  {
+        id: "confirm_new_password",
+        label: "confirm_new_password",
+        name: "confirm_new_password",
+        type: "password",
+        htmlFor: "confirm_new_password",
+        placeholder: "confirm_new_password",
     }
 //  export const confirm_password = 
 //     {

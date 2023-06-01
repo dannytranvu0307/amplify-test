@@ -1,6 +1,6 @@
 import { useState, useEffect} from "react";
 import { useTranslation } from 'react-i18next';
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import ErrorNotification from "../components/ErrorNotification";
 import {email, password} from "../instaces"
@@ -18,6 +18,10 @@ function Login(){
     const { t } = useTranslation();
     // message store
     const error = useSelector(selectErrorLogin);
+    useEffect(()=>{
+        setErrSever(error)
+    },[error])
+    const [errSever, setErrSever] = useState(error)
     const isActiveMessage= useSelector(selectIsActiveMessage)
     const isActiveError = useSelector(selectActiveError)
     const isActive = useSelector(selectIsActive)
@@ -57,12 +61,15 @@ function Login(){
             .then(res=>{
                 if (res.status !== 401){
                     dispatch(authenticate())
-                }})}
+                }})
+                }
+            else{
+                setErrSever('')
+            }
     }
 
     return (
         <>
-       
         <section 
         data-aos="fade-right"
         data-aos-offset="3"
@@ -97,7 +104,7 @@ function Login(){
                         </div>
                         <div>
 
-                        <span className= "text-red-500 pt-2 text-xs">{error && t(error)}</span>
+                        <span className= "text-red-500 pt-2 text-xs">{errSever && t(errSever)}</span>
                         </div>
                         <button 
                         type="submit" 

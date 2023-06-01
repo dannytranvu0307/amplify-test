@@ -12,7 +12,7 @@ function Validators (formId,options,value){
             if (value === ""){
                 error.id = "fullName"
                 error.name =  "er_input_empty"
-            }else if (value.length < 4 || value.length > 64 ){
+            }else if (value.length < 6 || value.length > 64 ){
                 error.id = "fullName"
                 error.name = "er_username_len"
             }

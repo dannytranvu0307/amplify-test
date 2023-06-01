@@ -80,7 +80,7 @@ if(Object.values(updatedError).every((value)=> value===false)){
   })
   .catch(error => {
     // Handle the error
-    console.error(error)
+    onSearching({noData:t('Result')})
   });
 }
 else if(departure === arrival){

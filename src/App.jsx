@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, unstable_HistoryRouter } from 'react-router-dom';
 
 import Aos from "aos";
 import 'aos/dist/aos.css';
@@ -23,7 +23,7 @@ import { useDispatch, useSelector  } from "react-redux";
 function App() {
 
   const isAuthenticated = useSelector(selectIsAuthenticated)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(()=>{
     Aos.init({ duration: 1000 });
@@ -56,14 +56,14 @@ function App() {
                     <Route path='/profile' element={<Profile />} />
                       <Route path='' element={<Home />} />
                       <Route path='/history' element={<History />} />
-                      <Route path='/*' element={<Navigate to={location}/>} />
+                      <Route path='/*' element={<Navigate to='/'/>} />
                     </>):(<>
                         <Route path='/login' element={<Login />} />
                         <Route path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}></Route>
                         <Route path='/register' element={<SignUp />} />
                         <Route path='/passwordreset' element={<PasswordReset />} />
                         <Route path='/verify/:verifyCode' element={<Active />} />
-                        <Route path='/*' element={<Navigate to={location} />} />
+                        <Route path='/*' element={<Navigate to='/login' />} />
                       </>
                       )}
                   </Routes>

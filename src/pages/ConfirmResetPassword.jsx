@@ -5,7 +5,7 @@ import FormInput from "../components/FormInput";
 import ValidatorSubmit from "../functional/ValidatorSubmit";
 import { confirmPasswordReset,selectConfirmPasswordResetSuccess,selectConfirmPasswordResetReject } from "../features/auth/loginSlice";
 import { useDispatch, useSelector } from "react-redux";
-import {new_password, confirm_password} from "../instaces";
+import {new_password, confirm_new_password} from "../instaces";
 import ErrorNotification from "../components/ErrorNotification";
 
 
@@ -21,7 +21,7 @@ const param = useParams()
 const navigate = useNavigate()
 
 const inputs = [
-    new_password,confirm_password
+    new_password,confirm_new_password
 ]
 
 const onChange = e => {
@@ -35,7 +35,7 @@ const onSubmit = e => {
     const formSubmit = document.querySelector("#confirm_reset_password")
 
     if (ValidatorSubmit(formSubmit,submitInput)){
-        dispatch(confirmPasswordReset({newPassword:form.password, ...param}))
+        dispatch(confirmPasswordReset({newPassword:form.new_password, ...param}))
         .unwrap().then(res =>{
           if (res.status === 200){
             setTimeout(()=>{

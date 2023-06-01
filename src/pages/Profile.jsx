@@ -1,6 +1,6 @@
 import { useState, memo, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fullName, email, department, password, start, goal } from '../instaces';
+import { fullName, email, department, password, start, goal, new_password, confirm_new_password } from '../instaces';
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, authenticate } from "../features/auth/loginSlice";
 import { userUpdate, selectUpdateSuccess, selectUpdateMessage } from "../features/user/userSlice";
@@ -33,7 +33,7 @@ const Profile = () => {
         { ...fullName, disabled: disabledName },
         { ...department, disabled: disabledDepartment, type: "departmentId" },
         { ...email, disabled: true },
-        { ...password, text: 'type', disabled: disabledPassWord, placeholder: "●●●●●●●●●●●●", }
+        { ...password, type: 'text', disabled: disabledPassWord, placeholder: "●●●●●●●●●●●●", }
     ]
     // commuter pass search instances
     const inputTickets = [start, goal]
@@ -45,27 +45,10 @@ const Profile = () => {
             label: "current_password",
             name: "current_password",
             type: "password",
-            required: true,
             placeholder: "current_password_pla",
             htmlFor: "current_password",
-        }, {
-            id: "new_password",
-            label: "new_password",
-            name: "new_password",
-            type: "password",
-            htmlFor: "new_password",
-            placeholder: "new_password_pla",
-            required: true,
-        },
-        {
-            id: "confirm_new_password",
-            label: "confirm_new_password",
-            name: "confirm_new_password",
-            type: "password",
-            htmlFor: "confirm_new_password",
-            placeholder: "confirm_new_password",
-            required: true,
-        }]
+        }, new_password,
+        confirm_new_password]
 
     // commuter pass state
     const [commuterPass, setCommuterPass] = useState({ start: null, goal: null, viaDetails: [] })
@@ -175,6 +158,8 @@ const Profile = () => {
                 setLstCp([])
                 if (err.response.data.message === "The specified route is not found."){
                     setNotFound('notFoundCp')
+                }else if (err.response.data.message === "Not found valid commuter pass"){
+                    setNotFound('notFoundCp')
                 }
             }
         }else{
@@ -258,11 +243,11 @@ const Profile = () => {
     // Not found valid commuter pass
 
     return (
-        <div className="flex lg:text-lg sm:text-sm md:text-md xl:text-xl flex-col items-center px-6 py-8 h-full md:h-full lg:py-0 mb-16">
+        <div className="flex flex-col items-center px-6 py-8 h-full md:h-full lg:py-0 mb-16">
             <div className="min-w-77 bg-white rounded-lg shadow md:mt-0 xl:p-0">
                 <div className="flex flex- p-6  sm:p-8">
                     <div className="flex flex-col">
-                        <h1 title="aaaa-aaaaaa-aaaaaaa-aaaaaaaaaaaa" className="w-full text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                        <h1 className="w-full text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                             {t("profile")}
                         </h1>
                         <div className="flex">
