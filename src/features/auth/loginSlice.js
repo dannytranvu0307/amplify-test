@@ -1,16 +1,17 @@
 import {  createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 // import process from 'node:process';
-// export const baseURL = env.LINK
-export const baseURL = 'https://api.vtitransports.link/api/v1';
+// export const baseURL = process.env.LINK
+// export const baseURL = 'https://api.vtitransports.link/api/v1';
+export const baseURL = 'http://localhost:8080/api/v1';
 
 // get cookie accesstoken/ refresh token
 export const login = createAsyncThunk(
     'login/login',
     async (form) => {
+        console.log(form)
         try {
             const response = await axios.post(`${baseURL}/auth/login`,form,{withCredentials: true})
-            console.log(response)
             return response
         }catch(err){
             return err.response
@@ -26,7 +27,6 @@ export const authenticate = createAsyncThunk(
             const response = await axios.get(`${baseURL}/users`,{withCredentials: true})
             return response
         }catch(err){
-            console.log(err.response)
             return err.response
         }
     }
@@ -39,6 +39,7 @@ export const register = createAsyncThunk(
         const headers = {
             'content-type':'application/json'
         }
+        console.log(form)
         try {
             const response = await axios.post(`${baseURL}/auth/register`,form,headers)
             return response
@@ -54,7 +55,6 @@ export const verify = createAsyncThunk(
     async (form) => {
         try {
             const response = await axios.post(`${baseURL}/users/active`,form,{withCredentials: true})
-            console.log(response)
             return response
         }catch(err){
             return err.response
@@ -65,13 +65,10 @@ export const verify = createAsyncThunk(
 export const refreshToken =  createAsyncThunk(
     'login/refreshToken',
     async () => {
-
         try {
             const response = await axios.get(`${baseURL}/auth/refreshToken`,{withCredentials: true})
-            console.log(response)
             return response
         }catch(err){
-            console.log(err.response)
             return err.response
         }
     }

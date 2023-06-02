@@ -12,6 +12,7 @@ import PreviewImage from '../components/HomepageComponent/PreviewImage';
 import SearchResult from '../components/HomepageComponent/SearchResult';
 import FormatDate from '../functional/FormatDate';
 import { useSelector, useDispatch } from 'react-redux';
+import { baseURL } from '../features/auth/loginSlice';
 import axios from 'axios';
 import { authenticate } from '../features/auth/loginSlice';
 function Home() {
@@ -156,7 +157,7 @@ function Home() {
              visitDate: FormatDate(data.date,"YYYY/MM/DD")
           }
           
-          axios.post('http://localhost:8080/api/v1/fares', form, {
+          axios.post(`${baseURL}/fares`, form, {
             withCredentials: true,
           })
             .then(response => {
@@ -205,7 +206,7 @@ function Home() {
             transportation:data.vehicle,
             visitDate: FormatDate(data.date,"YYYY/MM/DD")
          }
-         axios.post('http://localhost:8080/api/v1/fares', form, {
+         axios.post(`${baseURL}/fares`, form, {
           withCredentials: true,
         })
           .then(response => {

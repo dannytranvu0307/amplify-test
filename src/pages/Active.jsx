@@ -5,13 +5,13 @@ import { useEffect } from "react";
 const VerifyCode = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const param = useParams ('verifyCode')
-    
+    // const { verifyCode }= useParams('verifyCode')
+    const { verifyCode } = useParams('verifyCode')
     useEffect(()=>{
-        if(param){  
-        dispatch(verify(param))
+        if(verifyCode){
+            dispatch(verify({verifyCode:verifyCode}))
             .unwrap().then((res)=>{
-                    navigate("/login")
+                navigate("/login")
             })
         }
     },[])

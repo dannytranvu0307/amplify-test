@@ -5,6 +5,7 @@ import { baseURL } from "../auth/loginSlice";
 export const userUpdate = createAsyncThunk(
     'user/userUpdate',
     async (form) => {
+        console.log(form)
         try {
             const response = await axios.put(`${baseURL}/users`,form,{withCredentials: true})
             return response
@@ -24,7 +25,6 @@ const userSlice = createSlice({
             state.updateMessage = null
         }),
         builder.addCase(userUpdate.fulfilled, (state,action)=> {
-            console.log(action.payload)
             if(action.payload.status === 200 &&  action.payload.data.type ==="ERROR" && action.payload.data.message === "Old password is not match"){
                 state.updateSuccess = false
                 state.updateMessage = "oldPasswordNotMatch"

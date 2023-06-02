@@ -5,7 +5,7 @@ import Worksheet from '../../functional/Worksheet';
 import WorksheetImg from '../../functional/WorksheetImg';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { authenticate } from '../../features/auth/loginSlice';
+import { authenticate, baseURL } from '../../features/auth/loginSlice';
 
 function HomeFooter2({onFileChange, tableData ,img }){
     const { t } = useTranslation();
@@ -66,7 +66,7 @@ console.log(exportOptions)
     const formData = new FormData();
     formData.append('file', file);
 
-    axios.post('http://localhost:8080/api/v1/files', formData, {
+    axios.post(`${baseURL}/files`, formData, {
         withCredentials: true,
       })
         .then(response => {

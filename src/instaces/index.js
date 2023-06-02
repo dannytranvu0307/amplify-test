@@ -48,6 +48,7 @@ export const start = {
     name:"start",
     type: "text",
     htmlFor: "start",
+    placeholder: "start_pla",
 }
 
 export const goal = {
@@ -56,6 +57,8 @@ export const goal = {
     name:"goal",
     type: "text",
     htmlFor: "goal",
+    placeholder: "goal_pla",
+
 }
 export const via = {
     id:"via",

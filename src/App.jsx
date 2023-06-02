@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate, unstable_HistoryRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import Aos from "aos";
 import 'aos/dist/aos.css';
@@ -58,12 +58,12 @@ function App() {
                       <Route path='/history' element={<History />} />
                       <Route path='/*' element={<Navigate to='/'/>} />
                     </>):(<>
-                        <Route path='/login' element={<Login />} />
+                        <Route path='/' element={<Login />} />
                         <Route path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}></Route>
                         <Route path='/register' element={<SignUp />} />
                         <Route path='/passwordreset' element={<PasswordReset />} />
                         <Route path='/verify/:verifyCode' element={<Active />} />
-                        <Route path='/*' element={<Navigate to='/login' />} />
+                        <Route path='/*' element={<Login />} /> 
                       </>
                       )}
                   </Routes>
@@ -73,7 +73,6 @@ function App() {
           </div>
         </div>
       </div>
-   
     </Router>
   )
 }

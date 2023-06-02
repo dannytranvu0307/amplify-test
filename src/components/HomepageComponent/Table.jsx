@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { memo, } from 'react';
 import axios from 'axios';
-import { authenticate } from '../../features/auth/loginSlice';
+import { authenticate, baseURL } from '../../features/auth/loginSlice';
 import {  useDispatch } from 'react-redux';
 
 const Table = ({tableData})=>{
@@ -27,7 +27,7 @@ const Table = ({tableData})=>{
       };
  
     const deleteRecord=(id)=>{
-      axios.delete('http://localhost:8080/api/v1/fares',{
+      axios.delete(`${baseURL}/api/v1/fares`,{
         params: {
           recordId:id
         },withCredentials: true

@@ -33,7 +33,7 @@ const SignUp = () => {
         // pass or not
         if (ValidatorSubmit(formSubmit,[...submitInput,select])){
             let {departmentId, confirm_password,password, fullName, email} = {...form}
-            dispatch(register({departmentId:departmentId,password,fullName,email}))
+            dispatch(register({departmentId:departmentId,password,fullName: fullName.replace(/\s\s+/g, ' '),email:email.replace(/\s\s+/g, '').trim()}))
             .unwrap()
         }
     }

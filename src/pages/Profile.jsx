@@ -88,7 +88,7 @@ const Profile = () => {
                 setCommuterPass({
                     start: user.commuterPass.departure,
                     goal: user.commuterPass.destination,
-                    viaDetails: user.commuterPass.viaDetails
+                    viaDetails: []
                 })
             }
         }
@@ -147,18 +147,21 @@ const Profile = () => {
             setCommuterPass({ ...commuterPass, start: commuterPass.start, goal: commuterPass.goal })
         }
     }
+    console.log(commuterPass)
 
     // submit to search commuter pass 
     const onSubmitSearch = async () => {
         if (startPoint.stationCode !== "" && goaltPoint.stationCode !== ""){
+            console.log(startPoint.stationCode,
+                goaltPoint.stationCode )
             try {
                 const res = await axios.get(`${baseURL}/cp-routes?start=${startPoint.stationCode}&goal=${goaltPoint.stationCode}`, { withCredentials: true })
                 setLstCp(res.data.data)
             } catch (err) {
                 setLstCp([])
-                if (err.response.data.message === "The specified route is not found."){
+                if (err.response.data.code === "API017_ER04"){
                     setNotFound('notFoundCp')
-                }else if (err.response.data.message === "Not found valid commuter pass"){
+                }else if (err.response.data.code === "API017_ER"){
                     setNotFound('notFoundCp')
                 }
             }
@@ -212,11 +215,10 @@ const Profile = () => {
 
         const { departmentId, fullName, email, current_password, new_password, confirm_new_password, ...userData } = form
         if (ValidatorSubmit(formSubmit, [eName, eDepartmentId, eOldPassword, eNewPassword, eConfirmNewPassword]))
-            console.log(commuterPass)
-            console.log(checkTicket)
-            if ((checkTicket && commuterPass.viaDetails === undefined) || (!checkTicket && commuterPass.viaDetails !== undefined)) {
-                dispatch(userUpdate({
-                    fullName: fullName,
+            if ((!checkTicket && commuterPass.viaDetails.length === 0) === (checkTicket && commuterPass.viaDetails.length !== 0)) {
+                if (commuterPass.viaDetails.length === 0){
+                    dispatch(userUpdate({
+                    fullName: fullName.replace(/\s\s+/g, ' '),
                     email: email,
                     departmentId: +departmentId,
                     oldPassword: current_password,
@@ -224,20 +226,60 @@ const Profile = () => {
                     commuterPass: {
                         departure: commuterPass.start,
                         destination: commuterPass.goal,
-                        viaDetails: commuterPass.viaDetails
+                        viaDetails: null
                     }
                 })).unwrap().then(res => {
+                    console.log(res)
                     if (res.status === 200) {
                         dispatch(authenticate())
                             .unwrap().then(() => {
                             });
                             setMounted(true)
-                                setCheckTicket(true)
-                                setCommuterPass({...commuterPass, viaDetails: ""})
+                            setCheckTicket(true)
+                            setCommuterPass({...commuterPass, viaDetails: []})
+                            setStartPoint({})
+                            setGoalPoint({})
+                            setDisabledPassword(true)
+                            setInvalidError('')
+                            setDisabledname(true)
+                        setDisabledDepartment(true)
                     }
                 })
+                }
+                else{ 
+                    dispatch(userUpdate({
+                        fullName: fullName,
+                        email: email,
+                        departmentId: +departmentId,
+                        oldPassword: current_password,
+                        newPassword: new_password,
+                        commuterPass: {
+                            departure: commuterPass.start,
+                            destination: commuterPass.goal,
+                            viaDetails: [...commuterPass.viaDetails]
+                        }
+                    })).unwrap().then(res => {
+                        console.log(res)
+                        if (res.status === 200) {
+                            dispatch(authenticate())
+                                .unwrap().then(() => {
+                                });
+                                setMounted(true)
+                                    setCheckTicket(true)
+                                    setCommuterPass({...commuterPass, viaDetails: []})
+                                    setStartPoint({})
+                                    setGoalPoint({})
+                                    setDisabledPassword(true)
+                                    setInvalidError('')
+                                    setDisabledname(true)
+setDisabledDepartment(true)
+                        }
+                    })
+                }
+                
             
-            } else {
+            } 
+            else {
                 if (lstCp.length === 0){
                     setInvalidError('requiredSearchBtn')
                 }else {
@@ -251,14 +293,14 @@ const Profile = () => {
 
     return (
         <div className="flex flex-col items-center px-6 py-8 h-full md:h-full lg:py-0 mb-16">
-            <div className="min-w-77 bg-white rounded-lg shadow md:mt-0 xl:p-0">
-                <div className="flex flex- p-6  sm:p-8">
+            <div className="min-w-full lg:min-w-min bg-white rounded-lg shadow md:mt-0 xl:p-0">
+                <div className="flex flex-col p-6  sm:p-8">
                     <div className="flex flex-col">
                         <h1 className="w-full text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                             {t("profile")}
                         </h1>
-                        <div className="flex">
-                            <form className="flex flex-wrap min-w-[500px]" onSubmit={e => onSubmit(e)}>
+                        <div className="flex flex-col md:flex-row ">
+                            <form className="flex flex-wrap min-w-full md:min-w-[300px] lg:min-w-[500px]" onSubmit={e => onSubmit(e)}>
                                 {/* <div className="flex flex-col  w-full flex-none"> */}
                                 <div id="profile" className="relative mt-6 flex flex-col  w-full flex-none">
                                     <FormInput onChange={(e) => onChange(e)} value={form.fullName} {...infor[0]} />
@@ -309,7 +351,7 @@ const Profile = () => {
                                 {/* </div> */}
                             </form>
                             <div id="computerPass" className="flex flex-wrap" >
-                                <div className="ml-6 flex-1">
+                                <div className="mt-6 md:ml-6 flex-1">
                                     <span
                                         className="flex mb-2 text-sm font-medium text-gray-900 grow-0 items-end">
                                         {t("reason_ticket")}
@@ -354,7 +396,7 @@ const Profile = () => {
                                                     <div className="relative">
                                                         <FormInput value={commuterPass.start} onChange={e => onChangeStation(e)} {...inputTickets[0]} />
 
-                                                        <div className="absolute bg-white w-full rounded drop-shadow-lg">
+                                                        <div className="absolute bottom bg-white w-full rounded drop-shadow-lg">
                                                             {startSuggestion.map((item, i) => (
                                                                 <p className="px-2 py-1  duration-100 
                                                         transision-all cursor-pointer 
@@ -392,12 +434,12 @@ const Profile = () => {
                                             </div>
                                             <span className="text-red-500  pt-8 text-md">{t(validError)}</span>
                                             <span className="text-red-500  pt-8 text-md">{t(notFound)}</span>
-                                            <div className="space-y-3 text-lg  sm:text-sm ">
+                                            <div className="space-y-3 text-sm  md:text-md last:bottom-0">
                                                 {lstCp && lstCp.map((item, i) => (
                                                     <div key={i} className="group cursor-pointer">
                                                         <div className={`divCp justify-items-stretch w-full border rounded-[10px] border-black flex h-10 px-3 pointer`}
                                                             onClick={(e) => handleUpdateItem(e, item.summary.start.stationName, item.summary.goal.stationName, item.commuterPassLink)} key={i}>
-                                                            <span className="pointer-events-none flex my-auto after:content-['ー'] after:px-1">{item.summary.start.stationName}</span>
+                                                            <span className="pointer-events-none flex my-auto whitespace-nowrap text-ellipsis overflow-hidden  after:content-['ー'] after:px-1">{item.summary.start.stationName}</span>
                                                             <span className="pointer-events-none flex my-auto  whitespace-nowrap text-ellipsis overflow-hidden max-w-[200px]">
                                                                 {item.sections.map((e, i) => {
                                                                     if (e.type === "point" && e.stationName !== item.summary.start.stationName && e.stationName !== item.summary.goal.stationName) {
@@ -406,10 +448,10 @@ const Profile = () => {
                                                                 })
                                                                 }
                                                             </span>
-                                                            <span className="pointer-events-none flex my-auto ">{item.summary.goal.stationName}</span>
-                                                            <span className="pointer-events-none flex my-auto pl-3 ml-auto">{t("transfer")}：{item.summary.move.transitCount}{t('times')}</span>
+                                                            <span className="pointer-events-none flex my-auto whitespace-nowrap text-ellipsis overflow-hidden  ">{item.summary.goal.stationName}</span>
+                                                            <span className="pointer-events-none flex my-auto pl-3 ml-auto whitespace-nowrap">{t("transfer")}：{item.summary.move.transitCount}{t('times')}</span>
                                                         </div>
-                                                        <div className="absolute w-full flex flex-col hidden group-hover:block z-99 bg-white drop-shadow-lg rounded max-h-[150px] overflow-y-auto">
+                                                        <div className="absolute w-full flex flex-col hidden group-hover:translate-x-0 md:group-hover:-translate-y-1/2 group-hover:block z-99 bg-white shadow-md drop-shadow-lg lg:group-hover:-translate-x-full rounded max-h-[150px] overflow-y-auto">
                                                             {item.sections.map((e, i) => {
                                                                 if (e.type === "move" && e.transport) {
                                                                     return <div key={i} style={{ color: e.transport.lineColor }} className="pointer-events-none px-3 flex my-auto after:px-1"><span className="border border-2 rounded mx-2" style={{ borderColor: e.transport.lineColor }}></span >{e.transport.lineName}</div>

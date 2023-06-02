@@ -69,7 +69,7 @@ function History() {
                                                                 {files.map((file, key) => (
                                                                     <tr className="bg-white border h-4  border-borderTable-borderTable transition duration-300 ease-in-out hover:bg-gray-100" key={key}>
                                                                         <td className="text-sm bg-white  h-4   border font-extrabold border-borderTable-borderTable font-light px-6 py-2 whitespace-nowrap">{file.exportedDate}</td>
-                                                                        <td  className="text-sm bg-white h-4   text-blue-700 underline px-6 py-2 whitespace-nowrap underline-offset-4"><Link to={'http://localhost:8080/api/v1'+"/files/"+file.fileId}>{file.fileName}</Link></td>
+                                                                        <td  className="text-sm bg-white h-4   text-blue-700 underline px-6 py-2 whitespace-nowrap underline-offset-4"><Link to={`${baseURL}`+"/files/"+file.fileId}>{file.fileName}</Link></td>
                                                                     </tr>))}
                                                                 {renderTable()} 
                                                             </tbody>

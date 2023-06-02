@@ -1,6 +1,6 @@
 import { useState, useEffect} from "react";
 import { useTranslation } from 'react-i18next';
-import { Link} from "react-router-dom";
+import { Link, useLocation, useNavigate} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import ErrorNotification from "../components/ErrorNotification";
 import {email, password} from "../instaces"
@@ -19,6 +19,8 @@ function Login(){
     useEffect(()=>{
         setErrSever(error)
     },[error])
+    const navigate = useNavigate()
+    const location = useLocation()
     const [errSever, setErrSever] = useState(error)
     const isActiveMessage= useSelector(selectIsActiveMessage)
     const isActiveError = useSelector(selectActiveError)
@@ -60,7 +62,9 @@ function Login(){
                 if (res.status !== 401){
                     dispatch(authenticate())
                 }})
-                }
+                console.log(location)
+                navigate(location)
+            }
             else{
                 setErrSever('')
             }

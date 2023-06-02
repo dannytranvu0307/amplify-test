@@ -1,6 +1,7 @@
 // const regex_password = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]){8,24}/gm  //regex k cần có dấu kí tự đặt biệt
 
 function Validators (formId,options,value){
+    value = value.trim()
     const error = {}
     const loginEmail = /.+@.+\..+/gm
     const regex_email = /^[a-z]{1,15}[.][a-z]{1,30}([0-9]{0,3})@(vti.com.vn)$/gm;
@@ -43,7 +44,7 @@ function Validators (formId,options,value){
                 error.id = "password"
                 error.name =  "er_input_empty"
             }
-            else if (value.length < 8){
+            else if (value.length < 8 || value.length > 32){
                 error.id = "password"
                 error.name =  "er_input_len_password"
             }
@@ -96,7 +97,7 @@ function Validators (formId,options,value){
                 error.id = "new_password"
                 error.name = "er_input_empty"
             }
-            else if (value.length < 8){
+            else if (value.length < 8 || value.length > 32){
                 error.id = "new_password"
                 error.name =  "er_input_len_password"
             }
@@ -115,8 +116,8 @@ function Validators (formId,options,value){
                 error.name =  "er_input_empty"
             }
             else if (value !== formId.parentElement.parentElement.parentElement.querySelector("#new_password").value){
-                error.id = "confirm_new_password"
-                error.name = "er_input_confirm_password"
+                error.id = "er_input_confirm_new_password"
+                error.name = "er_input_confirm_new_password"
             }
             else {
                 error.name = ""

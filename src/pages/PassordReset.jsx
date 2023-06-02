@@ -15,6 +15,7 @@ const PasswordReset = () => {
     const dispatch = useDispatch()
     const sendMail = useSelector(selectSendMailNotification)
     const invalidEmail = useSelector(selectPasswordResetError)
+    const [errSever, setErrSever] = useState()
 
     const onSubmit = e => {
         e.preventDefault();
@@ -22,6 +23,8 @@ const PasswordReset = () => {
         const formSubmit = document.querySelector("#passwordreset")
         if (ValidatorSubmit(formSubmit,submitInput)){
             dispatch(passwordReset(form)).unwrap()
+        }else {
+            setErrSever('')
         }
     }
 
@@ -48,7 +51,7 @@ const PasswordReset = () => {
                     <div className="py-4 text-gray-500">{t("ConfirmEmaiMessage")}</div>
                     <form id="passwordreset" className="space-y-4 md:space-y-6" onSubmit={e => onSubmit(e)}>
                         <FormInput {...email} onChange = {e => onChange(e)} placeholder="ex_email"/>
-                        <div><span className="absolute text-red-500 text-xs">{t(invalidEmail)}</span></div>
+                        <div><span className="absolute text-red-500 text-xs">{t(errSever)}</span></div>
                         <div className="flex justify-end">
                             <button 
                                 type="submit" 
