@@ -54,11 +54,11 @@ function App() {
                   <Routes>
                     {isAuthenticated ? (<>
                     <Route path='/profile' element={<Profile />} />
-                      <Route path='' element={<Home />} />
                       <Route path='/history' element={<History />} />
+                      <Route path='' element={<Home />} />
                       <Route path='/*' element={<Navigate to='/'/>} />
                     </>):(<>
-                        <Route path='/' element={<Login />} />
+                        <Route path='/login' element={<Login />} />
                         <Route path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}></Route>
                         <Route path='/register' element={<SignUp />} />
                         <Route path='/passwordreset' element={<PasswordReset />} />

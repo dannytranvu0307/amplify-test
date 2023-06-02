@@ -20,13 +20,20 @@ function Home() {
   const [data, setData] = useState({ date: "", vehicle: 'train', Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" });
   const [error, setError] = useState({ date: false, payment: false, Destination: false, departure: false, arrival: false, price: false })
   const [TableData, setTableData] = useState([])
-  const [image, setImage] = useState(JSON.parse(localStorage.getItem('imageData')).imageList || []);
+  const [image, setImage] = useState([]);
   const [searching, setSearching] = useState([]);
   const [isOn, setIsOn] = useState(true);
   const dispatch = useDispatch()
   const [warning, setWarning] = useState('');
 
-  console.log(searching)
+  useEffect(()=>{
+    const data=  JSON.parse(localStorage.getItem('imageData'))
+     if(data){
+       setImage(data.imageList)
+     }
+
+   },[])
+   
   const user = useSelector(state => state.login.user)
 
   useEffect(() => {

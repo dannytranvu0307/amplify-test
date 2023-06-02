@@ -51,8 +51,9 @@ export const register = createAsyncThunk(
 export const verify = createAsyncThunk(
     'login/verify',
     async (form) => {
+        console.log(form)
         try {
-            const response = await axios.post(`${baseURL}/users/active`,form,{withCredentials: true})
+            const response = await axios.post(`${baseURL}/users/active`,form)
             return response
         }catch(err){
             return err.response
@@ -213,6 +214,7 @@ const authSlice = createSlice({
             state.isLoading = true
         }),
         builder.addCase(passwordReset.fulfilled, (state, action)=>{
+            console.log(action.payload)
             if(action.payload.status === 200){
                 state.isLoading = false
                 state.sendMailNotification = true

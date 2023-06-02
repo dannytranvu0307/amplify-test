@@ -63,8 +63,6 @@ function Login(){
                 if (res.status !== 401){
                     dispatch(authenticate())
                 }})
-                console.log(location)
-                navigate(location)
             }
             else{
                 setErrSever('')
