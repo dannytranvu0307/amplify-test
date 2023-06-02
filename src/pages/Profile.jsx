@@ -147,13 +147,10 @@ const Profile = () => {
             setCommuterPass({ ...commuterPass, start: commuterPass.start, goal: commuterPass.goal })
         }
     }
-    console.log(commuterPass)
 
     // submit to search commuter pass 
     const onSubmitSearch = async () => {
         if (startPoint.stationCode !== "" && goaltPoint.stationCode !== ""){
-            console.log(startPoint.stationCode,
-                goaltPoint.stationCode )
             try {
                 const res = await axios.get(`${baseURL}/cp-routes?start=${startPoint.stationCode}&goal=${goaltPoint.stationCode}`, { withCredentials: true })
                 setLstCp(res.data.data)
@@ -229,7 +226,6 @@ const Profile = () => {
                         viaDetails: null
                     }
                 })).unwrap().then(res => {
-                    console.log(res)
                     if (res.status === 200) {
                         dispatch(authenticate())
                             .unwrap().then(() => {
@@ -259,7 +255,6 @@ const Profile = () => {
                             viaDetails: [...commuterPass.viaDetails]
                         }
                     })).unwrap().then(res => {
-                        console.log(res)
                         if (res.status === 200) {
                             dispatch(authenticate())
                                 .unwrap().then(() => {

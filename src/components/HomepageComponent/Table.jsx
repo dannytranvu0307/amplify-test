@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { baseURL } from '../../features/auth/loginSlice';
 import { memo, } from 'react';
 import axios from 'axios';
 import { authenticate, baseURL } from '../../features/auth/loginSlice';

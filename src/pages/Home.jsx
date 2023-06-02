@@ -15,7 +15,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { baseURL } from '../features/auth/loginSlice';
 import axios from 'axios';
 import { authenticate } from '../features/auth/loginSlice';
-import { baseURL } from '../features/auth/loginSlice';
 function Home() {
    const { t } = useTranslation();
     const [data,setData] =useState({date:"",vehicle:'train', Destination:"", price:"" , round:t('1way'),departure:"",arrival:"", payment:"" ,transport:""});

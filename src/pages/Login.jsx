@@ -50,6 +50,7 @@ function Login(){
         e.preventDefault();
         const $ = document.querySelector.bind(document)
 
+
         // get elements
         const submitEmail = $("input#email")
         const submitPassword = $("input#password")
@@ -69,7 +70,8 @@ function Login(){
                 setErrSever('')
             }
     }
-
+        
+    console.log(import.meta.env)
     return (
         <>
         <section 
