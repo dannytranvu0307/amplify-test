@@ -150,7 +150,8 @@ const Profile = () => {
 
     // submit to search commuter pass 
     const onSubmitSearch = async () => {
-        if (startPoint.stationCode !== "" && goaltPoint.stationCode !== ""){
+        console.log(startPoint.stationCode !== "",startPoint.stationCode  !== undefined,goaltPoint.stationCode !== undefined)
+        if ((startPoint.stationCode !== "" && startPoint.stationCode !== undefined)  && (goaltPoint.stationCode !== "" && goaltPoint.stationCode !== undefined)){
             try {
                 const res = await axios.get(`${baseURL}/cp-routes?start=${startPoint.stationCode}&goal=${goaltPoint.stationCode}`, { withCredentials: true })
                 setLstCp(res.data.data)
@@ -164,7 +165,7 @@ const Profile = () => {
             }
         }else{
             setLstCp([])
-            if (startPoint.stationCode === ""){
+            if (startPoint.stationCode === "" || startPoint.stationCode === undefined){
                 document.querySelector("#start").focus()
             }else{
                 document.querySelector("#goal").focus()
@@ -267,7 +268,7 @@ const Profile = () => {
                                     setDisabledPassword(true)
                                     setInvalidError('')
                                     setDisabledname(true)
-setDisabledDepartment(true)
+                                    setDisabledDepartment(true)
                         }
                     })
                 }

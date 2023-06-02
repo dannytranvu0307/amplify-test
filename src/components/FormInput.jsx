@@ -51,7 +51,7 @@ const FormInput = (props) => {
                         className={`
                         peer
                         bg-gray-50 border border-gray-300 
-                        text-gray-900 sm:text-[16px] rounded-lg 
+                        text-gray-900 sm:text-sm rounded-lg 
                         disabled:text-gray-600
                         disabled:border-none 
                         focus:ring-primary-600 
@@ -67,7 +67,7 @@ const FormInput = (props) => {
                     className={`
                     disabled:appearance-none
                     bg-gray-50 border border-gray-300 
-                    text-gray-700 sm:text-[16px] rounded-lg 
+                    text-gray-700 sm:text-sm rounded-lg 
                     focus:ring-primary-600
                     focus:border-primary-600 w-full p-2.5 ${error.name && ("border-red-500 bg-red-100")}`}>
                 <option value = "" >{t("chooseDepartmentId")}</option>

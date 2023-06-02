@@ -134,5 +134,8 @@
     "Result":"検索結果がありません。",
     "start_pla":"出発駅を入力",
     "goal_pla":"到着駅を入力",
-    "futureAlert":"未来の訪問日付を入力してはいけません。"
+    "futureAlert":"未来の訪問日付を入力してはいけません。",
+    "via_pla":"経由駅を入力",
+    "start_bus_pla":"出発地を入力",
+    "goal_bus_pla":"到着地を入力"
 }

@@ -51,10 +51,10 @@ const Table = ({tableData})=>{
         <table className="">
           <thead className="text-xs text-black uppercase bg-[#D9D9D9] ">
             <tr>
-                <th scope="col" className="py-3 px-4 px-auto border border-gray-500 flex-nowrap ">
+                <th scope="col" className="py-3 px-6 px-auto border border-gray-500 flex-nowrap max-w-xs truncate">
                  {t('date2')}
                 </th>
-                <th scope="col" className="py-3 px-14 border border-gray-500 ">
+                <th scope="col" className="py-3 px-14 border border-gray-500 max-w-xs truncate">
                 {t('destination')}
                 </th>
                 <th scope="col" className="border px-4 border border-gray-500  max-w-xs truncate">
