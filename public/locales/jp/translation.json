@@ -125,10 +125,10 @@
     "requiredSearchBtn":"検索ボタンをクリックてください。",
     "requiredChoose":"該当する項目を選択してください。",
     "notFoundCp":"検索結果がありません。",
-    "warningLength":"金額が長すぎます",
-    "warningType":"金額に数字を入力してください",
+    "warningLength":"金額が長すぎます。",
+    "warningType":"金額に数字を入力してください。",
     "alert":"各項目は選択または入力必須です。",
-    "AlertSame":"同じ駅名は連続して設定できません",
+    "AlertSame":"同じ駅名は連続して設定できません。",
     "Search_Result":"検索結果",
     "Result":"検索結果がありません。"
 }
