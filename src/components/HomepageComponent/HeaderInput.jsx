@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 
 
-function HeaderInput({ onDateChange,data,onVehiclechange, onPayment , onRound, onDestination,error ,setError}) {
+function HeaderInput({ onDateChange,data,onVehiclechange, onPayment , onRound, onDestination,error ,setError, onKillData}) {
     const { t } = useTranslation();
    
  
@@ -13,11 +13,17 @@ function HeaderInput({ onDateChange,data,onVehiclechange, onPayment , onRound, o
    
     return (
 <div className='w-full border-b-[1.5px] border-gray-500'>
- <div className='flex sm:flex-col md:flex-row gap-3'>
+{/* <button className='shrink w-26 absolute right-0 h-full ' onClick={()=>onKillData()}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+</svg>
+</button> */}
+
+ <div className='flex sm:flex-col md:flex-row gap-3 relative'>
 
        <div className='shrink w-32 '>
            <span className='whitespace-nowrap text-xs '>{t("date")}</span>
-           <div className='flex bg-white relative border border-black '>
+           <div className='flex bg-[#F9FAFB] relative border border-black '>
                 <DatePicker
                 className={` w-full text-sm h-6 px-2 ${error.date&&("border-red-500 bg-red-100")}`}
                 selected={data.date}
@@ -44,6 +50,7 @@ function HeaderInput({ onDateChange,data,onVehiclechange, onPayment , onRound, o
               className="
               h-6 pr-4 pl-2
               flex-auto 
+              bg-[#F9FAFB]
               text-xs
               appearance-none
                ">
@@ -72,10 +79,11 @@ function HeaderInput({ onDateChange,data,onVehiclechange, onPayment , onRound, o
               h-6 px-2
               flex-auto 
               text-xs
+              bg-[#F9FAFB]
               appearance-none ${error.payment&&("border-red-500 bg-red-100")}`}
           
                > 
-               <option >ーー</option>
+               <option  value='' >ーー</option>
                <option  value={t("cash")}>{t("cash")}</option>
                <option  value={t("ic")}>{t("ic")}</option>
                
@@ -102,6 +110,7 @@ function HeaderInput({ onDateChange,data,onVehiclechange, onPayment , onRound, o
              text-gray-600 h-6 
              text-xs
              flex-auto 
+             bg-[#F9FAFB]
              appearance-none
                 ">
 
@@ -115,11 +124,11 @@ function HeaderInput({ onDateChange,data,onVehiclechange, onPayment , onRound, o
             </svg>
           </div>
        </div></>}
-
+     
 </div>
 <div className='py-5 '>
-    <span className=''>{t('Destination')}</span>
-    <div className='' ><input value ={data.Destination}  className={`w-full h-8 px-2 border border-black ${error.Destination&&("border-red-500 bg-red-100")}`} placeholder={t('Destination_pla')} onChange={(e)=> {onDestination(e.target.value),setError({...error,Destination:false})}} /></div> 
+    <span className='text-xs'>{t('Destination')}</span>
+    <div className='' ><input value ={data.Destination}  className={`w-full h-8 px-2 bg-[#F9FAFB] border border-black ${error.Destination&&("border-red-500 bg-red-100")}`} placeholder={t('Destination_pla')} onChange={(e)=> {onDestination(e.target.value),setError({...error,Destination:false})}} /></div> 
 </div>
 </div>
 )

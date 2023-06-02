@@ -16,7 +16,7 @@ function SearchTrain({onDepart, onArrival, data ,onTransport,error,setError, onS
     //trigger of switch button 
     const [alert, setAlert]= useState('')
    
-    
+    console.log(alert)
   const handleClick = () => {
     setInputVisible(true)
   };
@@ -31,6 +31,7 @@ function SearchTrain({onDepart, onArrival, data ,onTransport,error,setError, onS
     setId({...id,goal:suggestion.stationCode})
     setSuggestionsArrival([])
   };
+
   const handleSuggestionClickTransport = (suggestion) => {
     onTransport(suggestion.stationName);
     setId({...id,viaCode:suggestion.stationCode})
@@ -55,17 +56,20 @@ function SearchTrain({onDepart, onArrival, data ,onTransport,error,setError, onS
 
 
 const handleSearch =()=>{
+  console.log('search')
   const { date, Destination, departure, arrival, payment } = data;
   const updatedError = {
-  date: date === "",
+  date: date === ""||date===null,
   Destination: Destination === "",
-  departure: departure === ""||departure === arrival,
-  arrival: arrival === ""||departure === arrival,
-  payment: payment === ""
+  departure: departure === "",
+  arrival: arrival === "",
+  payment: payment === "",
+  equal:departure === arrival
 };
+console.log(updatedError)
 setError(updatedError);
-
 if(Object.values(updatedError).every((value)=> value===false)){
+  console.log('koko')
   axios.get(`${baseURL}/routes`,{
     params: {
       ...id,
@@ -74,7 +78,6 @@ if(Object.values(updatedError).every((value)=> value===false)){
   } )
   .then(response => {
     // Handle the response
-    console.log(response.data)
     onSearching(response.data.data)
     setAlert('')
   })
@@ -82,11 +85,10 @@ if(Object.values(updatedError).every((value)=> value===false)){
     // Handle the error
     onSearching({noData:t('Result')})
   });
-}
-else if(departure === arrival){
+}else if(updatedError.date ||updatedError.departure|| updatedError.departure||updatedError.arrival||updatedError.payment){
+   setAlert(t('alert'))
+}else if(departure !==""&&arrival!==""&&updatedError.equal){
   setAlert(t('AlertSame'))
-}else {
-  setAlert(t('alert'))
 }
 }
 
@@ -179,7 +181,7 @@ useEffect(()=>{
             <div className='flex-auto '>
                <span className='my-2 text-xs'>{t("departure")}</span>
                <div className='relative '>
-              <input  className={`w-full border-[1px] border-black rounded h-8 px-5 ${error.departure&&("border-red-500 bg-red-100")}`} 
+              <input  className={`w-full border-[1px] bg-[#F9FAFB] border-black rounded h-8 px-5 ${error.departure&&("border-red-500 bg-red-100")}`} 
                value={data.departure}
                onChange={e=>{onDepart(e.target.value),setError({...error,departure:false})}}
                onFocus={(prev)=>setFocus({...prev,departure:true})}
@@ -203,7 +205,7 @@ useEffect(()=>{
             <span className='my-2 text-xs'>{t("arrival")}</span>
                <div className='relative'>
                 <input  
-               className={`w-full border-[1px] border-black rounded h-8 px-5 ${error.arrival&&("border-red-500 bg-red-100")}`} 
+                className={`w-full border-[1px] border-black bg-[#F9FAFB] rounded h-8 px-5 ${error.arrival&&("border-red-500 bg-red-100")}`} 
                value ={data.arrival}
                onFocus={(prev)=>setFocus({...prev,arrival:true})}
                onBlur={(prev)=>setFocus({...prev,arrival:false})}
@@ -228,7 +230,7 @@ useEffect(()=>{
        <div className='border border-black rounded relative'>   
       {isInputVisible ? (
         <input
-          className='w-full border-[1px] border-black rounded h-8 px-2'
+          className='w-full border-[1px] border-black rounded h-8 px-2 bg-[#F9FAFB]'
           type="text"
           value={data.transport}
           onChange={e=>onTransport(e.target.value)}

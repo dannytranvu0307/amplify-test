@@ -42,7 +42,7 @@ function SearchResult({search,data ,onPrice , isOn}){
         <div className=" text-xs my-3 ">
           {search.noData&& <div> <p className ='pb-5 text-lg '>{t('Search_Result')}</p>
            <div className="text-center text-gray-500">{search.noData}</div> </div>}
-            {!search.noData&&<div className ='pb-5 text-lg '>{t('Search_Result')} </div>}
+            {search.length>0&&<div className ='pb-5 text-lg '> {t('Search_Result')} </div>}
             { !search.noData &&
             search.map((search,i)=>(
                 <div 
@@ -50,9 +50,9 @@ function SearchResult({search,data ,onPrice , isOn}){
                 className={`my-2 group relative border  ${selectedObject2 === search ?'bg-primary-500 rounded border border-black text-white' : ''}`}
                 onMouseEnter={() => handleObjectHover(search)}
                 onMouseLeave={() => handleObjectHover(null)}
-                onClick={() => handleObjectClick(search)}
+             
                 >
-              <div  className="flex  px-4 py-2 rounded hover:border border-black  flex flex-nowrap" >
+              <div  className="flex  px-4 py-2 rounded hover:border border-black  flex flex-nowrap" onClick={() => handleObjectClick(search)} >
                 
                {
               search.sections.length===3&&<div>{search.sections[0].stationName}ー{search.sections[2].stationName}</div>
@@ -77,10 +77,9 @@ function SearchResult({search,data ,onPrice , isOn}){
               </div>}
     
               </div>
-              <div className={`absolute z-10 w-full bg-white p-2 rounded-md shadow-md transition-opacity duration-300 overflow-auto mx-auto max-h-[200px] overflow-y-scroll
-             ${selectedObject === search ? 'opacity-100' : 'opacity-0 invisible'}`}>
-                
-    
+              <div className={`absolute z-10 w-[50%] right-[-200px] text-black bg-white p-2 rounded-md shadow-md transition-opacity duration-300 overflow-auto mx-auto max-h-[200px] overflow-y-scroll
+            
+            ${selectedObject === search ? 'opacity-100' : 'opacity-0 invisible'}`}>
                               {search.sections.map((section, index)=>(<div key={index} className="">
                              {section.type==='point'&&<div className="text-xs">{section.stationName}</div>}
                              {section.type==='move'&&<div className="flex" >

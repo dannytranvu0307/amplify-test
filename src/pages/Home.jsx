@@ -15,18 +15,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import { baseURL } from '../features/auth/loginSlice';
 import axios from 'axios';
 import { authenticate } from '../features/auth/loginSlice';
+import { baseURL } from '../features/auth/loginSlice';
 function Home() {
    const { t } = useTranslation();
     const [data,setData] =useState({date:"",vehicle:'train', Destination:"", price:"" , round:t('1way'),departure:"",arrival:"", payment:"" ,transport:""});
     const [error,setError]=useState({date:false ,payment:false,Destination:false,departure:false,arrival:false , price:false})
     const [TableData,setTableData]= useState([])
-    const [image, setImage] =useState([]);
+    const [image, setImage] =useState(JSON.parse(localStorage.getItem('imageData')).imageList||[]);
     const [searching , setSearching] = useState([]);
     const [isOn, setIsOn] = useState(true);
     const dispatch = useDispatch()
     const [warning , setWarning ]= useState('');
-
-
+    
+  console.log(searching)
     const  user= useSelector(state =>state.login.user)
 
      useEffect(()=>{
@@ -71,7 +72,10 @@ function Home() {
         setData({ ...data,price:option});
       };
 
-
+      const handleKillData=(option)=>{
+        // setData({date:"",vehicle:data.vehicle, Destination:"", price:"" , round:t('1way'),departure:"",arrival:"", payment:"" ,transport:""})
+        console.log('wtf')
+      }
 
 
 
@@ -126,6 +130,21 @@ function Home() {
         console.error('Error saving data to localStorage:', error);
       }
        }
+       const handleDeleteAll= ()=>{
+        setImage([])
+        try {
+         const data = {
+           imageList:[],
+         };
+     
+         const dataJSON = JSON.stringify(data);
+         localStorage.setItem('imageData', dataJSON);
+       } catch (error) {
+         console.error('Error saving data to localStorage:', error);
+       }
+        }
+ 
+
 
        
        const  handleAddTable= () => {
@@ -231,19 +250,6 @@ function Home() {
       }
     }
        
-
-useEffect(()=>{
-
-
-  const dataJSON = localStorage.getItem('imageData');
-  
-    if (dataJSON) {
-      const data = JSON.parse(dataJSON);
-      setImage(data.imageList)
-      
-    }
-},[])
-
     return (
         <div className="w-full h-full bg-[#F9FAFB] ">
           
@@ -256,7 +262,8 @@ useEffect(()=>{
                              onPayment ={handlePayment} 
                              onRound ={handleRound } 
                              onDestination ={handleDestination} 
-                             error={error}
+                             error={error} 
+                              onKillData ={handleKillData}
                              setError={setError}
                  /> </div>
               <div className='flex'>
@@ -268,7 +275,7 @@ useEffect(()=>{
                  {data.vehicle==='taxi'&&<SearchBus onDepart ={handleDeparture} onArrival={handleArrial} data={data } error ={error} setError={setError}/>}
                </div>
                <SearchResult search={searching} data={data} onPrice={handlePrice} isOn ={isOn} />
-              <div className='flex mt-auto pb-[150px]'>
+              <div className='flex mt-auto pb-[50px]'>
           {data.vehicle ==='train' ? (searching.length>0&&<HomeFooter warning={warning} onPrice={handlePrice} data ={data} onAdd={handleAddTable} error ={error} setError={setError}/>): <HomeFooter warning={warning} onPrice={handlePrice} data ={data} onAdd={handleAddTable} error ={error} setError={setError}/>}
                 </div>
              
@@ -281,10 +288,10 @@ useEffect(()=>{
                 <div className='flex'><HomeUserData /></div>
                 <div className='max-w-[700px]'> <Table tableData={TableData}/>
                 
-                <div className='w-full my-2 h-32'>{TableData.length>=1&&<PreviewImage image={image} onDelete ={handleDeleteImage}/>}</div>
+                <div className='w-full my-2 h-32 '>{TableData.length>=1&&<PreviewImage image={image} onDelete ={handleDeleteImage}/>}</div>
                 </div>
                
-                <div className='max-w-[750px]' ><HomeFooter2 img={image} deleteAllFile={setImage} onFileChange={handleFileChange} tableData={TableData}/></div>
+                <div className='max-w-[750px] flex mt-auto pb-[64px]' ><HomeFooter2 img={image} deleteAllFile={handleDeleteAll} onFileChange={handleFileChange} tableData={TableData}/></div>
               </div>
                
              </div>

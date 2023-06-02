@@ -3,7 +3,6 @@ import { useState,useRef,memo,useEffect } from "react";
 import Validators from "../functional/Validators";
 import { departments  ,selectDepartments} from '../features/department/departmentsSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import { use } from 'i18next';
 
 const FormInput = (props) => {
     const {label, placeholder,forHtml,value,type,onChange,invalidError,...inputProps} = props
