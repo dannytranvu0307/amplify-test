@@ -4,6 +4,7 @@ import SwitchButton from './SwitchButton';
 import { useEffect } from 'react';
 import axios from 'axios';
 import {baseURL} from '../../features/auth/loginSlice'
+import { useSelector } from 'react-redux';
 
 function SearchTrain({onDepart, onArrival, data ,onTransport,error,setError, onSearching , isOn,setIsOn}){
     const { t } = useTranslation();
@@ -15,8 +16,9 @@ function SearchTrain({onDepart, onArrival, data ,onTransport,error,setError, onS
     const [id, setId]=useState({}); //id of station 
     //trigger of switch button 
     const [alert, setAlert]= useState('')
-   
-    console.log(alert)
+    const user= useSelector(state =>state.login.user)
+    
+
   const handleClick = () => {
     setInputVisible(true)
   };
@@ -56,24 +58,28 @@ function SearchTrain({onDepart, onArrival, data ,onTransport,error,setError, onS
 
 
 const handleSearch =()=>{
-  console.log('search')
+  const today = new Date()
+ 
   const { date, Destination, departure, arrival, payment } = data;
   const updatedError = {
-  date: date === ""||date===null,
+  date: date === ""||date===null||date>today,
   Destination: Destination === "",
   departure: departure === "",
   arrival: arrival === "",
   payment: payment === "",
-  equal:departure === arrival
+  equal:departure === arrival,
+  
 };
-console.log(updatedError)
+
+
+
 setError(updatedError);
 if(Object.values(updatedError).every((value)=> value===false)){
-  console.log('koko')
+  
   axios.get(`${baseURL}/routes`,{
     params: {
       ...id,
-      commuterPass:isOn?1:0,
+      commuterPass:user.commuterPass?1:0,
     },withCredentials: true
   } )
   .then(response => {
@@ -85,10 +91,12 @@ if(Object.values(updatedError).every((value)=> value===false)){
     // Handle the error
     onSearching({noData:t('Result')})
   });
-}else if(updatedError.date ||updatedError.departure|| updatedError.departure||updatedError.arrival||updatedError.payment){
+}else if(date === ""||date===null ||updatedError.departure|| updatedError.departure||updatedError.arrival||updatedError.payment){
    setAlert(t('alert'))
 }else if(departure !==""&&arrival!==""&&updatedError.equal){
   setAlert(t('AlertSame'))
+}else if(date!==null&&date!==''&&date>today){
+  setAlert(t('futureAlert'))
 }
 }
 

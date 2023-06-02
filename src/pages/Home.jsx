@@ -34,6 +34,7 @@ function Home() {
         setTableData(user.fares)
       }
      },[user, image])
+     
 
       const handleDateChange = (newData) => {
       setData({ ...data,date:newData});
@@ -147,11 +148,12 @@ function Home() {
 
        
        const  handleAddTable= () => {
+        const today = new Date()
         if(data.vehicle==='train'){
           const { date, Destination, departure, arrival, payment , price} = data;
 
           const updatedError ={
-          date: date === "",
+          date: date === "" || date>today,
           Destination: Destination === "",
           departure: departure === "",
           arrival: arrival === "",
@@ -175,7 +177,7 @@ function Home() {
              visitDate: FormatDate(data.date,"YYYY/MM/DD")
           }
           
-          axios.post(`${baseURL/'fares'}`, form, {
+          axios.post(`${baseURL}/fares`, form, {
             withCredentials: true,
           })
             .then(response => {
@@ -196,14 +198,17 @@ function Home() {
           setWarning(t('warningLength'))
         }else if(isNaN(price)){
           setWarning(t('warningType'))
-        }else{
+        }else if(date>today){
+          setWarning(t('futureAlert'))
+        }
+        else{
           setWarning(t('warning'))
         }
       }
       else{
         const { date, Destination, departure, arrival,price} = data;
         const updatedError = {
-          date: date === "",
+          date: date === "" || date>today,
           Destination: Destination === "",
           departure: departure === "",
           arrival: arrival === "",
@@ -224,7 +229,7 @@ function Home() {
             transportation:data.vehicle,
             visitDate: FormatDate(data.date,"YYYY/MM/DD")
          }
-         axios.post(`${baseURL/'fares'}`, form, {
+         axios.post(`${baseURL}/fares`, form, {
           withCredentials: true,
         })
           .then(response => {
@@ -243,7 +248,10 @@ function Home() {
           setWarning(t('warningLength'))
         }else if(isNaN(price)){
           setWarning(t('warningType'))
-        }else{
+        }else if(date>today){
+          setWarning(t('futureAlert'))
+        }
+        else{
           setWarning(t('warning'))
         }
       }
