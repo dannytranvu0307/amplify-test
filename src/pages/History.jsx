@@ -11,9 +11,7 @@ function History() {
     const getFiles = async () => {
         try {
             const res = await axios.get(`${baseURL}/files`,{withCredentials: true})
-            return setFiles([...res.data.data,{exportedDate:"todayyyyyyyyyyyyyyyyy",
-                fileId:"1",
-                fileName:"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}]) 
+            return setFiles([...res.data.data]) 
         }catch(err){
             return err.response
         }

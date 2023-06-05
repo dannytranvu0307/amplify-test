@@ -28,7 +28,9 @@ function HeaderInput({ onDateChange, data, onVehiclechange, onPayment, onRound, 
                             className={`w-full text-sm h-6 px-2 ${error.date && ("border-red-500 bg-red-100")}`}
                             selected={data.date}
                             onChange={date => { onDateChange(date), setError({ ...error, date: false }) }}
-
+                            maxDate={new Date()}
+                            showMonthDropdown
+                            yearDropdownItemNumber={10}
                             dateFormat="yyyy/MM/dd"
                             placeholderText='YYYY/MM/DD'
 
@@ -68,7 +70,7 @@ function HeaderInput({ onDateChange, data, onVehiclechange, onPayment, onRound, 
 
                 </div>
 
-                {data.vehicle === 'train' && <> <div className='sm:w-20'>
+                {data.vehicle === 'train' ?<> <div className='sm:w-20'>
                     <span className='whitespace-nowrap text-xs '>{t("purchase")}</span>
                     <div className=" flex   border border-black bg-white relative  ">
 
@@ -123,12 +125,12 @@ function HeaderInput({ onDateChange, data, onVehiclechange, onPayment, onRound, 
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                             </svg>
                         </div>
-                    </div></>}
+                    </div></>:<> <div className='sm:w-20'></div><div className='sm:w-20'></div></>}
 
             </div>
             <div className='py-5 '>
                 <span className='text-xs'>{t('Destination')}</span>
-                <div className='' ><input value={data.Destination} className={`w-full h-8 px-2 bg-[#F9FAFB] border border-black ${error.Destination && ("border-red-500 bg-red-100")}`} placeholder={t('Destination_pla')} onChange={(e) => { onDestination(e.target.value), setError({ ...error, Destination: false }) }} /></div>
+                <div className='w-full' ><input value={data.Destination} className={`w-full h-8 px-2 bg-[#F9FAFB] border border-black ${error.Destination && ("border-red-500 bg-red-100")}`} placeholder={t('Destination_pla')} onChange={(e) => { onDestination(e.target.value), setError({ ...error, Destination: false }) }} /></div>
             </div>
         </div>
     )

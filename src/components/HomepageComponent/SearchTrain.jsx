@@ -6,14 +6,13 @@ import axios from 'axios';
 import { baseURL } from '../../features/auth/loginSlice'
 import { useSelector } from 'react-redux';
 
-function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, onSearching, isOn, setIsOn , onWarning }) {
+function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, onSearching, isOn, setIsOn , onWarning  , id , setId,isInputVisible, setInputVisible}) {
   const { t } = useTranslation();
-  const [isInputVisible, setInputVisible] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [suggestionsArrival, setSuggestionsArrival] = useState([]);
   const [suggestionsTransport, setSuggestionsTransport] = useState([]);
   const [focus, setFocus] = useState({ departure: false, arrival: false, transport: false });
-  const [id, setId] = useState({}); //id of station 
+
   //trigger of switch button 
   const [alert, setAlert] = useState('')
   const user = useSelector(state => state.login.user)
@@ -39,6 +38,7 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
     setId({ ...id, viaCode: suggestion.stationCode })
     setSuggestionsTransport([])
   };
+  
   const handleBlur = () => {
     setFocus({ ...focus, transport: false })
     if (data.transport === "" || data.transport === null || data.transport == undefined) {
@@ -58,17 +58,16 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
 
 
   const handleSearch = () => {
-    const today = new Date()
-
-    const { date, Destination, departure, arrival, payment } = data;
+    
+    
+    const { date, Destination, departure, arrival, payment, } = data;
     const updatedError = {
-      date: date === "" || date === null || date > today,
+      date: date === "" || date === null || date === undefined,
       Destination: Destination === "",
       departure: departure === ""||departure===arrival,
       arrival: arrival === ""||departure===arrival,
       payment: payment === "",
       equal: departure === arrival,
-
     };
 
 
@@ -92,12 +91,10 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
           // Handle the error
           onSearching({ noData: t('Result') })
         });
-    } else if (date === "" || date === null || updatedError.departure || updatedError.departure || updatedError.arrival || updatedError.payment) {
+    } else if (date === "" || date === null ||departure===''|| departure === null|| departure=== undefined || arrival==='' || arrival===null ||arrival===undefined||payment ==='' ||payment===null||payment===undefined ) {
       setAlert(t('alert'))
-    } else if (departure !== "" && arrival !== "" && updatedError.equal) {
+    } else if (departure !== "" && arrival !== "" && departure===arrival) {
       setAlert(t('AlertSame'))
-    } else if (date !== null && date !== '' && date > today) {
-      setAlert(t('futureAlert'))
     }
   }
 
