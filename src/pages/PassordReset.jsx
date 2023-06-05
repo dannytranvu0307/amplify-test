@@ -4,7 +4,7 @@ import {email} from "../instaces"
 import ValidatorSubmit from "../functional/ValidatorSubmit";
 import { useTranslation } from 'react-i18next';
 import { passwordReset,changeActive } from "../features/auth/loginSlice";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 

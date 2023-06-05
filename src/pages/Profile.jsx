@@ -516,7 +516,9 @@ const Profile = () => {
 
                 </div>
             </div>
-            {messageUpdate && <ErrorNotification>userInfoUpdateMessageSuccess</ErrorNotification>}
+            {/* {messageUpdate &&  */}
+            <ErrorNotification>userInfoUpdateMessageSuccess</ErrorNotification>
+            {/* } */}
         </div>
     )
 }
