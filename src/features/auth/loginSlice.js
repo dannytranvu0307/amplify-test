@@ -122,7 +122,7 @@ const authSlice = createSlice({
                     isLoading: true, 
                     // acctive parameter
                     isActiveMessage: null,
-                    isActive : true,
+                    isActive : false,
                     passwordResetError: null,
                     // email reset password instace
                     sendMailMessage: null,
