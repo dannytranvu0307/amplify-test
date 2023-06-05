@@ -13,7 +13,7 @@ const PasswordReset = () => {
     const { t } = useTranslation();
 
     useEffect(()=>{
-        return dispatch(changeActive())
+        return ()=>dispatch(changeActive())
      },[])
 
     const dispatch = useDispatch()

@@ -22,6 +22,7 @@ import { useDispatch, useSelector  } from "react-redux";
 
 function App() {
 
+
   const isAuthenticated = useSelector(selectIsAuthenticated)
   const dispatch = useDispatch();
 
@@ -51,7 +52,7 @@ function App() {
              <Sidebar />
               }
             <main className="flex flex-col w-full overflow-x-hidden overflow-y-auto left-16 -z-1">
-              <div className="w-full py-8 mx-auto">
+              <div className="w-full py-8 md:py-1 mx-auto">
                 <div className="flex flex-col w-full h-full">
                   <Routes>
                     {isAuthenticated ? (
