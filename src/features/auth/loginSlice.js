@@ -122,17 +122,20 @@ const authSlice = createSlice({
                     isLoading: true, 
                     // acctive parameter
                     isActiveMessage: null,
-                    isActive : false,
+                    isActive : true,
                     passwordResetError: null,
                     // email reset password instace
                     sendMailMessage: null,
-                    // login error 
-                    errorLogin: null,
                     // mailTimeOut: false
                     // confirm password and auth token message
                     confirmPasswordResetSuccess: null,
                     confirmPasswordResetReject: false
                 },
+    reducers : {
+        changeActive: (state) => {
+            state.isActive = false
+        }
+    },
     extraReducers:(builder) =>  {
         // login thunk
         builder.addCase(login.pending, (state,action)=> {
@@ -143,13 +146,7 @@ const authSlice = createSlice({
         builder.addCase(login.fulfilled, (state,action)=> {
             if(action.payload.status === 200){
                 state.error = null
-                state.errorLogin = null
                 state.isAuthenticated = true
-            }else if (action.payload.status === 401){
-                state.errorLogin = 'Unauthorized'
-            }
-            else if (action.payload.status === 400){
-                state.errorLogin = 'Unauthorized'
             }
         }),
 
@@ -272,13 +269,13 @@ const authSlice = createSlice({
     }
 })
 
+export const { changeActive } = authSlice.actions
 export default authSlice.reducer
 
 
 // 
 export const selectIsLoading = (state ) => state.login.isLoading
 export const selectError = (state) => state.login.error
-export const selectErrorLogin = (state) => state.login.errorLogin
 // user info
 export const selectUser = (state) => state.login.user
 // is authen

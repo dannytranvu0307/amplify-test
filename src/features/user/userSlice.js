@@ -24,9 +24,7 @@ const userSlice = createSlice({
             state.updateMessage = null
         }),
         builder.addCase(userUpdate.fulfilled, (state,action)=> {
-            if(action.payload.data.code === "API004_ER" && action.payload.data.message === "Old password is not match"){
-                state.updateMessage = "oldPasswordNotMatch"
-            }else if (action.payload.status === 200 &&  action.payload.data.type ==="INFO" && action.payload.data.message === "Update successfull") {
+            if (action.payload.status === 200 &&  action.payload.data.type ==="INFO" && action.payload.data.message === "Update successfull") {
                 state.updateMessage = ""
             }else if (action.payload === 401){
                 state.error = ""

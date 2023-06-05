@@ -3,7 +3,7 @@ import ErrorNotification from "../components/ErrorNotification";
 import {email} from "../instaces"
 import ValidatorSubmit from "../functional/ValidatorSubmit";
 import { useTranslation } from 'react-i18next';
-import { passwordReset } from "../features/auth/loginSlice";
+import { passwordReset,changeActive } from "../features/auth/loginSlice";
 import {useState} from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -11,6 +11,10 @@ import { useDispatch } from "react-redux";
 const PasswordReset = () => {
     const [form, setForm] = useState();
     const { t } = useTranslation();
+
+    useEffect(()=>{
+        return dispatch(changeActive())
+     },[])
 
     const dispatch = useDispatch()
     const [message, setMessage] = useState(false);

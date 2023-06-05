@@ -1,13 +1,9 @@
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from '../features/auth/loginSlice';
-import AOS from "aos";
-AOS.init({
-    once: true,
-    easing: 'ease-in-out'
-});
+import { useDispatch } from "react-redux";
+import { changeActive, logout } from '../features/auth/loginSlice';
+
 const Sidebar = () => {
     const dispatch = useDispatch()
     const { t } = useTranslation();
@@ -15,6 +11,9 @@ const Sidebar = () => {
     const openSideBar = () => {
         setMounted(!mounted)
     }
+    useEffect(()=>{
+        dispatch(changeActive())
+    },[])
     const handleLogout = () => {
         dispatch(logout())
     }

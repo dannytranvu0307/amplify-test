@@ -1,4 +1,4 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect, memo} from "react";
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,21 +7,16 @@ import {email, password} from "../instaces"
 import Modal from "../components/Modal";
 import FormInput from "../components/FormInput";
 import ValidatorSubmit from "../functional/ValidatorSubmit";
-import { login, authenticate,
-    selectIsActive,selectIsActiveMessage,selectErrorLogin,
+import { login, authenticate,changeActive,
+    selectIsActive,selectIsActiveMessage,
     selectActiveError } from "../features/auth/loginSlice";
 
 function Login(){
     // change language
     const { t } = useTranslation();
     // message store
-    const error = useSelector(selectErrorLogin);
-    useEffect(()=>{
-        setErrSever(error)
-    },[error])
-
-    const [errSever, setErrSever] = useState(error)
-    const isActiveMessage= useSelector(selectIsActiveMessage)
+    const [errSever, setErrSever] = useState('')
+    const isActiveMessage = useSelector(selectIsActiveMessage)
     const isActiveError = useSelector(selectActiveError)
     const isActive = useSelector(selectIsActive)
 
@@ -41,11 +36,10 @@ function Login(){
     }
 
     // check remember me or not?
-    const handleCheck = (e) =>{
+    const handleCheck = () =>{
         setRemember(!remember)
     }
     
-
     // send form
     const onSubmit = async e => {
         e.preventDefault();
@@ -56,16 +50,18 @@ function Login(){
         const submitPassword = $("input#password")
         const formSubmit = $("#login")
         // pass or not
-        if (ValidatorSubmit(formSubmit,[submitEmail,submitPassword])){
+        if (ValidatorSubmit(formSubmit,[submitEmail,submitPassword])){        
             dispatch(login({...form, ["remember"]:remember}))
             .unwrap()
             .then(res=>{
-                if (res.status !== 401){
+                if (res.status === 200){
                     dispatch(authenticate()).unwrap()
                     .then(res=>{
                         navigate('/')
                     })
-                }})
+                }else {
+                    setErrSever('Unauthorized')
+                }}) 
             }
             else{
                 setErrSever('')
@@ -79,6 +75,7 @@ function Login(){
         data-aos-offset="3"
         data-aos-easing="ease-in-sine"
         className="bg-gray-50 dark:bg-gray-900"
+        key="login"
         >
             <div className="flex flex-col items-center justify-center px-2 md:px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
@@ -135,4 +132,4 @@ function Login(){
     </>
     )
 }
-export default Login
+export default memo(Login)

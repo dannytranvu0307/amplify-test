@@ -7,16 +7,18 @@ import { email, department,password, confirm_password, fullName} from "../instac
 import ErrorNotification from "../components/ErrorNotification";
 
 import { useDispatch, useSelector } from "react-redux";
-import { register, selectIsSuccess,selectRegisterError } from "../features/auth/loginSlice";
+import { register, selectIsSuccess,selectRegisterError, changeActive } from "../features/auth/loginSlice";
 
 const SignUp = () => {
     const { t } = useTranslation();
-
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     // error message
-    const error = useSelector(selectRegisterError)
-    const isSuccess = useSelector(selectIsSuccess)
+    const error = useSelector(selectRegisterError);
+    const isSuccess = useSelector(selectIsSuccess);
 
+    useEffect(()=>{
+       return ()=>dispatch(changeActive())
+    },[])
     // input elements
     const inputs =  [fullName,email,department,password,confirm_password]
 

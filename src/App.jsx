@@ -47,24 +47,28 @@ function App() {
             <Language />
           </header>
           <div className="flex h-full bg-gray-50 mb-1">
-            {isAuthenticated && <Sidebar />}
+            {isAuthenticated &&
+             <Sidebar />
+              }
             <main className="flex flex-col w-full overflow-x-hidden overflow-y-auto left-16 -z-1">
               <div className="w-full py-8 mx-auto">
                 <div className="flex flex-col w-full h-full">
                   <Routes>
-                    {isAuthenticated ? (<>
+                    {isAuthenticated ? (
+                    <>
                     <Route path='/profile' element={<Profile />} />
                       <Route path='/history' element={<History />} />
                       <Route path='' element={<Home />} />
                       <Route path='/*' element={<Navigate to='/'/>} />
-                    </>):(<>
+                    </>
+                     ):(
+                    <>
                         <Route path='/login' element={<Login />} />
                         <Route path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}></Route>
                         <Route path='/register' element={<SignUp />} />
                         <Route path='/passwordreset' element={<PasswordReset />} />
-                        <Route path='/*' element={<Login />} /> 
                       </>
-                      )}
+                       )}
                       <Route path='/verify/:verifyCode' element={<Active />} />
                   </Routes>
                 </div>
