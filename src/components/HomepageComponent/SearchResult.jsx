@@ -65,7 +65,7 @@ function SearchResult({ search, data, onPrice, isOn }) {
 
               <div className="mx-2 flex-none absolute right-16">{t('transit')}:{search.summary.move.transitCount}回</div>
 
-              {isOn ? <div className="flex-none  absolute right-1">
+              {isOn && search.summary.move.fare.unit114 ? <div className="flex-none  absolute right-1">
                 {data.payment === t('ic') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.unit114}</span> : <span>{data.payment}:{search.summary.move.fare.unit114 * 2}</span>}</div>}
                 {data.payment === t('cash') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.unit112}</span> : <span>{data.payment}:{search.summary.move.fare.unit112 * 2}</span>}</div>}
 
