@@ -35,6 +35,9 @@ function Home() {
     if (data) {
       setImage(data.imageList)
     }
+    return ()=>{
+      localStorage.removeItem('imageData')
+    }
 
   }, [])
 
