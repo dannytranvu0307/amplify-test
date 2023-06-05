@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 
 
-function HeaderInput({ onDateChange, data, onVehiclechange, onPayment, onRound, onDestination, error, setError, onKillData }) {
+function HeaderInput({ onDateChange, data, onVehiclechange, onPayment, onRound, onDestination, error, setError }) {
     const { t } = useTranslation();
 
 
@@ -19,7 +19,7 @@ function HeaderInput({ onDateChange, data, onVehiclechange, onPayment, onRound, 
 </svg>
 </button> */}
 
-            <div className='flex flex-col md:flex-row justify-between md:space-x-2'>
+            <div className='flex flex-col md:flex-row gap-4 md:space-x-2'>
 
                 <div className='sm:w-32 w-32'>
                     <span className='whitespace-nowrap text-xs'>{t("date")}</span>

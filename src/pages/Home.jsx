@@ -15,6 +15,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { baseURL } from '../features/auth/loginSlice';
 import axios from 'axios';
 import { authenticate } from '../features/auth/loginSlice';
+import Resizer from "react-image-file-resizer";
+
 function Home() {
   const { t } = useTranslation();
   const [data, setData] = useState({ date: "", vehicle: 'train', Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" });
@@ -79,37 +81,16 @@ function Home() {
     setData({ ...data, price: option });
   };
 
-  const handleKillData = (option) => {
-    // setData({date:"",vehicle:data.vehicle, Destination:"", price:"" , round:t('1way'),departure:"",arrival:"", payment:"" ,transport:""})
-    console.log('wtf')
-  }
-
-
-
   const handleFileChange = (file) => {
     convertAllToBase64(file)
   };
-
-
-  const convertToBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
+  //convert all image
   const convertAllToBase64 = async (img) => {
     const base64Images = [];
-
     for (const file of img) {
-      try {
-        const base64 = await convertToBase64(file);
-        base64Images.push({ name: file.name, fileURL: base64 });
-      } catch (error) {
-        return error
-      }
-    }
+    const compressedImage = await compressImage(file);
+    base64Images.push({ name: file.name, fileURL: compressedImage });
+  }
     setImage([...image, ...base64Images])
     const data = {
       imageList: [...image, ...base64Images],
@@ -118,11 +99,29 @@ function Home() {
       const dataJSON = JSON.stringify(data);
       localStorage.setItem('imageData', dataJSON);
     } catch (error) {
-      console.error('Error saving data to localStorage:', error);
+      return error
     }
 
   };
-
+  //covert image too
+  const compressImage = (file) => {
+    return new Promise((resolve, reject) => {
+      Resizer.imageFileResizer(
+        file,
+        300, // Chiều rộng mới (ví dụ: 800px)
+        200, // Chiều cao mới (ví dụ: 600px)
+        'JPEG', // Định dạng ảnh mới (ví dụ: JPEG)
+        70, // Chất lượng ảnh mới (từ 0 - 100)
+        0, // Độ quay ảnh mới (đối với ảnh xoay: 90, 180, 270)
+        (uri) => {
+          resolve(uri);
+        },
+        'base64', // Loại dữ liệu đầu ra (base64)
+        300, // Chiều rộng tối đa (tùy chọn, ví dụ: 800px)
+        200 // Chiều cao tối đa (tùy chọn, ví dụ: 600px)
+      );
+    });
+  };
 
 
   const handleDeleteImage = (index) => {
@@ -135,9 +134,11 @@ function Home() {
       const dataJSON = JSON.stringify(data);
       localStorage.setItem('imageData', dataJSON);
     } catch (error) {
-      console.error('Error saving data to localStorage:', error);
+      return error
     }
   }
+
+
   const handleDeleteAll = () => {
     setImage([])
     try {
@@ -148,12 +149,9 @@ function Home() {
       const dataJSON = JSON.stringify(data);
       localStorage.setItem('imageData', dataJSON);
     } catch (error) {
-      console.error('Error saving data to localStorage:', error);
+      return error
     }
   }
-
-
-
 
   const handleAddTable = () => {
     const today = new Date()
@@ -163,12 +161,13 @@ function Home() {
       const updatedError = {
         date: date === "" || date > today,
         Destination: Destination === "",
-        departure: departure === "",
-        arrival: arrival === "",
+        departure: departure === ""||departure===arrival,
+        arrival: arrival === ""||departure===arrival,
         payment: payment === "",
         price: price === "",
         priceLength: price.length > 8,
-        priceType: isNaN(price)
+        priceType: isNaN(price), 
+        equal: departure === arrival
 
       };
       setError(updatedError);
@@ -198,7 +197,7 @@ function Home() {
           })
           .catch(error => {
             // Handle errors
-            console.error(error);
+            return error
           });
 
 
@@ -208,6 +207,8 @@ function Home() {
         setWarning(t('warningType'))
       } else if (date > today) {
         setWarning(t('futureAlert'))
+      } else if(departure === arrival){
+        setWarning(t('AlertSame'))
       }
       else {
         setWarning(t('warning'))
@@ -218,11 +219,12 @@ function Home() {
       const updatedError = {
         date: date === "" || date > today,
         Destination: Destination === "",
-        departure: departure === "",
-        arrival: arrival === "",
+        departure: departure === ""||departure===arrival,
+        arrival: arrival === ""||departure===arrival,
         price: price === "",
         priceLength: price.length > 8,
-        priceType: isNaN(price)
+        priceType: isNaN(price),
+        equal:departure===arrival
       };
       setError(updatedError);
       if (Object.values(updatedError).every((value) => value === false)) {
@@ -249,7 +251,7 @@ function Home() {
 
           })
           .catch(error => {
-            console.error(error);
+            return error
           })
 
       } else if (updatedError.priceLength) {
@@ -258,6 +260,8 @@ function Home() {
         setWarning(t('warningType'))
       } else if (date > today) {
         setWarning(t('futureAlert'))
+      } else if(departure===arrival){
+        setWarning(t('AlertSame'))
       }
       else {
         setWarning(t('warning'))
@@ -266,8 +270,8 @@ function Home() {
   }
 
   return (
-    <div className="w-full ml-0 sm:-ml-6 h-full bg-[#F9FAFB] ">
-      <div className='flex flex-col lg:flex-row h-full mb-auto mx-auto'>
+    <div className="w-full h-full overflow-auto bg-[#F9FAFB]">
+      <div className='flex flex-col lg:flex-row h-full mb-auto mx-auto mt-10 md:pl-16'>
         <div className='flex flex-col ml-0 lg:mx-auto md:basis-1/3  px-3 h-full'>
           <div className='flex '>
             <HeaderInput onDateChange={handleDateChange} data={data}
@@ -276,12 +280,12 @@ function Home() {
               onRound={handleRound}
               onDestination={handleDestination}
               error={error}
-              onKillData={handleKillData}
               setError={setError}
             /> </div>
           <div className='flex w-full'>
             {data.vehicle === 'train' && <SearchTrain
               isOn={isOn}
+              onWarning={setWarning}
               setIsOn={setIsOn}
               onSearching={setSearching} onDepart={handleDeparture} onArrival={handleArrial} onTransport={handleTransport} data={data} error={error} setError={setError} />}
             {data.vehicle === 'bus' && <SearchBus onDepart={handleDeparture} onArrival={handleArrial} data={data} error={error} setError={setError} />}
@@ -292,11 +296,11 @@ function Home() {
             {data.vehicle === 'train' ? (searching.length > 0 && <HomeFooter warning={warning} onPrice={handlePrice} data={data} onAdd={handleAddTable} error={error} setError={setError} />) : <HomeFooter warning={warning} onPrice={handlePrice} data={data} onAdd={handleAddTable} error={error} setError={setError} />}
           </div>
         </div>
-        <div className="border border-gray-500 h-full"></div>
-        <div className='pl-5 bh-full md:basis-2/3'>
-          <div className='flex flex-col h-full'>
-            <div className='flex'><HomeUserData /></div>
-            <div className='max-w-[700px]'> <Table tableData={TableData} />
+        <div className="border-t lg:border-t-0 lg:border-l mx-3 border-gray-500 h-full"></div>
+        <div className='pl-5 w-full h-full'>
+          <div className='flex flex-col w-full h-full'>
+            <div className='flex w-full'><HomeUserData /></div>
+            <div className='w-full '> <Table tableData={TableData} />
               <div className='w-full my-2 h-32 '>{TableData.length >= 1 && <PreviewImage image={image} onDelete={handleDeleteImage} />}</div>
             </div>
             <div className='max-w-[750px] flex mt-auto pb-[214px]' ><HomeFooter2 img={image} deleteAllFile={handleDeleteAll} onFileChange={handleFileChange} tableData={TableData} /></div>

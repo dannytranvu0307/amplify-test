@@ -3,6 +3,7 @@ import { memo, } from 'react';
 import axios from 'axios';
 import { authenticate, baseURL } from '../../features/auth/loginSlice';
 import {  useDispatch } from 'react-redux';
+import { isRouteErrorResponse } from 'react-router-dom';
 
 const Table = ({tableData})=>{
     const { t } = useTranslation();
@@ -37,7 +38,7 @@ const Table = ({tableData})=>{
      
       })
       .catch(error => {
-        console.error(error)
+        return error
       });
        
     }
@@ -46,7 +47,7 @@ const Table = ({tableData})=>{
 
  return (
     <div className='py-3'>  
-      <div className=" relative max-h-[250px]  overflow-auto">
+      <div className="relative tbscrool w-full max-h-[250px] mr-4 overflow-auto">
     
         <table className="">
           <thead className="text-xs text-black uppercase bg-[#D9D9D9] ">

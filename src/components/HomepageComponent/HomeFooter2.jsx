@@ -43,12 +43,6 @@ function HomeFooter2({onFileChange, tableData ,img, deleteAllFile}){
             }
           });
 
-
-console.log(exportOptions)
-
-
-
-
     //    ExportExcel(user,exportOptions,evidences) 
     const toDay = new Date();
     const workbook = new ExcelJS.Workbook();
@@ -56,7 +50,6 @@ console.log(exportOptions)
     WorksheetImg(workbook,evidences)
 
     workbook.xlsx.writeBuffer().then((buffer) => {
-        console.log(buffer)
         const blob = new Blob([buffer],{
             type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             
@@ -105,7 +98,7 @@ console.log(exportOptions)
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
                         </div>
-                   <span className='text-xs'>{t("UploadFile")}</span>
+                   <span className='text-xs  whitespace-nowrap'>{t("UploadFile")}</span>
                <input
                type="file"
                className="hidden"

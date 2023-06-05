@@ -1,6 +1,6 @@
 import { useState, useEffect} from "react";
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useNavigate} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import ErrorNotification from "../components/ErrorNotification";
 import {email, password} from "../instaces"
@@ -19,8 +19,7 @@ function Login(){
     useEffect(()=>{
         setErrSever(error)
     },[error])
-    const navigate = useNavigate()
-    const location = useLocation()
+
     const [errSever, setErrSever] = useState(error)
     const isActiveMessage= useSelector(selectIsActiveMessage)
     const isActiveError = useSelector(selectActiveError)
@@ -30,6 +29,7 @@ function Login(){
     const inputs = [{...email,type:'text'}, password]
     // init function to dispatch action
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     // init form obj
     const [form, setForm] = useState({});
@@ -44,12 +44,12 @@ function Login(){
     const handleCheck = (e) =>{
         setRemember(!remember)
     }
+    
 
     // send form
     const onSubmit = async e => {
         e.preventDefault();
         const $ = document.querySelector.bind(document)
-
 
         // get elements
         const submitEmail = $("input#email")
@@ -61,15 +61,17 @@ function Login(){
             .unwrap()
             .then(res=>{
                 if (res.status !== 401){
-                    dispatch(authenticate())
+                    dispatch(authenticate()).unwrap()
+                    .then(res=>{
+                        navigate('/')
+                    })
                 }})
             }
             else{
                 setErrSever('')
             }
     }
-        
-    console.log(import.meta.env)
+
     return (
         <>
         <section 
@@ -78,7 +80,7 @@ function Login(){
         data-aos-easing="ease-in-sine"
         className="bg-gray-50 dark:bg-gray-900"
         >
-            <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <div className="flex flex-col items-center justify-center px-2 md:px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">

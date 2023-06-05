@@ -3,18 +3,17 @@ import ErrorNotification from "../components/ErrorNotification";
 import {email} from "../instaces"
 import ValidatorSubmit from "../functional/ValidatorSubmit";
 import { useTranslation } from 'react-i18next';
-import { selectSendMailNotification,passwordReset,selectPasswordResetError } from "../features/auth/loginSlice";
+import { passwordReset } from "../features/auth/loginSlice";
 import {useState} from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const PasswordReset = () => {
     const [form, setForm] = useState();
     const { t } = useTranslation();
 
     const dispatch = useDispatch()
-    const sendMail = useSelector(selectSendMailNotification)
-    const invalidEmail = useSelector(selectPasswordResetError)
+    const [message, setMessage] = useState(false);
     const [errSever, setErrSever] = useState()
 
     const onSubmit = e => {
@@ -22,12 +21,18 @@ const PasswordReset = () => {
         const submitInput = document.querySelectorAll("input")
         const formSubmit = document.querySelector("#passwordreset")
         if (ValidatorSubmit(formSubmit,submitInput)){
-            dispatch(passwordReset(form)).unwrap()
+            dispatch(passwordReset(form)).unwrap().then(res=>{
+                if (res.data.code === "API003_ER" && res.data.message){
+                    setErrSever('invalidEmail')
+                }else {
+                    setErrSever('')
+                    setMessage(true)
+                }
+            })
         }else {
             setErrSever('')
         }
     }
-
 
     const onChange = e => {
         setForm({[e.target.name]:e.target.value})
@@ -35,7 +40,7 @@ const PasswordReset = () => {
 
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
-            <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <div className="flex flex-col items-center justify-center px-2 md:px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                 <div className="relative p-6 space-y-4 md:space-y-6 sm:p-8">
                     <Link to="/login">
@@ -67,7 +72,7 @@ const PasswordReset = () => {
                 </div>
             </div>
             {
-            sendMail && 
+            message && 
                 <ErrorNotification>confirm_email_message</ErrorNotification>
                 }
         </div>

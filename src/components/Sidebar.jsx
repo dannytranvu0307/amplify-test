@@ -51,29 +51,30 @@ const Sidebar = () => {
     ]
     return (
         <div className={`fixed
-            h-full
+            h-12
+            md:h-full
             drop-shadow-md
             flex-col items-center 
-            lg:w-16
+            w-full
             md:w-16
             text-gray-700 bg-white 
             transition-all
-            ${mounted ? ("lg:w-[300px] md:w-[300px] w-[300px]") : "lg:w-16 md:w-16"} 
+            ${mounted ? ("h-full md:w-[300px]") : ""} 
             duration-200
             overflow-hidden
             z-40
             `}>
             {!mounted ?
-                (<div className={`flex items-center ml-2 px-3 pt-3 cursor-pointer 
-               ${mounted && ("lg:w-[300px] md:w-[300px]")}  active:animate-fadeRight active:animate-fadeLeft `}
+                (<div className={`flex items-center ml-2 px-3 py-3 cursor-pointer w-full
+               ${mounted && ("md:w-[300px]")} md:active:animate-fadeRight md:active:animate-fadeLeft `}
                     onClick={openSideBar}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"
                         className="w-6 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                     </svg>
                 </div>) :
-                (<div className={`flex justify-end mr-5 ml-3 px-3 pt-3 cursor-pointer ${!mounted && (" md:w-[300px] sm:w-full")} `} onClick={openSideBar}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                (<div className={`flex justify-end mr-2 px-3 pt-3 cursor-pointer w-full ${!mounted && ("md:w-[300px]")} `} onClick={openSideBar}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6  rotate-90 md:rotate-0">
                         <path fillRule="evenodd" d="M11.03 3.97a.75.75 0 010 1.06l-6.22 6.22H21a.75.75 0 010 1.5H4.81l6.22 
                         6.22a.75.75 0 11-1.06 1.06l-7.5-7.5a.75.75 0 010-1.06l7.5-7.5a.75.75 0 011.06 0z" clipRule="evenodd" />
                     </svg>
@@ -81,7 +82,6 @@ const Sidebar = () => {
             }
             <div className={`flex items-center mx-auto mt-2 border-t border-b border-gray-300`}>
                 <div className={`flex flex-col w-full`}>
-                    <>
                         {
                             sideBarItem.map((item, key) => {
                                 return (
@@ -92,7 +92,7 @@ const Sidebar = () => {
                                             "active" : ""} 
                                 `}
                                     >
-                                        <div className={`w-16 transition ease-in-out duration-200 ${mounted && "w-full md:w-[300px] lg:w-[300px]"}`}>
+                                        <div className={`w-16 transition ease-in-out duration-200 w-full ${mounted && "md:w-[300px]"}`}>
                                             <div
                                                 className={` 
                                             items-center
@@ -100,7 +100,6 @@ const Sidebar = () => {
                                             ease-in-out
                                             group-[.active]:bg-gradient-to-r from-cyan-200 to-blue-300 
                                             h-12 mt-2
-                                            hover:scale-110
                                             hover:bg-gradient-to-r from-cyan-200 to-blue-300 flex  
                                             duration-300
                                             `}>
@@ -125,7 +124,6 @@ const Sidebar = () => {
                                     ease-in-out
                                     group-[.active]:bg-gradient-to-r from-cyan-200 to-blue-300 
                                     h-12 mt-2
-                                    hover:scale-110
                                     hover:bg-gradient-to-r from-cyan-200 to-blue-300 flex  
                                     duration-300
                                     `}>
@@ -138,9 +136,7 @@ const Sidebar = () => {
                                     </div>
                                 </div>
                             </a>
-
                         }
-                    </>
                 </div>
             </div>
         </div>

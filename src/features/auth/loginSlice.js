@@ -1,13 +1,12 @@
 import {  createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-export const baseURL = `https://api.vtitransports.link/api/v1`;
-// export const baseURL = 'http://localhost:8080/api/v1';
+// export const baseURL = `https://api.vtitransports.link/api/v1`;
+export const baseURL = 'http://localhost:8080/api/v1';
 
 // get cookie accesstoken/ refresh token
 export const login = createAsyncThunk(
     'login/login',
     async (form) => {
-        console.log(form)
         try {
             const response = await axios.post(`${baseURL}/auth/login`,form,{withCredentials: true})
             return response
@@ -37,7 +36,6 @@ export const register = createAsyncThunk(
         const headers = {
             'content-type':'application/json'
         }
-        console.log(form)
         try {
             const response = await axios.post(`${baseURL}/auth/register`,form,headers)
             return response
@@ -51,7 +49,6 @@ export const register = createAsyncThunk(
 export const verify = createAsyncThunk(
     'login/verify',
     async (form) => {
-        console.log(form)
         try {
             const response = await axios.post(`${baseURL}/users/active`,form)
             return response
@@ -193,7 +190,10 @@ const authSlice = createSlice({
         // active verify thunk
         builder.addCase(verify.pending, (state, action)=>{
             state.error= null
+            state.isActive = false
             state.isLoading = true
+            state.activeError = null
+            state.isActiveMessage = null
         }),
         builder.addCase(verify.fulfilled, (state, action)=>{
             if(action.payload.status === 200){
@@ -201,7 +201,7 @@ const authSlice = createSlice({
                 state.isActive = true
                 state.activeError = null
                 state.isActiveMessage = "activeIsSuccess"
-            }else if (action.payload.status === 400){
+            }else if (action.payload.data.code === "API005_ER" && action.payload.data.type=== "ERROR"){
                 state.isLoading = false
                 state.isActive = false
                 state.activeError = 'TIMEOUT'
@@ -214,7 +214,6 @@ const authSlice = createSlice({
             state.isLoading = true
         }),
         builder.addCase(passwordReset.fulfilled, (state, action)=>{
-            console.log(action.payload)
             if(action.payload.status === 200){
                 state.isLoading = false
                 state.sendMailNotification = true

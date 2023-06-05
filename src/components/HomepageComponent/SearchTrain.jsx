@@ -6,7 +6,7 @@ import axios from 'axios';
 import { baseURL } from '../../features/auth/loginSlice'
 import { useSelector } from 'react-redux';
 
-function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, onSearching, isOn, setIsOn }) {
+function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, onSearching, isOn, setIsOn , onWarning }) {
   const { t } = useTranslation();
   const [isInputVisible, setInputVisible] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
@@ -64,8 +64,8 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
     const updatedError = {
       date: date === "" || date === null || date > today,
       Destination: Destination === "",
-      departure: departure === "",
-      arrival: arrival === "",
+      departure: departure === ""||departure===arrival,
+      arrival: arrival === ""||departure===arrival,
       payment: payment === "",
       equal: departure === arrival,
 
@@ -86,6 +86,7 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
           // Handle the response
           onSearching(response.data.data)
           setAlert('')
+          onWarning('')
         })
         .catch(error => {
           // Handle the error
@@ -104,8 +105,6 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
 
   useEffect(() => {
     if (data.departure.length > 1 && focus.departure) {
-
-      console.log('call departure')
       axios.get(`${baseURL}/stations`, {
         params: {
           stationName: data.departure
@@ -113,12 +112,10 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
       })
         .then(response => {
           // Handle the response
-          console.log(response.data)
           setSuggestions(response.data.data)
         })
         .catch(error => {
           // Handle the error
-          console.error(error)
         });
     } else if (data.departure === '' || data.departure === undefined || data.departure === null) {
       setSuggestions([])
@@ -131,8 +128,6 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
   useEffect(() => {
 
     if (data.arrival.length > 1 && focus.arrival) {
-      console.log('call arrival')
-      console.log(data.arrival.length)
       axios.get(`${baseURL}/stations`, {
         params: {
           stationName: data.arrival
@@ -140,10 +135,9 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
       })
         .then(response => {
           setSuggestionsArrival(response.data.data)
-          console.log(suggestionsArrival)
         })
         .catch(error => {
-          console.error(error)
+          return error
         });
     } else if (data.arrival === '' || data.arrival === undefined || data.arrival === null) {
       setSuggestionsArrival([])
@@ -154,7 +148,6 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
 
   useEffect(() => {
     if (data.transport.length > 1 && focus.transport) {
-      console.log('call trans')
       axios.get(`${baseURL}/stations`, {
         params: {
           stationName: data.transport
@@ -162,12 +155,10 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
       })
         .then(response => {
           // Handle the response
-          console.log(response.data.data)
           setSuggestionsTransport(response.data.data)
         })
         .catch(error => {
           // Handle the error
-          console.error(error)
         });
     } else if (data.transport === '' || data.transport === undefined || data.transport === null) {
       setSuggestionsTransport([])

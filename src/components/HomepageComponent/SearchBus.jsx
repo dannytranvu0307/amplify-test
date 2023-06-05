@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 function SearchBus({onDepart, onArrival, data ,error,setError}){
     const { t } = useTranslation();
     return(
-    <div className='pt-3'>
-        <div className='flex pb-[40%]'>
+    <div className='pt-3 w-full'>
+        <div className='flex pb-[40%] w-full'>
             <div className='flex-auto'>
                <span className='my-2 text-xs'>{t("departure")}</span>
                <div className=' '><input placeholder={t("start_bus_pla")} className={`w-full border-[1px] border-black rounded h-8 px-2 ${error.departure&&("border-red-500 bg-red-100")}`}value={data.departure} onChange={e=>{onDepart(e.target.value),setError({...error,departure:false})}}/></div> 

@@ -39,10 +39,16 @@ function History() {
       };
   
     return (
-        <div className="flex flex-col mx-auto items-center w-full -sm:py-4 sm:px-6 mb-16 py-8 h-full xl:w-3/5 lg:w-full sm:w-full md:w-full 2xl:w-3/5  lg:py-0">
+        <div className="flex flex-col 
+        mx-auto items-center
+        w-full
+        px-2 sm:px-6
+        sm:-py-4 mb-16 py-8 h-full
+         lg:w-3/5
+         lg:py-0">
             <div className="bg-white rounded-lg shadow  md:mt-0 w-full 2xl:w-full sm:w-full h-full xl:p-0">
                 
-                <div className="flex flex-col h-full">
+                <div className="flex flex-col px-6 h-full">
                     <h1 className="text-xl pt-8 px-12 sm:px-12 sm:text-lg  md:text-lg  lg:text-lg 2xl:text-2xl  font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
                         {t("lbviewExportFileHistory")}
                     </h1>

@@ -48,8 +48,8 @@ function App() {
           </header>
           <div className="flex h-full bg-gray-50 mb-1">
             {isAuthenticated && <Sidebar />}
-            <main className="flex flex-col w-full overflow-x-hidden overflow-y-auto ml-16 left-16 -z-1">
-              <div className="w-full px-6 py-8 ">
+            <main className="flex flex-col w-full overflow-x-hidden overflow-y-auto left-16 -z-1">
+              <div className="w-full py-8 mx-auto">
                 <div className="flex flex-col w-full h-full">
                   <Routes>
                     {isAuthenticated ? (<>
@@ -62,10 +62,10 @@ function App() {
                         <Route path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}></Route>
                         <Route path='/register' element={<SignUp />} />
                         <Route path='/passwordreset' element={<PasswordReset />} />
-                        <Route path='/verify/:verifyCode' element={<Active />} />
                         <Route path='/*' element={<Login />} /> 
                       </>
                       )}
+                      <Route path='/verify/:verifyCode' element={<Active />} />
                   </Routes>
                 </div>
               </div>
