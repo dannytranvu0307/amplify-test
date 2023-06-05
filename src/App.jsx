@@ -59,7 +59,7 @@ function App() {
                     <Route path='/profile' element={<Profile />} />
                       <Route path='/history' element={<History />} />
                       <Route path='' element={<Home />} />
-                      <Route path='/*' element={<Navigate to='/'/>} />
+                      <Route path='/*' element={<Home />} />
                     </>
                      ):(
                     <>
@@ -67,6 +67,7 @@ function App() {
                         <Route path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}></Route>
                         <Route path='/register' element={<SignUp />} />
                         <Route path='/passwordreset' element={<PasswordReset />} />
+                        <Route path='/*' element={<Login />} />
                       </>
                        )}
                       <Route path='/verify/:verifyCode' element={<Active />} />
