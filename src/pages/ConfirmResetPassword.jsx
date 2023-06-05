@@ -14,7 +14,7 @@ const ConfirmResetPassword = () => {
 const { t } = useTranslation();
 const [form, setForm] = useState({})
 
-const [ message, isMessage] = useState(false)
+const [ message, setMessage] = useState(false)
 const [ errSever, setErrSever] = useState('')
 
 const param = useParams()
@@ -32,6 +32,7 @@ const onChange = e => {
 const dispatch = useDispatch();
 const onSubmit = e => {
     e.preventDefault();
+    setMessage(false)
     const submitInput = document.querySelectorAll("input")
     const formSubmit = document.querySelector("#confirm_reset_password")
 
@@ -39,12 +40,15 @@ const onSubmit = e => {
         dispatch(confirmPasswordReset({newPassword:form.new_password, ...param}))
         .unwrap().then(res =>{
           if (res.status === 200){
-            isMessage(true)
+            setMessage(true)
             setTimeout(()=>{
                 navigate('/login')
             },2000)
             }
             else if (res.data.code === "API_ER03" && res.data.type === "ERROR"){
+                setErrSever('mailTimeOut')
+            }
+            else if (res.data.code === "API005_ER" && res.data.type === "ERROR"){
                 setErrSever('mailTimeOut')
             }
         })

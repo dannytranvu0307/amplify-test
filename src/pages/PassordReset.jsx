@@ -22,6 +22,7 @@ const PasswordReset = () => {
 
     const onSubmit = e => {
         e.preventDefault();
+        setMessage(false)
         const submitInput = document.querySelectorAll("input")
         const formSubmit = document.querySelector("#passwordreset")
         if (ValidatorSubmit(formSubmit,submitInput)){

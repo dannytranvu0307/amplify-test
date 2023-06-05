@@ -36,7 +36,7 @@ function Login(){
     }
 
     // check remember me or not?
-    const handleCheck = () =>{
+    const handleCheck = (e) =>{
         setRemember(!remember)
     }
     
