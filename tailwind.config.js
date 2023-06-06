@@ -64,7 +64,7 @@ module.exports = {
       animation: {
         fadeLeft: 'fadeLeft .3s ease-in-out',
         fadeRight: 'fadeLeft .3s ease-in-out',
-        showNotation: 'showNotation 3s ease-in-out'
+        showNotation: 'showNotation 5s ease-in-out'
       
       },
       keyframes: {

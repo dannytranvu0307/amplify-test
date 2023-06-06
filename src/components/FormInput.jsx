@@ -66,11 +66,12 @@ const FormInput = (props) => {
                     {...inputProps}
                     className={`
                     disabled:appearance-none
+                    cursor-pointer
                     bg-gray-50 border border-gray-300 
                     text-gray-700 sm:text-sm rounded-lg 
                     focus:ring-primary-600
                     focus:border-primary-600 w-full p-2.5 ${error.name && ("border-red-500 bg-red-100")}`}>
-                <option value = "" >{t("chooseDepartmentId")}</option>
+                    <option className="cursor-pointer" value = "" >{t("chooseDepartmentId")}</option>
                     {departments_lst.map((item,key)=>(
                         <option key={key} value={item.departmentId}>{t(`D${item.departmentId}`)}</option>
                     ))}

@@ -19,6 +19,7 @@ function HeaderInput({  data, onVehiclechange, error, setError , setData }) {
                          
                             yearDropdownItemNumber={10}
                             dateFormat="yyyy/MM/dd"
+                            language="ja"
                             placeholderText='YYYY/MM/DD'
 
                         />
