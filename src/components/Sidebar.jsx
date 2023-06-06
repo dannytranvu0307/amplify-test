@@ -114,7 +114,7 @@ const Sidebar = () => {
                             })
                         }
                         {
-                            <a  className="group" onClick={handleLogout}>
+                            <a  className="group cursor-pointer" onClick={handleLogout}>
                                 <div className={`w-16 transition ease-in-out duration-200 ${mounted && "w-full md:w-[300px] lg:w-[300px]"}`}>
                                     <div
                                         className={` 

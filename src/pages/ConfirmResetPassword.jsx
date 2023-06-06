@@ -42,9 +42,11 @@ const onSubmit = e => {
             isMessage(true)
             setTimeout(()=>{
                 navigate('/login')
-            },2000)
-            }
+            },2000)}
             else if (res.data.code === "API_ER03" && res.data.type === "ERROR"){
+                setErrSever('mailTimeOut')
+            }
+            else if (res.data.code === "API_ER005" && res.data.type === "ERROR"){
                 setErrSever('mailTimeOut')
             }
         })

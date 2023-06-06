@@ -506,12 +506,15 @@ const Profile = () => {
                 <div className="w-full px-8 mb-4 mt-4 flex col-span-2 justify-between">
                     <Link
                         to="/"
-                        className="w-auto text-white bg-primary-600 hover:bg-primary-500 focus:ring-4 focus:outline-none  focus:ring-primary-300 font-medium rounded-lg  text-sm px-5 py-2.5 text-center ">
+                        className="w-auto text-white bg-primary-600 hover:bg-primary-500 
+                        focus:ring-4 focus:outline-none  focus:ring-primary-300 font-medium rounded-lg  text-sm px-5 py-2.5 text-center ">
                         {t("cancel")}</Link>
                     <button
                         onClick={e => onSubmit(e)}
                         type="submit"
-                        className="w-auto text-white  bg-primary-600 hover:bg-primary-500  focus:ring-4 focus:outline-none    focus:ring-primary-300 font-medium rounded-lg   text-sm px-5 py-2.5 text-center ">
+                        className="w-auto text-white  bg-primary-600 hover:bg-primary-500 
+                        focus:ring-4 focus:outline-none font-medium rounded-lg  
+                        text-sm px-5 py-2.5 text-center ">
                         {t("save")}</button>
 
                 </div>
