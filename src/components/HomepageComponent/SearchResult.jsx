@@ -52,7 +52,7 @@ function SearchResult({ search, data, onPrice, isOn }) {
             onMouseLeave={() => handleObjectHover(null)}
           >
             <div className="flex  px-4 py-2 " onClick={() => handleObjectClick(search)} >
-              <div className="bg-red-100 max-w-[70%] overflow-hidden">
+              <div className=" max-w-[70%] overflow-hidden">
 
               {
                 search.sections.length === 3 && <div>{search.sections[0].stationName}ー{search.sections[2].stationName}</div>
