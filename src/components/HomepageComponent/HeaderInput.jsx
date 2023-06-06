@@ -16,7 +16,7 @@ function HeaderInput({  data, onVehiclechange, error, setError , setData }) {
                             selected={data.date}
                             onChange={date => { setData({ ...data, date: date }) , setError({ ...error, date: false }) }}
                             maxDate={new Date()}
-                            
+                         
                             yearDropdownItemNumber={10}
                             dateFormat="yyyy/MM/dd"
                             placeholderText='YYYY/MM/DD'
