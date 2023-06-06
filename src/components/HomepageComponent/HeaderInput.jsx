@@ -2,15 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { memo } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
-
-
 function HeaderInput({  data, onVehiclechange, error, setError , setData }) {
     const { t } = useTranslation();
-
-
-
-
     return (
         <div className='w-full border-b-[1.5px] border-gray-500'>
             <div className='flex flex-col md:flex-row gap-4 md:space-x-2'>
@@ -23,7 +16,7 @@ function HeaderInput({  data, onVehiclechange, error, setError , setData }) {
                             selected={data.date}
                             onChange={date => { setData({ ...data, date: date }) , setError({ ...error, date: false }) }}
                             maxDate={new Date()}
-                            showMonthDropdown
+                            
                             yearDropdownItemNumber={10}
                             dateFormat="yyyy/MM/dd"
                             placeholderText='YYYY/MM/DD'

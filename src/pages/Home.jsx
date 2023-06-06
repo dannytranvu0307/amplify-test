@@ -276,8 +276,8 @@ function Home() {
               setData={setData}
               error={error}
               setError={setError} />}
-            {data.vehicle === 'bus' && <SearchBus onDepart={handleDeparture} onArrival={handleArrial} data={data} error={error} setError={setError} />}
-            {data.vehicle === 'taxi' && <SearchBus onDepart={handleDeparture} onArrival={handleArrial} data={data} error={error} setError={setError} />}
+            {data.vehicle === 'bus' && <SearchBus   setData={setData} data={data} error={error} setError={setError} />}
+            {data.vehicle === 'taxi' && <SearchBus   setData={setData} data={data} error={error} setError={setError} />}
           </div>
           <SearchResult search={searching} data={data} onPrice={handlePrice} isOn={isOn} />
           <div className='flex mt-auto pb-[200px]'>

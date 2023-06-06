@@ -28,7 +28,7 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
     setSuggestions([])
   };
   const handleSuggestionClickArrival = (suggestion) => {
-    setData({...data,departure:suggestion.stationName})
+    setData({...data,arrival:suggestion.stationName})
     setId({ ...id, goal: suggestion.stationCode })
     setSuggestionsArrival([])
   };
