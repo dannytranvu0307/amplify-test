@@ -2,12 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { memo, } from 'react';
 import axios from 'axios';
 import {  baseURL } from '../../features/auth/loginSlice';
-import {  useDispatch } from 'react-redux';
 
 
 const Table = ({tableData , setTableData})=>{
     const { t } = useTranslation();
-    const dispatch = useDispatch()
 
     const renderTable = () => {
         const table = [];
@@ -35,7 +33,6 @@ const Table = ({tableData , setTableData})=>{
       } )
       .then(response => {
       setTableData(()=>tableData.filter(obj => obj.recordId !== id) )
-      console.log(tableData)
       })
       .catch(error => {
         return error
@@ -46,14 +43,14 @@ const Table = ({tableData , setTableData})=>{
 
 
  return (
-    <div className='py-3' 
+    <div className='' 
   >  
-      <div className="relative tbscrool max-w-[700px] max-h-[250px] mr-4 overflow-auto ">
+      <div className="relative tbscrool max-w-[700px] max-h-[250px] mr-4 overflow-auto  ">
     
-        <table className=" relative">
-          <thead className="text-xs text-white uppercase bg-primary-600 sticky top-0 border border-black">
+        <table className=" relative border border-black">
+          <thead className="text-xs text-white uppercase bg-primary-600 sticky  top-0 border border-black ">
             <tr>
-                <th scope="col" className="py-3 px-6 px-auto border-black flex-nowrap max-w-xs truncate">
+                <th scope="col" className="py-3 px-6 px-auto border-black flex-nowrap max-w-xs truncate border">
                  {t('date2')}
                 </th>
                 <th scope="col" className="py-3 px-12 border border-black max-w-xs truncate">

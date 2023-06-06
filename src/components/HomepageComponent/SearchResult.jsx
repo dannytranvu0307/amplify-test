@@ -40,9 +40,9 @@ function SearchResult({ search, data, onPrice, isOn }) {
 
   return (
     <div className="relative text-xs my-3">
-      {search.noData && <div> <p className='pb-5 text-lg '>{t('Search_Result')}</p>
+      {search.noData && <div> <p className='pb-5 text-xs'>{t('Search_Result')}</p>
         <div className="text-center text-gray-500">{search.noData}</div> </div>}
-      {search.length > 0 && <div className='pb-5 text-lg '> {t('Search_Result')} </div>}
+      {search.length > 0 && <div className='pb-5 text-xs'> {t('Search_Result')} </div>}
       {!search.noData &&
         search.map((search, i) => (
           <div
@@ -51,7 +51,8 @@ function SearchResult({ search, data, onPrice, isOn }) {
             onMouseEnter={() => handleObjectHover(search)}
             onMouseLeave={() => handleObjectHover(null)}
           >
-            <div className="flex  px-4 py-2  flex flex-nowrap " onClick={() => handleObjectClick(search)} >
+            <div className="flex  px-4 py-2 " onClick={() => handleObjectClick(search)} >
+              <div className="bg-red-100 max-w-[70%] overflow-hidden">
 
               {
                 search.sections.length === 3 && <div>{search.sections[0].stationName}ー{search.sections[2].stationName}</div>
@@ -62,13 +63,15 @@ function SearchResult({ search, data, onPrice, isOn }) {
               {
                 search.sections.length === 5 && <div>{search.sections[0].stationName}ー{search.sections[2].stationName} ー {search.sections[search.sections.length - 1].stationName}</div>
               }
-
+             </div>
               <div className="mx-2 flex-none absolute right-16">{t('transit')}:{search.summary.move.transitCount}回</div>
 
-              {isOn && search.summary.move.fare.unit114 ? <div className="flex-none  absolute right-1">
-                {data.payment === t('ic') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.unit114}</span> : <span>{data.payment}:{search.summary.move.fare.unit114 * 2}</span>}</div>}
-                {data.payment === t('cash') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.unit112}</span> : <span>{data.payment}:{search.summary.move.fare.unit112 * 2}</span>}</div>}
-
+              {isOn ? <div className="flex-none  absolute right-1">
+                
+                {search.summary.move.fare.unit114&&data.payment === t('ic') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.unit114}</span> : <span>{data.payment}:{search.summary.move.fare.unit114 * 2}</span>}</div>}
+                {search.summary.move.fare.unit114&&data.payment === t('cash') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.unit112}</span> : <span>{data.payment}:{search.summary.move.fare.unit112 * 2}</span>}</div>}
+                {!search.summary.move.fare.unit114&&data.payment === t('ic') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.IC}</span> : <span>{data.payment}:{search.summary.move.fare.IC * 2}</span>}</div>}
+                {!search.summary.move.fare.unit114&&data.payment === t('cash') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.現金}</span> : <span>{data.payment}:{search.summary.move.fare.現金 * 2}</span>}</div>}
               </div>
                 : <div className="flex-none absolute right-1">
                   {data.payment === t('ic') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.IC}</span> : <span>{data.payment}:{search.summary.move.fare.IC * 2}</span>}</div>}

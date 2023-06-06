@@ -1,7 +1,7 @@
 
 function PreviewImage({image , onDelete}){
     return(
-        <div className='flex flex-row h-full mx-auto border-dotted border border-gray-400 overflow-auto bg-[#ffffff]'>
+        <div className='flex flex-row h-full mx-auto border-dotted border border-gray-400 overflow-auto bg-[#ffffff] tbscrool'>
             {image.map((img,i)=>(
                 <div key={i} className="basis-1/5 flex flex-col h-full  px-2 ">
 

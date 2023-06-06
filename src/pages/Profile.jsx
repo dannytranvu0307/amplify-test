@@ -421,7 +421,7 @@ const Profile = () => {
                                                     <div className="relative">
                                                         <FormInput value={commuterPass.start} onChange={e => onChangeStation(e)} {...inputTickets[0]} />
 
-                                                        <div className="absolute bottom bg-white w-full rounded drop-shadow-lg">
+                                                        <div className="absolute bottom bg-white w-full rounded drop-shadow-lg max-h-64 overflow-y-auto">
                                                             {startSuggestion.map((item, i) => (
                                                                 <p className="px-2 py-1  duration-100 
                                                                     transision-all cursor-pointer 
@@ -437,7 +437,7 @@ const Profile = () => {
                                                     </div>
                                                     <div className="relative">
                                                         <FormInput value={commuterPass.goal} onChange={e => onChangeStation(e)} {...inputTickets[1]} />
-                                                        <div className="absolute bg-white w-full rounded drop-shadow-lg">
+                                                        <div className="absolute bg-white w-full rounded drop-shadow-lg max-h-64 overflow-y-auto">
                                                             {goaltSuggestion.map((item, i) => (
                                                                 <p className="px-2 py-1 duration-100 
                                                                     transision-all cursor-pointer 

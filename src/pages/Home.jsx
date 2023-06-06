@@ -1,5 +1,5 @@
 
-import { useEffect, useState,useLayoutEffect } from 'react';
+import { useEffect, useState} from 'react';
 import { useTranslation } from 'react-i18next';
 import HeaderInput from '../components/HomepageComponent/HeaderInput';
 import SearchBus from '../components/HomepageComponent/SearchBus';
@@ -18,8 +18,11 @@ import { authenticate } from '../features/auth/loginSlice';
 import Resizer from "react-image-file-resizer";
 
 
+
 function Home() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
   const [data, setData] = useState({ date: "", vehicle: 'train', Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" });
   const [error, setError] = useState({ date: false, payment: false, Destination: false, departure: false, arrival: false, price: false })
   const [TableData, setTableData] = useState([])
@@ -29,35 +32,34 @@ function Home() {
   const [warning, setWarning] = useState('');
   const [id, setId] = useState({});
   const [isInputVisible, setInputVisible] = useState(false);
+ 
 
   useEffect(() => {
+    dispatch(authenticate())
     const data = JSON.parse(localStorage.getItem('imageData'))
     if (data) {
       setImage(data.imageList)
     }
-    return ()=>{
-      localStorage.removeItem('imageData')
-    }
-
   }, [])
 
   const user = useSelector(state => state.login.user)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (user) {
       setTableData(user.fares)
     }
   }, [user])
 
 
-  const handleDateChange = (newData) => {
-    setData({ ...data, date: newData });
-  };
   const handleVehicleChange = (option) => {
     setData({ date:data.date, vehicle: option, Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" });
     setError({ date: false, payment: false, Destination: false, departure: false, arrival: false, price: false });
     setSearching([])
     setWarning('')
+  };
+  
+  const handleDateChange = (newData) => {
+    setData({ ...data, date: newData });
   };
   const handlePayment = (option) => {
     setData({ ...data, payment: option });
@@ -155,7 +157,6 @@ function Home() {
       const data = {
         imageList: [],
       };
-
       const dataJSON = JSON.stringify(data);
       localStorage.setItem('imageData', dataJSON);
     } catch (error) {
@@ -164,10 +165,8 @@ function Home() {
   }
 
   const handleAddTable = () => {
- 
     if (data.vehicle === 'train') {
       const { date, Destination, departure, arrival, payment, price } = data;
-
       const updatedError = {
         date: date === "" || date ===null || data === undefined,
         Destination: Destination === "",
@@ -320,7 +319,7 @@ function Home() {
           <div className='flex flex-col w-full h-full'>
             <div className='flex '><HomeUserData /></div>
             <div className='w-full '> <Table tableData={TableData} setTableData={setTableData}/>
-              <div className='w-full my-2 h-32  max-w-[700px] '>{TableData.length >= 1 && <PreviewImage image={image} onDelete={handleDeleteImage} />}</div>
+              <div className='w-full my-2 h-32  max-w-[700px]  '>{TableData.length >= 1 && <PreviewImage image={image} onDelete={handleDeleteImage} />}</div>
             </div>
             <div className='max-w-[750px] flex mt-auto pb-[214px]' ><HomeFooter2 img={image} deleteAllFile={handleDeleteAll} onFileChange={handleFileChange} tableData={TableData} /></div>
           </div>

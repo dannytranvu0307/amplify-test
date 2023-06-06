@@ -37,6 +37,11 @@ function App() {
         .then(res => res.status === 200 && dispatch(authenticate()))
       }
     })
+    
+    return ()=>{
+      localStorage.removeItem('imageData')
+    }
+
   },[])
 
   return (
