@@ -11,7 +11,53 @@ function History() {
     const getFiles = async () => {
         try {
             const res = await axios.get(`${baseURL}/files`,{withCredentials: true})
-            return setFiles([...res.data.data]) 
+            return setFiles([...res.data.data,
+                {exportedDate:"asas",
+                fileId:"assa",
+                fileName:"sdas"}
+                ,
+                {exportedDate:"asas",
+                fileId:"assa",
+                fileName:"sdas"},
+                {exportedDate:"asas",
+                fileId:"assa",
+                fileName:"sdas"},
+                {exportedDate:"asas",
+                fileId:"assa",
+                fileName:"sdas"},
+                {exportedDate:"asas",
+                fileId:"assa",
+                fileName:"sdas"},
+                {exportedDate:"asas",
+                fileId:"assa",
+                fileName:"sdas"}
+                ,
+                {exportedDate:"asas",
+                fileId:"assa",
+                fileName:"sdas"},
+                {exportedDate:"asas",
+                fileId:"assa",
+                fileName:"sdas"},
+                {exportedDate:"asas",
+                fileId:"assa",
+                fileName:"sdas"},
+                {exportedDate:"asas",
+                fileId:"assa",
+                fileName:"sdas"}
+                ,
+                {exportedDate:"asas",
+                fileId:"assa",
+                fileName:"sdas"},
+                {exportedDate:"asas",
+                fileId:"assa",
+                fileName:"sdas"},
+                {exportedDate:"asas",
+                fileId:"assa",
+                fileName:"sdas"},
+                {exportedDate:"asas",
+                fileId:"assa",
+                fileName:"sdas"}
+            ]) 
         }catch(err){
             return err.response
         }
@@ -58,23 +104,28 @@ function History() {
                                 <div className="item mb-2 flex flex-wrap ">
                                     { files.length !== 0 ? (<div className="container">
                                             <div className="overflow-y-auto">
-                                                <div className="border-borderTable-borderTable ">
-                                                    <div className="max-h-[403px] ">
-                                                        <table className="border table-fixed w-full border-borderTable-borderTable ">
-                                                            <thead className="border sticky top-0">
+                                                <div className="max-h-[403px]">
+                                                    <div className="max-h-[403px]">
+                                                        <table className="table-fixed w-full border-l border-r border-borderTable-borderTable">
+                                                            <thead className="sticky top-0">
                                                                 <tr>
-                                                                    <th  className="bg-primary-600 text-md w-1/4 text-center border border-borderTable-borderTable font-medium text-white px-2 md:px-6 py-2 text-left">
+                                                                    <th  className="bg-primary-600 text-md w-1/4 text-center 
+                                                                    font-medium text-white px-2 md:px-6 py-2 text-left
+                                                                    border-r border-borderTable-borderTable
+                                                                    ">
                                                                         {t("lbDate")}
                                                                     </th>
-                                                                    <th  className="bg-primary-600 text-md text-center border border-borderTable-borderTable font-medium text-white px-2 md:px-6 py-2 text-left">
+                                                                    <th  className="bg-primary-600 text-md text-center font-medium text-white px-2 md:px-6 py-2 text-left">
                                                                         {t("lbFileName")}
                                                                     </th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody className="border bg-white w-1/5 min-h-96">
+                                                            <tbody className="border bg-white w-1/5 min-h-96
+                                                            
+                                                            ">
                                                                 {files.map((file, key) => (
                                                                     <tr className="bg-white border h-4  border-borderTable-borderTable transition duration-300 ease-in-out hover:bg-gray-100" key={key}>
-                                                                        <td className="text-sm bg-white  h-4  overflow-hidden border font-extrabold text-ellipsis border-borderTable-borderTable font-light px-2 md:px-6 py-2 whitespace-nowrap" title={file.exportedDate} >{file.exportedDate}</td>
+                                                                        <td className="text-sm bg-white h-4  overflow-hidden border font-extrabold text-ellipsis border-borderTable-borderTable font-light px-2 md:px-6 py-2 whitespace-nowrap" title={file.exportedDate} >{file.exportedDate}</td>
                                                                         <td  className="text-sm bg-white h-4  overflow-hidden text-blue-700 underline px-2 md:px-6 py-2 text-ellipsis whitespace-nowrap overflow-hidden underline-offset-4" title={file.fileName}><Link to={`${baseURL}`+"/files/"+file.fileId}>{file.fileName}</Link></td>
                                                                     </tr>))}
                                                                 {renderTable()} 

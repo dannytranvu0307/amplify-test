@@ -32,6 +32,7 @@ function HeaderInput({ onDateChange, data, onVehiclechange, onPayment, onRound, 
                             showMonthDropdown
                             yearDropdownItemNumber={10}
                             dateFormat="yyyy/MM/dd"
+                            language="ja"
                             placeholderText='YYYY/MM/DD'
 
                         />
