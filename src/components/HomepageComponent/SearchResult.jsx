@@ -13,16 +13,27 @@ function SearchResult({ search, data, onPrice, isOn }) {
   const handleObjectClick = (object) => {
     setSelectedObject2(object);
     if (isOn) {
-      if (data.payment === t('ic') && data.round === t('1way')) {
-        onPrice(object.summary.move.fare.unit114)
-      } else if (data.payment === t('ic') && data.round === t('2way')) {
-        onPrice(object.summary.move.fare.unit114 * 2)
-      } else if (data.payment === t('cash') && data.round === t('1way')) {
-        onPrice(object.summary.move.fare.unit112)
-      } else if (data.payment === t('cash') && data.round === t('2way')) {
-        onPrice(object.summary.move.fare.unit112 * 2)
+      if(object.summary.move.fare.unit114){
+        if (data.payment === t('ic') && data.round === t('1way')) {
+          onPrice(object.summary.move.fare.unit114)
+        } else if (data.payment === t('ic') && data.round === t('2way')) {
+          onPrice(object.summary.move.fare.unit114 * 2)
+        } else if (data.payment === t('cash') && data.round === t('1way')) {
+          onPrice(object.summary.move.fare.unit112)
+        } else if (data.payment === t('cash') && data.round === t('2way')) {
+          onPrice(object.summary.move.fare.unit112 * 2)
+        }
+      }else{
+        if (data.payment === t('ic') && data.round === t('1way')) {
+          onPrice(object.summary.move.fare.IC)
+        } else if (data.payment === t('ic') && data.round === t('2way')) {
+          onPrice(object.summary.move.fare.IC * 2)
+        } else if (data.payment === t('cash') && data.round === t('1way')) {
+          onPrice(object.summary.move.fare.現金)
+        } else if (data.payment === t('cash') && data.round === t('2way')) {
+          onPrice(object.summary.move.fare.現金 * 2)
+        }
       }
-
     } else {
       if (data.payment === t('ic') && data.round === t('1way')) {
         onPrice(object.summary.move.fare.IC)
@@ -35,7 +46,6 @@ function SearchResult({ search, data, onPrice, isOn }) {
       }
 
     }
-
   };
 
   return (

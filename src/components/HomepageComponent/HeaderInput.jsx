@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 
 
-function HeaderInput({ onDateChange, data, onVehiclechange, onPayment, onRound, onDestination, error, setError }) {
+function HeaderInput({  data, onVehiclechange, error, setError , setData }) {
     const { t } = useTranslation();
 
 
@@ -13,12 +13,6 @@ function HeaderInput({ onDateChange, data, onVehiclechange, onPayment, onRound, 
 
     return (
         <div className='w-full border-b-[1.5px] border-gray-500'>
-            {/* <button className='shrink w-26 absolute right-0 h-full ' onClick={()=>onKillData()}>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-</svg>
-</button> */}
-
             <div className='flex flex-col md:flex-row gap-4 md:space-x-2'>
 
                 <div className='sm:w-32 w-32'>
@@ -27,7 +21,7 @@ function HeaderInput({ onDateChange, data, onVehiclechange, onPayment, onRound, 
                         <DatePicker
                             className={`w-full text-sm h-6 px-2 ${error.date && ("border-red-500 bg-red-100")}`}
                             selected={data.date}
-                            onChange={date => { onDateChange(date), setError({ ...error, date: false }) }}
+                            onChange={date => { setData({ ...data, date: date }) , setError({ ...error, date: false }) }}
                             maxDate={new Date()}
                             showMonthDropdown
                             yearDropdownItemNumber={10}
@@ -76,7 +70,7 @@ function HeaderInput({ onDateChange, data, onVehiclechange, onPayment, onRound, 
 
                         <select
                             value={data.payment}
-                            onChange={(e) => { onPayment(e.target.value), setError({ ...error, payment: false }) }}
+                            onChange={(e) => {   setData({ ...data, payment: e.target.value }), setError({ ...error, payment: false }) }}
                             className={`
               h-6 px-2
               flex-auto 
@@ -104,7 +98,7 @@ function HeaderInput({ onDateChange, data, onVehiclechange, onPayment, onRound, 
 
                             <select
                                 value={data.round}
-                                onChange={(e) => onRound(e.target.value)}
+                                onChange={(e) =>  setData({ ...data, round: e.target.value })}
                                 className="
              text-base 
              h-6 pl-2
@@ -130,7 +124,7 @@ function HeaderInput({ onDateChange, data, onVehiclechange, onPayment, onRound, 
             </div>
             <div className='py-5 '>
                 <span className='text-xs'>{t('Destination')}</span>
-                <div className='w-full' ><input value={data.Destination} className={`w-full h-8 px-2 bg-[#F9FAFB] border border-black ${error.Destination && ("border-red-500 bg-red-100")}`} placeholder={t('Destination_pla')} onChange={(e) => { onDestination(e.target.value), setError({ ...error, Destination: false }) }} /></div>
+                <div className='w-full' ><input value={data.Destination} className={`w-full h-8 px-2 bg-[#F9FAFB] border border-black ${error.Destination && ("border-red-500 bg-red-100")}`} placeholder={t('Destination_pla')} onChange={(e) => { setData({...data,Destination:e.target.value}), setError({ ...error, Destination: false }) }} /></div>
             </div>
         </div>
     )

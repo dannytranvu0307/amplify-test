@@ -17,7 +17,7 @@ function HomeFooter2({onFileChange, tableData ,img, deleteAllFile}){
            
         const user ={
             fullname:userDetail.fullName,
-            department: userDetail.department.departmentName
+            department: t('D'+userDetail.department.departmentId)
         }
         const evidences =img.map((ob)=>ob.fileURL)
         
