@@ -313,7 +313,9 @@ const Profile = () => {
     // Not found valid commuter pass
 
     return (
-        <div className="flex md:ml-16 flex-col items-center px-2 md:px-6 py-8 h-full md:h-full mb-16">
+        <div className="flex md:ml-16 flex-col items-center px-2 md:px-6 py-8 h-full md:h-full mb-16"
+        data-aos="fade-up"
+        >
             <div className="min-w-full lg:min-w-min bg-white rounded-lg shadow md:mt-0 xl:p-0">
                 <div className="flex flex-col px-5 py-5 md:p-6 sm:p-8">
                     <div className="flex flex-col">

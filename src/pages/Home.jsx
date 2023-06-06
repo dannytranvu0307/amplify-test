@@ -249,7 +249,8 @@ function Home() {
 
   return (
     <div className="w-full h-full overflow-auto bg-[#F9FAFB]"
-    
+    data-aos="fade-down"
+    data-aos-easing="ease-out-cubic"
     >
       <div className='flex flex-col lg:flex-row h-full mx-auto mt-10 md:mt-0 md:pl-16'>
         <div className='flex flex-col ml-0 lg:mx-auto md:basis-1/3  px-3 h-full'>

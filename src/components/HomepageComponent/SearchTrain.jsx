@@ -85,7 +85,7 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
           // Handle the error
           onSearching({ noData: t('Result') })
         });
-    } else if (date === "" || date === null ||departure===''|| departure === null|| departure=== undefined || arrival==='' || arrival===null ||arrival===undefined||payment ==='' ||payment===null||payment===undefined ) {
+    } else if (date === "" || date === null ||departure===''|| departure === null|| departure=== undefined || arrival==='' || arrival===null ||arrival===undefined||payment ==='' ||payment===null||payment===undefined || Destination===''||Destination===null||Destination===undefined) {
       setAlert(t('alert'))
     } else if (departure !== "" && arrival !== "" && departure===arrival) {
       setAlert(t('AlertSame'))
@@ -174,7 +174,7 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
               onBlur={(prev) => setFocus({ ...prev, departure: false })}
           
             />
-            <ul className='absolute z-10 w-full bg-white rounded-md shadow-md max-h-32 overflow-y-scroll '>
+            <ul className='absolute z-10 w-full bg-white rounded-md shadow-md max-h-64 overflow-y-scroll '>
               {suggestions.map((suggestion, index) => (
                 <li key={index} onClick={() => handleSuggestionClick(suggestion)} className='text-sm px-2 hover:bg-blue-200 rounded py-1'>
                   {suggestion.stationName}

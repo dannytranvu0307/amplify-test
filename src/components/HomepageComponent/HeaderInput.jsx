@@ -37,7 +37,9 @@ function HeaderInput({  data, onVehiclechange, error, setError , setData }) {
                         <select
                             value={data.vehicle}
                             onChange={(e) => { onVehiclechange(e.target.value) }}
+                           
                             className="
+                            
                             h-6 pr-4 pl-2
                             flex-auto 
                             bg-[#F9FAFB]

@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next";
 function SearchResult({ search, data, onPrice, isOn }) {
-  console.log(search)
   const { t } = useTranslation()
   const [selectedObject, setSelectedObject] = useState(null);
   const [selectedObject2, setSelectedObject2] = useState(null);
@@ -93,19 +92,20 @@ function SearchResult({ search, data, onPrice, isOn }) {
                 </div>}
 
             </div>
-            <div className={`absolute z-10 w-[50%] right-[-200px] text-black bg-white p-2 rounded-md shadow-md transition-opacity duration-300 overflow-auto mx-auto max-h-[200px] overflow-y-scroll
+            <div className={`absolute z-10 w-[60%] right-[-200px] text-black bg-white p-2 rounded-md shadow-md transition-opacity duration-300 overflow-auto mx-auto max-h-[200px] overflow-y-scroll
 
             
             ${selectedObject === search ? 'opacity-100' : 'opacity-0 invisible'}`}>
               {search.sections.map((section, index) => (<div key={index} className="">
                 {section.type === 'point' && <div className="text-xs">{section.stationName}</div>}
                 {section.type === 'move' && <div className="flex" >
-                  {section.transport ? <div className="flex">
-                    <div className={`text-[8px]  py-2 w-2 h-10 border rounded `} style={{ backgroundColor: section.transport.lineColor }}></div>
-                    <span className="flex items-center mx-auto font-bold pl-5">{section.transport.lineName}</span>
+                  {section.transport ? <div className="flex gap-3">
+                    <div className={` py-2 w-2 h-10 border rounded `} style={{ backgroundColor: section.transport.lineColor }}></div>
+                    <span className="flex items-center mx-auto font-bold ">{section.transport.lineName}</span>
                   </div>
-                    : <div className="bg-gray-300 h-10 w-3">
-
+                    : <div className=" flex gap-3">
+                     <div className={`  py-2 w-2 h-10 border rounded `} ></div>
+                    <span className="flex items-center mx-auto font-bold">{t('walk')}</span>
                     </div>}
                 </div>}
 

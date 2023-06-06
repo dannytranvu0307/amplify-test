@@ -11,53 +11,7 @@ function History() {
     const getFiles = async () => {
         try {
             const res = await axios.get(`${baseURL}/files`,{withCredentials: true})
-            return setFiles([...res.data.data,
-                {exportedDate:"asas",
-                fileId:"assa",
-                fileName:"sdas"}
-                ,
-                {exportedDate:"asas",
-                fileId:"assa",
-                fileName:"sdas"},
-                {exportedDate:"asas",
-                fileId:"assa",
-                fileName:"sdas"},
-                {exportedDate:"asas",
-                fileId:"assa",
-                fileName:"sdas"},
-                {exportedDate:"asas",
-                fileId:"assa",
-                fileName:"sdas"},
-                {exportedDate:"asas",
-                fileId:"assa",
-                fileName:"sdas"}
-                ,
-                {exportedDate:"asas",
-                fileId:"assa",
-                fileName:"sdas"},
-                {exportedDate:"asas",
-                fileId:"assa",
-                fileName:"sdas"},
-                {exportedDate:"asas",
-                fileId:"assa",
-                fileName:"sdas"},
-                {exportedDate:"asas",
-                fileId:"assa",
-                fileName:"sdas"}
-                ,
-                {exportedDate:"asas",
-                fileId:"assa",
-                fileName:"sdas"},
-                {exportedDate:"asas",
-                fileId:"assa",
-                fileName:"sdas"},
-                {exportedDate:"asas",
-                fileId:"assa",
-                fileName:"sdas"},
-                {exportedDate:"asas",
-                fileId:"assa",
-                fileName:"sdas"}
-            ]) 
+            return setFiles([...res.data.data]) 
         }catch(err){
             return err.response
         }
@@ -91,7 +45,8 @@ function History() {
         px-2
         mb-16 py-8 h-full
          lg:w-3/5
-         lg:py-0">
+         lg:py-0"
+         data-aos="zoom-out-up">
             <div className="bg-white rounded-lg shadow  md:mt-0 w-full h-full xl:p-0">
                 
                 <div className="flex flex-col px-6 h-full">

@@ -91,7 +91,7 @@ const Sidebar = () => {
                                             "active" : ""} 
                                 `}
                                     >
-                                        <div className={`w-16 transition ease-in-out duration-200 w-full ${mounted && "md:w-[300px]"}`}>
+                                        <div className={`w-16 transition ease-in-out duration-300 w-full ${mounted && "md:w-[300px]"}`}>
                                             <div
                                                 className={` 
                                             items-center

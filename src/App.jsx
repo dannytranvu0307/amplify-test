@@ -27,7 +27,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(()=>{
-    Aos.init({ duration: 1000 });
+    Aos.init({ duration: 900 });
     dispatch(authenticate())
     .unwrap()
     .then(res =>{
