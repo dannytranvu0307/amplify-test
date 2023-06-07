@@ -12,7 +12,7 @@ function HeaderInput({  data, onVehiclechange, error, setError , setData,setSele
                     <span className='whitespace-nowrap text-xs'>{t("date")}</span>
                     <div className='flex bg-[#F9FAFB] relative border border-black '>
                         <DatePicker
-                            className={`w-full text-sm h-6 px-2 ${error.date && ("border-red-500 bg-red-100")}`}
+                            className={`w-full text-sm h-6  px-2 ${error.date && ("border-red-500 bg-red-100")}`}
                             selected={data.date}
                             onChange={date => { setData({ ...data, date: date }) , setError({ ...error, date: false }) }}
                             maxDate={new Date()}
