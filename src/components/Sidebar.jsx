@@ -14,6 +14,7 @@ const Sidebar = () => {
     useEffect(()=>{
         dispatch(changeActive())
     },[])
+
     const handleLogout = () => {
         dispatch(logout())
     }
@@ -87,6 +88,8 @@ const Sidebar = () => {
                                     <NavLink
                                         key={key}
                                         to={item.path}
+                                        onClick={()=>setMounted(false)}
+
                                         className={`group ${({ isActive, isPeding }) => isActive ?
                                             "active" : ""} 
                                 `}
@@ -95,10 +98,8 @@ const Sidebar = () => {
                                             <div
                                                 className={` 
                                             items-center
-                                            transition
-                                            ease-in-out
                                             group-[.active]:bg-gradient-to-r from-cyan-200 to-blue-300 
-                                            h-12 mt-2
+                                            h-12 m-1
                                             hover:bg-gradient-to-r from-cyan-200 to-blue-300 flex  
                                             duration-300
                                             `}>

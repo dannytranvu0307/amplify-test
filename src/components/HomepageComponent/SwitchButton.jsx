@@ -27,7 +27,7 @@ const SwitchButton = ({isOn,setIsOn}) => {
   peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:right-[2px] 
   after:bg-[#F9FAFB] after:border-gray-300
    after:border after:rounded-full after:h-5 after:w-5 
-   after:transition-all peer-checked:bg-gray-300
+   after:transition-all peer-checked:bg-gray-500
    ${isDisable?('bg-gray-300 after:bg-gray-500'):('after:bg-white')}`}></div>
 </label>
 </div>
