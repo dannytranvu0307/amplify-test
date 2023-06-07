@@ -135,6 +135,7 @@ const Profile = () => {
     const [validError, setInvalidError] = useState()
     // dissable handle change password
     const handleDisable = () => {
+        setMessagePassword()
         setDisabledPassword(true);
         setForm({ ...form, current_password: null, new_password: null, confirm_new_password: null })
     }

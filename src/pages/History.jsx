@@ -44,12 +44,13 @@ function History() {
         w-full
         px-2
         mb-16 py-8 h-full
-         lg:w-3/5
-         lg:py-0">
-            <div className="bg-white rounded-lg shadow  md:mt-0 w-full h-full xl:p-0">
-                
-                <div className="flex flex-col px-6 h-full">
-                    <h1 className="text-xl pt-8 px-12 sm:px-12 text-ms md:text-lg font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
+        py-2
+        md:w-4/5
+        lg:w-2/3
+        lg:py-8">
+            <div className="bg-white rounded-lg shadow md:mt-0 w-full h-full xl:p-0">
+                <div className="flex flex-col px-4 h-full">
+                    <h1 className="text-xl pt-8 px-2 md:px-12 text-ms md:text-lg font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
                         {t("lbviewExportFileHistory")}
                     </h1>
                     <div className="py-8 flex mx-auto xl:px-8 sm:py-1 sm:px-1 md:py-8 md:px-8">
@@ -90,11 +91,8 @@ function History() {
                                         </div>
                                     </div>):(<div className="h-96 w-full items-center
                                     ">
-
                                     <span className="flex justify-center text-gray-500">{t("lbviewExportFileHistoryEmpty")}</span>
                                     </div>)}
-                                    
-                                    
                                 </div>     
                             </div>
                         </div>
