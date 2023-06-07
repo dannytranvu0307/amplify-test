@@ -10,7 +10,7 @@ const Languages =['en','jp']
 
 i18n
   .use(Backend)
-  .use(LanguageDetector)
+  //.use(LanguageDetector)
   .use(initReactI18next)
   .init({
     fallbackLng: 'en',

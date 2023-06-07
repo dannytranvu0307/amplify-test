@@ -117,5 +117,7 @@
     "times":" Times",
     "start_pla":"Station of departure.",
     "goal_pla":"Station of destination.",
+    "walk":"Walking",
     "minusAlert":"Please enter an amount greater than 0"
+
 }
