@@ -7,9 +7,8 @@ const ValidatorSubmit = (form, objs) =>{
             const a = Validators(form,objs[i], objs[i].value)
             if (a.name !== "") {
                 const input = form.querySelector(`#${objs[i].id}`);
-                input.focus();
+                input.classList.add('border-red-500','bg-red-100')
                 arr.push(a.name);
-                break
             } 
         }
     }

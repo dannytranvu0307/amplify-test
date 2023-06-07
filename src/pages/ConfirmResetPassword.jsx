@@ -50,6 +50,8 @@ const onSubmit = e => {
                 setErrSever('mailTimeOut')
             }
         })
+    }else {
+        setErrSever('alert')
     }
 }
 
@@ -73,8 +75,8 @@ return (
                         )}
                     )
                     }
-                    <span className="text-red-500 text-sm">{t(errSever)}</span>
-                    <div className="flex pt-7 justify-between">
+                    <div className="pt-4 text-red-500 text-sm">{t(errSever)}</div>
+                    <div className="flex pt-3 justify-between">
                         <Link to="/login">
                         <button 
                             type="submit" 

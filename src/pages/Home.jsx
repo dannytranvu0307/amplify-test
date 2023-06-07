@@ -33,6 +33,12 @@ function Home() {
   const [id, setId] = useState({});
   const [isInputVisible, setInputVisible] = useState(false);
  
+  const user = useSelector(state => state.login.user)
+  useEffect(() => {
+    if (user) {
+      setTableData(user.fares)
+    }
+  }, [user])
 
   useEffect(() => {
     dispatch(authenticate())
@@ -40,17 +46,8 @@ function Home() {
     if (data) {
       setImage(data.imageList)
     }
+    
   }, [])
-
-  const user = useSelector(state => state.login.user)
-
-  useEffect(() => {
-    if (user) {
-      setTableData(user.fares)
-    }
-  }, [user])
-
-
   const handleVehicleChange = (option) => {
     setData({ date:data.date, vehicle: option, Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" });
     setError({ date: false, payment: false, Destination: false, departure: false, arrival: false, price: false });
@@ -58,46 +55,22 @@ function Home() {
     setWarning('')
   };
   
-  const handleDateChange = (newData) => {
-    setData({ ...data, date: newData });
-  };
-  const handlePayment = (option) => {
-    setData({ ...data, payment: option });
-  };
-
-  const handleRound = (option) => {
-    setData({ ...data, round: option });
-  };
-
-  const handleDestination = (option) => {
-    setData({ ...data, Destination: option });
-
-  };
-  const handleDeparture = (option) => {
-    setData({ ...data, departure: option });
-
-  };
-  const handleArrial = (option) => {
-    setData({ ...data, arrival: option });
-
-  };
+ 
 
   const handleTransport = (option) => {
+
     if(option===''){
     delete id.viaCode
     }
-  
     setData({ ...data, transport: option });
   };
   const handlePrice = (option) => {
     setData({ ...data, price: option });
   };
 
-  const handleFileChange = (file) => {
-    convertAllToBase64(file)
-  };
+ 
   //convert all image
-  const convertAllToBase64 = async (img) => {
+  const  handleFileChange　= async (img) => {
     const base64Images = [];
     for (const file of img) {
       const compressedImage = await compressImage(file);
@@ -197,7 +170,7 @@ function Home() {
           withCredentials: true,
         })
           .then(response => {
-            // dispatch(authenticate())
+
             const newTb= [...TableData,response.data.data]
             const sortedTable = [...newTb].sort((a, b) => new Date(a.visitDate) - new Date(b.visitDate));
             setTableData(sortedTable)
@@ -208,11 +181,8 @@ function Home() {
             setInputVisible(false)
           })
           .catch(error => {
-            // Handle errors
             return error
           });
-
-
       } else if (updatedError.priceLength) {
         setWarning(t('warningLength'))
       } else if (isNaN(price)) {
@@ -253,16 +223,12 @@ function Home() {
           withCredentials: true,
         })
           .then(response => {
-            // dispatch(authenticate())
-            // setTableData((prev)=>[...prev,{...data,payment:t('cash')}])
             const newTb= [...TableData,response.data.data]
             const sortedTable = [...newTb].sort((a, b) => new Date(a.visitDate) - new Date(b.visitDate));
             setTableData(sortedTable)
             setData({ date: "", vehicle: data.vehicle, Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" })
             setSearching([])
             setWarning('')
-        
-
           })
           .catch(error => {
             return error
@@ -283,16 +249,16 @@ function Home() {
 
   return (
     <div className="w-full h-full overflow-auto bg-[#F9FAFB]"
-    
+    data-aos="fade-down"
+    data-aos-easing="ease-out-cubic"
     >
       <div className='flex flex-col lg:flex-row h-full mx-auto mt-10 md:mt-0 md:pl-16'>
         <div className='flex flex-col ml-0 lg:mx-auto md:basis-1/3  px-3 h-full'>
           <div className='flex '>
-            <HeaderInput onDateChange={handleDateChange} data={data}
+            <HeaderInput 
+              data={data}
+              setData={setData}
               onVehiclechange={handleVehicleChange}
-              onPayment={handlePayment}
-              onRound={handleRound}
-              onDestination={handleDestination}
               error={error}
               setError={setError}
             /> </div>
@@ -305,9 +271,14 @@ function Home() {
               isOn={isOn}
               onWarning={setWarning}
               setIsOn={setIsOn}
-              onSearching={setSearching} onDepart={handleDeparture} onArrival={handleArrial} onTransport={handleTransport} data={data} error={error} setError={setError} />}
-            {data.vehicle === 'bus' && <SearchBus onDepart={handleDeparture} onArrival={handleArrial} data={data} error={error} setError={setError} />}
-            {data.vehicle === 'taxi' && <SearchBus onDepart={handleDeparture} onArrival={handleArrial} data={data} error={error} setError={setError} />}
+              onSearching={setSearching}
+              onTransport={handleTransport} 
+              data={data} 
+              setData={setData}
+              error={error}
+              setError={setError} />}
+            {data.vehicle === 'bus' && <SearchBus   setData={setData} data={data} error={error} setError={setError} />}
+            {data.vehicle === 'taxi' && <SearchBus   setData={setData} data={data} error={error} setError={setError} />}
           </div>
           <SearchResult search={searching} data={data} onPrice={handlePrice} isOn={isOn} />
           <div className='flex mt-auto pb-[200px]'>

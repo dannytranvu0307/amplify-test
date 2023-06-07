@@ -6,15 +6,15 @@ import ValidatorSubmit from "../functional/ValidatorSubmit";
 import { email, department,password, confirm_password, fullName} from "../instaces";
 import ErrorNotification from "../components/ErrorNotification";
 
-import { useDispatch, useSelector } from "react-redux";
-import { register, selectIsSuccess,selectRegisterError, changeActive } from "../features/auth/loginSlice";
+import { useDispatch } from "react-redux";
+import { register, changeActive } from "../features/auth/loginSlice";
 
 const SignUp = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     // error message
-    const error = useSelector(selectRegisterError);
-    const isSuccess = useSelector(selectIsSuccess);
+    const [messageError, setMessageError] = useState()
+    const [isSuccess, setIsSuccess] = useState(false)
 
     useEffect(()=>{
        return ()=>dispatch(changeActive())
@@ -24,9 +24,10 @@ const SignUp = () => {
 
     // change language
     const [form, setForm] = useState({})
+
     const onSubmit = e => {
         e.preventDefault();
-
+        setIsSuccess(false)
         // get elements to validate
         const submitInput = document.querySelectorAll("input")
         const select = document.querySelector('select#departmentId')
@@ -37,14 +38,26 @@ const SignUp = () => {
             let {departmentId, confirm_password,password, fullName, email} = {...form}
             dispatch(register({departmentId:departmentId,password,fullName: fullName.replace(/\s\s+/g, ' '),email:email.replace(/\s\s+/g, '').trim()}))
             .unwrap()
+            .then(res => {
+                if (res.data.code === 'API002_ER'){
+                    setMessageError('API002_ER')
+                }
+                else{
+                    setMessageError()
+                    setIsSuccess(true)
+                }
+            })
+        }
+        else {
+            setMessageError('alert')
         }
     }
 
     // every times typing tha target will be changed value
     const onChange = e => {
+        setMessageError()
         setForm({...form, [e.target.name]: e.target.value})
     }
-
 
 return (
     <section className="bg-gray-50 h-full align-middle pb-12">
@@ -66,7 +79,7 @@ return (
                         )}
                     )}
                     <div>
-                    {error && <span className="text-red-500 text-xs">{t(error)}</span>}
+                    {messageError && <span className="text-red-500 text-xs">{t(messageError)}</span>}
                     </div>
                     <button 
                     type=""

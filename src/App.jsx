@@ -18,6 +18,7 @@ import Sidebar from "./components/Sidebar";
 import React from 'react';
 import { authenticate, selectIsAuthenticated, refreshToken } from "./features/auth/loginSlice";
 import { useDispatch, useSelector  } from "react-redux";
+import NotFound from './pages/NotFound';
 
 
 function App() {
@@ -65,18 +66,20 @@ function App() {
                     <Route path='/profile' element={<Profile />} />
                       <Route path='/history' element={<History />} />
                       <Route path='' element={<Home />} />
-                      <Route path='/*' element={<Home />} />
+                      <Route path='/*' element={<NotFound />} />
                     </>
                      ):(
                     <>
+                        <Route path='/' element={<Login />} />
                         <Route path='/login' element={<Login />} />
                         <Route path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}></Route>
                         <Route path='/register' element={<SignUp />} />
                         <Route path='/passwordreset' element={<PasswordReset />} />
-                        <Route path='/*' element={<Login />} />
+                        <Route path='/*' element={<NotFound />} />
                       </>
                        )}
                       <Route path='/verify/:verifyCode' element={<Active />} />
+                      <Route path='/*' element={<NotFound />} />
                   </Routes>
                 </div>
               </div>

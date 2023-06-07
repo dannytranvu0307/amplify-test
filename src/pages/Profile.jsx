@@ -128,6 +128,7 @@ const Profile = () => {
     }
 
     const onChange = e => {
+        setMessagePassword()
         setForm({ ...form, [e.target.name]: e.target.value })
     }
 
@@ -214,6 +215,7 @@ const Profile = () => {
     const onSubmit = e => {
         setMessageUpdate(false)
         e.preventDefault();
+        setMessagePassword()
         const $ = document.querySelector.bind(document)
         const formSubmit = $('#profile')
         const eName = document.querySelector("#fullName")
@@ -224,7 +226,10 @@ const Profile = () => {
 
 
         const { departmentId, fullName, email, current_password, new_password, confirm_new_password, ...userData } = form
-        if (ValidatorSubmit(formSubmit, [eName, eDepartmentId, eOldPassword, eNewPassword, eConfirmNewPassword]))
+        if (ValidatorSubmit(formSubmit, [eName, eDepartmentId, eOldPassword, eNewPassword, eConfirmNewPassword])){
+
+        
+
             if ((!checkTicket && commuterPass.viaDetails.length === 0) === (checkTicket && commuterPass.viaDetails.length !== 0)) {
                 if (commuterPass.viaDetails.length === 0){
                     dispatch(userUpdate({
@@ -256,6 +261,7 @@ const Profile = () => {
                             oldPasswordNotMatch()
                     }else {
                         if(res.data.code === "API004_ER"){
+                            console.log("loi")
                             setMessagePassword('oldPasswordNotMatch')
                         }
                     }
@@ -307,6 +313,10 @@ const Profile = () => {
                     setInvalidError('requiredChoose')
                 }
             }
+        }
+        else{
+            setMessagePassword('alert')
+        }
 
     }
     // ERROR

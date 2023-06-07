@@ -32,6 +32,7 @@ function Login(){
 
     // input change
     const onChange = e => {
+        setErrSever()
         setForm({...form, [e.target.name] : e.target.value})
     }
 
@@ -64,8 +65,8 @@ function Login(){
                 }}) 
             }
             else{
-                setErrSever('')
-            }
+                setErrSever('alert')
+        }
     }
 
     return (

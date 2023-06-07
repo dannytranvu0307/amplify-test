@@ -6,7 +6,7 @@ import axios from 'axios';
 import { baseURL } from '../../features/auth/loginSlice'
 import { useSelector } from 'react-redux';
 
-function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, onSearching, isOn, setIsOn , onWarning  , id , setId,isInputVisible, setInputVisible}) {
+function SearchTrain({ setData,data, onTransport, error, setError, onSearching, isOn, setIsOn , onWarning  , id , setId,isInputVisible, setInputVisible}) {
   const { t } = useTranslation();
   const [suggestions, setSuggestions] = useState([]);
   const [suggestionsArrival, setSuggestionsArrival] = useState([]);
@@ -23,12 +23,12 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
   };
 
   const handleSuggestionClick = (suggestion) => {
-    onDepart(suggestion.stationName);
+    setData({...data, departure:suggestion.stationName})
     setId({ ...id, start: suggestion.stationCode })
     setSuggestions([])
   };
   const handleSuggestionClickArrival = (suggestion) => {
-    onArrival(suggestion.stationName);
+    setData({...data,arrival:suggestion.stationName})
     setId({ ...id, goal: suggestion.stationCode })
     setSuggestionsArrival([])
   };
@@ -48,13 +48,7 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
     }
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-
-      onDepart(event.target.value)
-    }
-  };
-
+  
 
 
   const handleSearch = () => {
@@ -91,7 +85,7 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
           // Handle the error
           onSearching({ noData: t('Result') })
         });
-    } else if (date === "" || date === null ||departure===''|| departure === null|| departure=== undefined || arrival==='' || arrival===null ||arrival===undefined||payment ==='' ||payment===null||payment===undefined ) {
+    } else if (date === "" || date === null ||departure===''|| departure === null|| departure=== undefined || arrival==='' || arrival===null ||arrival===undefined||payment ==='' ||payment===null||payment===undefined || Destination===''||Destination===null||Destination===undefined) {
       setAlert(t('alert'))
     } else if (departure !== "" && arrival !== "" && departure===arrival) {
       setAlert(t('AlertSame'))
@@ -175,12 +169,12 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
             <input className={`w-full border-[1px] bg-[#F9FAFB] border-black rounded h-8 px-2 ${error.departure && ("border-red-500 bg-red-100")}`}
               value={data.departure}
               placeholder={t("start_pla")}
-              onChange={e => { onDepart(e.target.value), setError({ ...error, departure: false }) }}
+              onChange={e => { setData({...data,departure:e.target.value}), setError({ ...error, departure: false }) }}
               onFocus={(prev) => setFocus({ ...prev, departure: true })}
               onBlur={(prev) => setFocus({ ...prev, departure: false })}
-              onKeyDown={handleKeyDown}
+          
             />
-            <ul className='absolute z-10 w-full bg-white rounded-md shadow-md max-h-32 overflow-y-scroll '>
+            <ul className='absolute z-10 w-full bg-white rounded-md shadow-md max-h-64 overflow-y-scroll '>
               {suggestions.map((suggestion, index) => (
                 <li key={index} onClick={() => handleSuggestionClick(suggestion)} className='text-sm px-2 hover:bg-blue-200 rounded py-1'>
                   {suggestion.stationName}
@@ -200,7 +194,7 @@ function SearchTrain({ onDepart, onArrival, data, onTransport, error, setError, 
               value={data.arrival}
               onFocus={(prev) => setFocus({ ...prev, arrival: true })}
               onBlur={(prev) => setFocus({ ...prev, arrival: false })}
-              onChange={e => { onArrival(e.target.value), setError({ ...error, arrival: false }) }} />
+              onChange={e => {setData({...data,arrival:e.target.value}), setError({ ...error, arrival: false }) }} />
             <ul className='absolute z-10 w-full bg-white rounded-md shadow-md overflow-auto max-h-64 overflow-y-scroll ' >
               {suggestionsArrival.map((suggestion, index) => (
                 <li key={index} onClick={() => handleSuggestionClickArrival(suggestion)} className='text-sm px-2 py-1 hover:bg-blue-200 rounded'>

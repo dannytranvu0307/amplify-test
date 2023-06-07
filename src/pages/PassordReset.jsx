@@ -22,6 +22,7 @@ const PasswordReset = () => {
 
     const onSubmit = e => {
         e.preventDefault();
+        setErrSever()
         const submitInput = document.querySelectorAll("input")
         const formSubmit = document.querySelector("#passwordreset")
         if (ValidatorSubmit(formSubmit,submitInput)){
@@ -34,11 +35,12 @@ const PasswordReset = () => {
                 }
             })
         }else {
-            setErrSever('')
+            setErrSever('alert')
         }
     }
 
     const onChange = e => {
+        setErrSever()
         setForm({[e.target.name]:e.target.value})
     }
 
