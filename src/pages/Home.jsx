@@ -22,7 +22,6 @@ import Resizer from "react-image-file-resizer";
 function Home() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
   const [data, setData] = useState({ date: "", vehicle: 'train', Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" });
   const [error, setError] = useState({ date: false, payment: false, Destination: false, departure: false, arrival: false, price: false })
   const [TableData, setTableData] = useState([])
@@ -201,7 +200,7 @@ function Home() {
         Destination: Destination === "",
         departure: departure === "" || departure === arrival,
         arrival: arrival === "" || departure === arrival,
-        price: price === "",
+        price: price === ""||isNaN(price) ,
         priceLength: price.length > 8,
         priceType: isNaN(price),
         equal: departure === arrival
@@ -234,13 +233,13 @@ function Home() {
             return error
           })
 
-      } else if (updatedError.priceLength) {
-        setWarning(t('warningLength'))
-      } else if (isNaN(price)) {
-        setWarning(t('warningType'))
-      } else if (departure === arrival) {
+      }else if ( departure!==''&&departure === arrival) {
         setWarning(t('AlertSame'))
-      }
+      }else if (updatedError.priceLength) {
+        setWarning(t('warningLength'))
+      } else if (isNaN(price)||Number(price)<0) {
+        setWarning(t('warningType'))
+      } 
       else {
         setWarning(t('warning'))
       }

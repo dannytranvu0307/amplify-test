@@ -47,7 +47,8 @@ function History() {
         py-2
         md:w-4/5
         lg:w-2/3
-        lg:py-8">
+        lg:py-8"
+        data-aos="zoom-out-up">
             <div className="bg-white rounded-lg shadow md:mt-0 w-full h-full xl:p-0">
                 <div className="flex flex-col px-4 h-full">
                     <h1 className="text-xl pt-8 px-2 md:px-12 text-ms md:text-lg font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">

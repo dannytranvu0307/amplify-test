@@ -85,13 +85,4 @@ export const new_password = {
         htmlFor: "confirm_new_password",
         placeholder: "confirm_new_password",
     }
-//  export const confirm_password = 
-//     {
-//         id:"confirm_password",
-//         label:t("confirm_password"),
-//         name:"confirm_password",
-//         type: "password",
-//         htmlFor: "confirm_password",
-//         placeholder: "confirm_password_pla",
-//         required: true,
-//     }
+    

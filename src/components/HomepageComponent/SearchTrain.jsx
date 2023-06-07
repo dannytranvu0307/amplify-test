@@ -78,11 +78,13 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
         .then(response => {
           // Handle the response
           onSearching(response.data.data)
+          setData({...data,price:''})
           setAlert('')
           onWarning('')
         })
         .catch(error => {
           // Handle the error
+         
           onSearching({ noData: t('Result') })
         });
     } else if (date === "" || date === null ||departure===''|| departure === null|| departure=== undefined || arrival==='' || arrival===null ||arrival===undefined||payment ==='' ||payment===null||payment===undefined || Destination===''||Destination===null||Destination===undefined) {
