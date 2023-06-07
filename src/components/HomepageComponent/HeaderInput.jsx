@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { memo } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-function HeaderInput({  data, onVehiclechange, error, setError , setData }) {
+function HeaderInput({  data, onVehiclechange, error, setError , setData,setSelectedObject2 }) {
     const { t } = useTranslation();
     return (
         <div className='w-full border-b-[1.5px] border-gray-500'>
@@ -66,7 +66,7 @@ function HeaderInput({  data, onVehiclechange, error, setError , setData }) {
 
                         <select
                             value={data.payment}
-                            onChange={(e) => {   setData({ ...data, payment: e.target.value }), setError({ ...error, payment: false }) }}
+                            onChange={(e) => {   setData({ ...data, payment: e.target.value }), setError({ ...error, payment: false }),setSelectedObject2(null)}}
                             className={`
               h-6 px-2
               flex-auto 
@@ -77,7 +77,7 @@ function HeaderInput({  data, onVehiclechange, error, setError , setData }) {
                         >
                             <option value='' >ーー</option>
                             <option value={t("cash")}>{t("cash")}</option>
-                            <option value={t("ic")}>{t("ic")}</option>
+                            <option value={t("IC")}>{t("IC")}</option>
 
 
                         </select>
@@ -94,7 +94,7 @@ function HeaderInput({  data, onVehiclechange, error, setError , setData }) {
 
                             <select
                                 value={data.round}
-                                onChange={(e) =>  setData({ ...data, round: e.target.value })}
+                                onChange={(e) =>  {setData({ ...data, round: e.target.value }),setSelectedObject2(null) }}
                                 className="
              text-base 
              h-6 pl-2
@@ -120,7 +120,15 @@ function HeaderInput({  data, onVehiclechange, error, setError , setData }) {
             </div>
             <div className='py-5 '>
                 <span className='text-xs'>{t('Destination')}</span>
-                <div className='w-full' ><input value={data.Destination} className={`w-full h-8 px-2 bg-[#F9FAFB] border border-black ${error.Destination && ("border-red-500 bg-red-100")}`} placeholder={t('Destination_pla')} onChange={(e) => { setData({...data,Destination:e.target.value}), setError({ ...error, Destination: false }) }} /></div>
+                <div className='w-full relative' >
+                <input value={data.Destination} className={`w-full h-8 px-2 bg-[#F9FAFB] border border-black rounded ${error.Destination && ("border-red-500 bg-red-100")}`} 
+                placeholder={t('Destination_pla')} 
+                onChange={(e) => { setData({...data,Destination:e.target.value}), setError({ ...error, Destination: false }) }} 
+               />
+              <svg   onClick={()=>setData({...data,Destination:""})} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" absolute right-1 top-1 w-4 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+             </svg>
+                </div>
             </div>
         </div>
     )

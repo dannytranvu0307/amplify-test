@@ -85,10 +85,10 @@ function HomeFooter2({onFileChange, tableData ,img, deleteAllFile}){
 
 
     return (
-        <div className='flex justify-between w-full'>
+        <div className='flex justify-between w-full px-5'>
        
           
-         {  <div className="flex items-center ">
+          <div className="flex items-start ">
              <label className={`flex items-center px-4 py-[6px]  text-white rounded-md shadow-md cursor-pointer group 
                      ${tableData.length!==0?'bg-primary-600 hover:bg-primary-500':'bg-gray-500'}`}>
                       <div className={`${tableData.length!==0?(' hover:bg-primary-500 group-hover:bg-gray-100  bg-green-500 group-hover:text-green-500 group-hover:rotate-180'):('bg-gray-300')}
@@ -108,8 +108,8 @@ function HomeFooter2({onFileChange, tableData ,img, deleteAllFile}){
                accept=".pnd, .jpeg, .eps, .tiff ,.gif ,.svg , .jpg"
              />
             </label>
-            </div>}
-        <div className='flex items-end px-20'>
+            </div>
+        <div className='flex items-end '>
             
          <button
          onClick={handleExportExcel}

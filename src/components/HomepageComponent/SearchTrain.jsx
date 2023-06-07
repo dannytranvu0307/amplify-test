@@ -6,7 +6,7 @@ import axios from 'axios';
 import { baseURL } from '../../features/auth/loginSlice'
 import { useSelector } from 'react-redux';
 
-function SearchTrain({ setData,data, onTransport, error, setError, onSearching, isOn, setIsOn , onWarning  , id , setId,isInputVisible, setInputVisible}) {
+function SearchTrain({ setData,data, onTransport, error, setError, onSearching, isOn, setIsOn , onWarning  , id , setId,isInputVisible, setInputVisible,setSelectedObject2}) {
   const { t } = useTranslation();
   const [suggestions, setSuggestions] = useState([]);
   const [suggestionsArrival, setSuggestionsArrival] = useState([]);
@@ -168,6 +168,7 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
         <div className='flex-auto '>
           <span className='my-2 text-xs'>{t("departure")}</span>
           <div className='relative '>
+          
             <input className={`w-full border-[1px] bg-[#F9FAFB] border-black rounded h-8 px-2 ${error.departure && ("border-red-500 bg-red-100")}`}
               value={data.departure}
               placeholder={t("start_pla")}
@@ -176,6 +177,13 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
               onBlur={(prev) => setFocus({ ...prev, departure: false })}
           
             />
+             <svg
+             onClick={()=>{setData({...data,departure:""}) , setId({...id,start:""})}}
+             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" absolute right-1 top-1 w-4 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+             </svg>
+       
+
             <ul className='absolute z-10 w-full bg-white rounded-md shadow-md max-h-64 overflow-y-scroll '>
               {suggestions.map((suggestion, index) => (
                 <li key={index} onClick={() => handleSuggestionClick(suggestion)} className='text-sm px-2 hover:bg-blue-200 rounded py-1'>
@@ -190,6 +198,7 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
         <div className='flex-auto'>
           <span className='my-2 text-xs'>{t("arrival")}</span>
           <div className='relative'>
+
             <input
               placeholder={t("goal_pla")}
               className={`w-full border-[1px] border-black bg-[#F9FAFB] rounded h-8 px-2 ${error.arrival && ("border-red-500 bg-red-100")}`}
@@ -197,6 +206,11 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
               onFocus={(prev) => setFocus({ ...prev, arrival: true })}
               onBlur={(prev) => setFocus({ ...prev, arrival: false })}
               onChange={e => {setData({...data,arrival:e.target.value}), setError({ ...error, arrival: false }) }} />
+               <svg 
+                onClick={()=>{setData({...data,arrival:""}) , setId({...id,goal:""})}}
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" absolute right-1 top-1 w-4 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+             </svg>
             <ul className='absolute z-10 w-full bg-white rounded-md shadow-md overflow-auto max-h-64 overflow-y-scroll ' >
               {suggestionsArrival.map((suggestion, index) => (
                 <li key={index} onClick={() => handleSuggestionClickArrival(suggestion)} className='text-sm px-2 py-1 hover:bg-blue-200 rounded'>
@@ -209,6 +223,7 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
       <div className=' px-[25%]'>
         <div className='border border-black rounded relative'>
           {isInputVisible ? (
+            <>
             <input
               className='w-full border-[1px] border-black rounded h-8 px-2 bg-[#F9FAFB]'
               type="text"
@@ -219,6 +234,13 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
               onBlur={handleBlur}
               autoFocus
             />
+             <svg 
+              onClick={()=>{setData({...data,transport:""}) , setId({...id,viaCode:""})}}
+             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" absolute right-1 top-1 w-4 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+             </svg>
+            </>
+            
           ) : (
             <button onClick={handleClick} className='w-full flex h-8 items-center  justify-center text-xs group'>
               <div className="duration-300 transition w-[24px] h-[24px] bg-green-500 text-white rounded-full flex items-center mr-2 group-hover:bg-gray-100 group-hover:text-green-500 group-hover:rotate-180">
@@ -240,7 +262,7 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
 
       </div>
 
-      <div><SwitchButton isOn={isOn} setIsOn={setIsOn} /></div>
+      <div><SwitchButton isOn={isOn} setIsOn={setIsOn} setSelectedObject2={setSelectedObject2} setData={setData} data ={data}/></div>
       <div className='text-xs py-2 text-red-500'>{alert}</div>
 
       <button className='w-24 h-8 items-center  text-xs justify-center rounded-md text-white flex mx-auto  bg-primary-600 hover:bg-primary-500' onClick={handleSearch}> {t("search")}</button>
