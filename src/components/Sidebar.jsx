@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink,useNavigate } from "react-router-dom";
 import { useState,useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from "react-redux";
@@ -8,6 +8,7 @@ const Sidebar = () => {
     const dispatch = useDispatch()
     const { t } = useTranslation();
     const [mounted, setMounted] = useState(false);
+    const navigate = useNavigate()
     const openSideBar = () => {
         setMounted(!mounted)
     }
@@ -16,7 +17,11 @@ const Sidebar = () => {
     },[])
 
     const handleLogout = () => {
-        dispatch(logout())
+        dispatch(logout()).unwrap().then(res => {
+            if(res.data.type === "INFO"){
+                navigate("")
+            }
+        })
     }
 
     const sideBarItem = [
