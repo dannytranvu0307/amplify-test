@@ -1,10 +1,8 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next";
-function SearchResult({ search, data, onPrice, isOn }) {
+function SearchResult({ search, data, onPrice, isOn ,selectedObject2, setSelectedObject2}) {
   const { t } = useTranslation()
   const [selectedObject, setSelectedObject] = useState(null);
-  const [selectedObject2, setSelectedObject2] = useState(null);
-
 
   const handleObjectHover = (object) => {
     setSelectedObject(object);
@@ -12,7 +10,7 @@ function SearchResult({ search, data, onPrice, isOn }) {
   const handleObjectClick = (object) => {
     setSelectedObject2(object);
     if (isOn) {
-      if(object.summary.move.fare.unit114){
+      if(object.summary.move.fare.unit114 || object.summary.move.fare.unit114 === 0){
         if (data.payment === t('ic') && data.round === t('1way')) {
           onPrice(object.summary.move.fare.unit114)
         } else if (data.payment === t('ic') && data.round === t('2way')) {
@@ -78,16 +76,16 @@ function SearchResult({ search, data, onPrice, isOn }) {
               {isOn ? 
               <div className="flex-none  absolute right-1">
                { search.summary.move.fare.unit114 !== undefined ?  <>
-                {data.payment === t('ic')&&( <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.unit114}</span> : <span>{data.payment}:{search.summary.move.fare.unit114 * 2}</span>}</div>)}
+                {data.payment === t('IC')&&( <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.unit114}</span> : <span>{data.payment}:{search.summary.move.fare.unit114 * 2}</span>}</div>)}
                 {data.payment === t('cash') &&( <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.unit112}</span> : <span>{data.payment}:{search.summary.move.fare.unit112 * 2}</span>}</div>)}
                 </>:
                 <>
-                  {data.payment === t('ic') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.IC}</span> : <span>{data.payment}:{search.summary.move.fare.IC * 2}</span>}</div>}
+                  {data.payment === t('IC') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.IC}</span> : <span>{data.payment}:{search.summary.move.fare.IC * 2}</span>}</div>}
                   {data.payment === t('cash') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.現金}</span> : <span>{data.payment}:{search.summary.move.fare.現金 * 2}</span>}</div>}
                 </>}
               </div>
                 : <div className="flex-none absolute right-1">
-                  {data.payment === t('ic') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.IC}</span> : <span>{data.payment}:{search.summary.move.fare.IC * 2}</span>}</div>}
+                  {data.payment === t('IC') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.IC}</span> : <span>{data.payment}:{search.summary.move.fare.IC * 2}</span>}</div>}
                   {data.payment === t('cash') && <div>{data.round === t('1way') ? <span>{data.payment}:{search.summary.move.fare.現金}</span> : <span>{data.payment}:{search.summary.move.fare.現金 * 2}</span>}</div>}
                 </div>}
 

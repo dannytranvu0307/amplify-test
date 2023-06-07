@@ -31,7 +31,7 @@ function Home() {
   const [warning, setWarning] = useState('');
   const [id, setId] = useState({});
   const [isInputVisible, setInputVisible] = useState(false);
- 
+  const [selectedObject2, setSelectedObject2] = useState(null);
   const user = useSelector(state => state.login.user)
   useEffect(() => {
     if (user) {
@@ -69,7 +69,7 @@ function Home() {
 
  
   //convert all image
-  const  handleFileChange　= async (img) => {
+  const  handleFileChange= async (img) => {
     const base64Images = [];
     for (const file of img) {
       const compressedImage = await compressImage(file);
@@ -145,7 +145,7 @@ function Home() {
         departure: departure === "" || departure === arrival,
         arrival: arrival === "" || departure === arrival,
         payment: payment === "",
-        price: price === "",
+        price:price === ""||isNaN(price)||+price<0 ,
         priceLength: price.length > 8,
         priceType: isNaN(price),
         equal: departure === arrival
@@ -160,7 +160,7 @@ function Home() {
           payMethod: data.payment === t('IC') ? "1" : "2",
           useCommuterPass: isOn,
           isRoundTrip: data.round === t('2way'),
-          fee: data.price,
+          fee: data.price ,
           transportation: data.vehicle,
           visitDate: FormatDate(data.date, "YYYY/MM/DD")
         }
@@ -173,23 +173,23 @@ function Home() {
             const newTb= [...TableData,response.data.data]
             const sortedTable = [...newTb].sort((a, b) => new Date(a.visitDate) - new Date(b.visitDate));
             setTableData(sortedTable)
-            setData({ date: "", vehicle: data.vehicle, Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" })
-            setSearching([])
+            setData({...data,price:''})
+            setSelectedObject2(null)
             setWarning('')
-            setId({})
             setInputVisible(false)
           })
           .catch(error => {
             return error
           });
-      } else if (updatedError.priceLength) {
-        setWarning(t('warningLength'))
-      } else if (isNaN(price)) {
-        setWarning(t('warningType'))
-      } else if (departure === arrival) {
+      } else if(departure === arrival) { 
         setWarning(t('AlertSame'))
-      }
-      else {
+      }else if(+price<0){
+        setWarning(t('minusAlert'))
+      }else if(updatedError.priceLength) {
+        setWarning(t('warningLength'))
+      }else if(isNaN(price)) {
+        setWarning(t('warningType'))
+      }else {
         setWarning(t('warning'))
       }
     }
@@ -200,10 +200,8 @@ function Home() {
         Destination: Destination === "",
         departure: departure === "" || departure === arrival,
         arrival: arrival === "" || departure === arrival,
-        price: price === ""||isNaN(price) ,
-        priceLength: price.length > 8,
-        priceType: isNaN(price),
-        equal: departure === arrival
+        price: price === ""||isNaN(price)||+price<0 ,
+        priceLength: price.length > 8
       };
       setError(updatedError);
       if (Object.values(updatedError).every((value) => value === false)) {
@@ -225,8 +223,8 @@ function Home() {
             const newTb= [...TableData,response.data.data]
             const sortedTable = [...newTb].sort((a, b) => new Date(a.visitDate) - new Date(b.visitDate));
             setTableData(sortedTable)
-            setData({ date: "", vehicle: data.vehicle, Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" })
-            setSearching([])
+            // setData({ date: "", vehicle: data.vehicle, Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" })
+           
             setWarning('')
           })
           .catch(error => {
@@ -237,9 +235,11 @@ function Home() {
         setWarning(t('AlertSame'))
       }else if (updatedError.priceLength) {
         setWarning(t('warningLength'))
-      } else if (isNaN(price)||Number(price)<0) {
+      } else if (isNaN(price)) {
         setWarning(t('warningType'))
-      } 
+      } else if (+price<0){
+        setWarning(t('minusAlert'))
+      }
       else {
         setWarning(t('warning'))
       }
@@ -259,6 +259,7 @@ function Home() {
               setData={setData}
               onVehiclechange={handleVehicleChange}
               error={error}
+              setSelectedObject2={setSelectedObject2}
               setError={setError}
             /> </div>
           <div className='flex w-full'>
@@ -274,12 +275,17 @@ function Home() {
               onTransport={handleTransport} 
               data={data} 
               setData={setData}
+              setSelectedObject2={setSelectedObject2}
               error={error}
               setError={setError} />}
             {data.vehicle === 'bus' && <SearchBus   setData={setData} data={data} error={error} setError={setError} />}
             {data.vehicle === 'taxi' && <SearchBus   setData={setData} data={data} error={error} setError={setError} />}
           </div>
-          <SearchResult search={searching} data={data} onPrice={handlePrice} isOn={isOn} />
+          <SearchResult 
+          search={searching} 
+          data={data}
+           onPrice={handlePrice}
+            isOn={isOn} selectedObject2={selectedObject2} setSelectedObject2={setSelectedObject2} />
           <div className='flex mt-auto pb-[200px]'>
             {data.vehicle === 'train' ? (searching.length > 0 && <HomeFooter warning={warning} onPrice={handlePrice} data={data} onAdd={handleAddTable} error={error} setError={setError} />) : <HomeFooter warning={warning} onPrice={handlePrice} data={data} onAdd={handleAddTable} error={error} setError={setError} />}
           </div>
@@ -291,7 +297,7 @@ function Home() {
             <div className='w-full '> <Table tableData={TableData} setTableData={setTableData}/>
               <div className='w-full my-2 h-32  max-w-[700px]  '>{TableData.length >= 1 && <PreviewImage image={image} onDelete={handleDeleteImage} />}</div>
             </div>
-            <div className='max-w-[750px] flex mt-auto pb-[214px]' ><HomeFooter2 img={image} deleteAllFile={handleDeleteAll} onFileChange={handleFileChange} tableData={TableData} /></div>
+            <div className='max-w-[700px] flex mt-auto pb-[214px]' ><HomeFooter2 img={image} deleteAllFile={handleDeleteAll} onFileChange={handleFileChange} tableData={TableData} /></div>
           </div>
 
         </div>
