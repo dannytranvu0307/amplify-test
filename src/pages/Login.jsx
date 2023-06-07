@@ -1,19 +1,20 @@
-import { useState, useEffect, memo} from "react";
+import { useState, memo} from "react";
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useLocation, useNavigate} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import ErrorNotification from "../components/ErrorNotification";
 import {email, password} from "../instaces"
 import Modal from "../components/Modal";
 import FormInput from "../components/FormInput";
 import ValidatorSubmit from "../functional/ValidatorSubmit";
-import { login, authenticate,changeActive,
+import { login, authenticate,
     selectIsActive,selectIsActiveMessage,
     selectActiveError } from "../features/auth/loginSlice";
 
 function Login(){
     // change language
     const { t } = useTranslation();
+    const location = useLocation();
     // message store
     const [errSever, setErrSever] = useState('')
     const isActiveMessage = useSelector(selectIsActiveMessage)
@@ -40,7 +41,7 @@ function Login(){
     const handleCheck = () =>{
         setRemember(!remember)
     }
-    
+
     // send form
     const onSubmit = async e => {
         e.preventDefault();
@@ -58,7 +59,7 @@ function Login(){
                 if (res.status === 200){
                     dispatch(authenticate()).unwrap()
                     .then(res=>{
-                        navigate('/')
+                        navigate(location.pathname)
                     })
                 }else {
                     setErrSever('Unauthorized')

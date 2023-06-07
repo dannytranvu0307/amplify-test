@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Link,useParams, useNavigate } from "react-router-dom";
 import FormInput from "../components/FormInput";
 import ValidatorSubmit from "../functional/ValidatorSubmit";
-import { confirmPasswordReset,selectConfirmPasswordResetSuccess,selectConfirmPasswordResetReject } from "../features/auth/loginSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { confirmPasswordReset } from "../features/auth/loginSlice";
+import { useDispatch } from "react-redux";
 import {new_password, confirm_new_password} from "../instaces";
 import ErrorNotification from "../components/ErrorNotification";
 

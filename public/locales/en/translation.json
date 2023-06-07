@@ -117,5 +117,8 @@
     "times":" Times",
     "start_pla":"Station of departure.",
     "goal_pla":"Station of destination.",
-    "walk":"Walking"
+    "walk":"Walking",
+    "error404":"404 - Page not found",
+    "error404_des_1":"The page you are looking for doesn't exist or",
+    "error404_des_2":"has been removed."
 }

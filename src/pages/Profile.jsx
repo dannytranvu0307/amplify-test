@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { fullName, email, department, password, start, goal, new_password, confirm_new_password } from '../instaces';
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, authenticate } from "../features/auth/loginSlice";
-import { userUpdate, selectUpdateMessage } from "../features/user/userSlice";
+import { userUpdate } from "../features/user/userSlice";
 import { useTranslation } from 'react-i18next';
 import ErrorNotification from "../components/ErrorNotification";
 import { baseURL } from "../features/auth/loginSlice";
@@ -116,13 +116,13 @@ const Profile = () => {
     }
 
     const handleStartPoint = (stationCode, stationName) => {
-        setStartPoint({ stationCode: stationCode, stationName: stationName })
+        setStartPoint({ stationCode: stationCode, stationName: stationName+"駅" })
         setCommuterPass({ ...commuterPass, start: stationName })
         setStartSuggestion([])
     }
 
     const handleGoalPoint = (stationCode, stationName) => {
-        setGoalPoint({ stationCode: stationCode, stationName: stationName })
+        setGoalPoint({ stationCode: stationCode, stationName: stationName+"駅" })
         setCommuterPass({ ...commuterPass, goal: stationName })
         setGoalSuggestion([])
     }
@@ -188,7 +188,7 @@ const Profile = () => {
 
     // select item
     const handleUpdateItem = (e, start_, goal_, links_) => {
-        setCommuterPass({ start: start_, goal: goal_, viaDetails: links_ })
+        setCommuterPass({ start: start_ + "駅", goal: goal_ + "駅", viaDetails: links_ })
         const Elements = document.querySelectorAll('div.divCp')
         Elements.forEach((item, i) => {
             if (item.classList.contains("clicked")) {
@@ -432,9 +432,9 @@ const Profile = () => {
                                             <div className="relative">
                                                 <div className="flex justify-between space-x-5" id="ReasonTicket">
                                                     <div className="relative">
-                                                        <FormInput value={commuterPass.start} onChange={e => onChangeStation(e)} {...inputTickets[0]} />
+                                                        <FormInput value={commuterPass.start} onBlur="" onChange={e => onChangeStation(e)} {...inputTickets[0]} />
 
-                                                        <div className="absolute bottom bg-white w-full rounded drop-shadow-lg max-h-64 overflow-y-auto">
+                                                        <div className="absolute top-full bg-white w-full rounded drop-shadow-lg max-h-64 overflow-y-auto">
                                                             {startSuggestion.map((item, i) => (
                                                                 <p className="px-2 py-1  duration-100 
                                                                     transision-all cursor-pointer 
@@ -477,16 +477,16 @@ const Profile = () => {
                                                     <div key={i} className="group cursor-pointer">
                                                         <div className={`divCp justify-items-stretch w-full border rounded-[10px] border-black flex h-10 px-3 pointer`}
                                                             onClick={(e) => handleUpdateItem(e, item.summary.start.stationName, item.summary.goal.stationName, item.commuterPassLink)} key={i}>
-                                                            <span className="pointer-events-none flex my-auto whitespace-nowrap text-ellipsis overflow-hidden  after:content-['ー'] after:px-1">{item.summary.start.stationName}</span>
+                                                            <span className="pointer-events-none flex my-auto whitespace-nowrap text-ellipsis overflow-hidden  after:content-['ー'] after:px-1">{item.summary.start.stationName + "駅"}</span>
                                                             <span className="pointer-events-none flex my-auto  whitespace-nowrap text-ellipsis overflow-hidden max-w-[200px]">
                                                                 {item.sections.map((e, i) => {
                                                                     if (e.type === "point" && e.stationName !== item.summary.start.stationName && e.stationName !== item.summary.goal.stationName) {
-                                                                        return <span className="after:content-['ー'] after:px-2" key={i}>{e.stationName}</span>
+                                                                        return <span className="after:content-['ー'] after:px-2" key={i}>{e.stationName + "駅"}</span>
                                                                     }
                                                                 })
                                                                 }
                                                             </span>
-                                                            <span className="pointer-events-none flex my-auto whitespace-nowrap text-ellipsis overflow-hidden  ">{item.summary.goal.stationName}</span>
+                                                            <span className="pointer-events-none flex my-auto whitespace-nowrap text-ellipsis overflow-hidden  ">{item.summary.goal.stationName + "駅"}</span>
                                                             <span className="pointer-events-none flex my-auto pl-3 ml-auto whitespace-nowrap">{t("transfer")}：{item.summary.move.transitCount}{t('times')}</span>
                                                         </div>
                                                         <div className="relative md:absolute w-full flex 
@@ -499,7 +499,7 @@ const Profile = () => {
                                                                 if (e.type === "move" && e.transport) {
                                                                     return <div key={i} style={{ color: e.transport.lineColor }} className="pointer-events-none px-3 flex my-auto after:px-1"><span className="border border-2 rounded mx-2" style={{ borderColor: e.transport.lineColor }}></span >{e.transport.lineName}</div>
                                                                 } else if (e.type === "point") {
-                                                                    return <div key={i} className="sticky px-3 py-2 top-0 bg-gray-50 pointer-events-none flex my-auto after:px-1">{e.stationName}</div>
+                                                                    return <div key={i} className="sticky px-3 py-2 top-0 bg-gray-50 pointer-events-none flex my-auto after:px-1">{e.stationName + "駅"}</div>
                                                                 }
                                                                 else {
                                                                     return <span className="text-gray-500  border border-2 rounded mx-2"></span>

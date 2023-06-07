@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
 import Aos from "aos";
 import 'aos/dist/aos.css';
@@ -17,33 +17,32 @@ import ConfirmResetPassword from './pages/ConfirmResetPassword';
 import Sidebar from "./components/Sidebar";
 import React from 'react';
 import { authenticate, selectIsAuthenticated, refreshToken } from "./features/auth/loginSlice";
-import { useDispatch, useSelector  } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import NotFound from './pages/NotFound';
 
 
 function App() {
 
-
   const isAuthenticated = useSelector(selectIsAuthenticated)
   const dispatch = useDispatch();
 
-  useEffect(()=>{
+  useEffect(() => {
     Aos.init({ duration: 900 });
     dispatch(authenticate())
-    .unwrap()
-    .then(res =>{
-      if (res.status === 401){
-        dispatch(refreshToken())
-        .unwrap()
-        .then(res => res.status === 200 && dispatch(authenticate()))
-      }
-    })
-    
-    return ()=>{
+      .unwrap()
+      .then(res => {
+        if (res.status === 401) {
+          dispatch(refreshToken())
+            .unwrap()
+            .then(res => res.status === 200 && dispatch(authenticate()))
+        }
+      })
+
+    return () => {
       localStorage.removeItem('imageData')
     }
 
-  },[])
+  }, [])
 
   return (
     <Router>
@@ -54,32 +53,21 @@ function App() {
             <Language />
           </header>
           <div className="flex h-full bg-gray-50 mb-1">
-            {isAuthenticated &&
-             <Sidebar />
-              }
+            {isAuthenticated && <Sidebar />}
             <main className="flex flex-col w-full overflow-x-hidden overflow-y-auto left-16 -z-1">
               <div className="w-full py-8 md:py-1 mx-auto">
                 <div className="flex flex-col w-full h-full">
                   <Routes>
-                    {isAuthenticated ? (
-                    <>
+                    {isAuthenticated ? (<>
                     <Route path='/profile' element={<Profile />} />
-                      <Route path='/history' element={<History />} />
-                      <Route path='' element={<Home />} />
-                      <Route path='/*' element={<NotFound />} />
-                    </>
-                     ):(
-                    <>
-                        <Route path='/' element={<Login />} />
-                        <Route path='/login' element={<Login />} />
-                        <Route path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}></Route>
-                        <Route path='/register' element={<SignUp />} />
-                        <Route path='/passwordreset' element={<PasswordReset />} />
-                        <Route path='/*' element={<NotFound />} />
-                      </>
-                       )}
-                      <Route path='/verify/:verifyCode' element={<Active />} />
-                      <Route path='/*' element={<NotFound />} />
+                    <Route path='/history' element={<History />} />
+                    <Route path='' element={<Home />} /></>):(<><Route path='/' element={<Login />} />
+                    <Route path='/login' element={<Login />} />
+                    <Route path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}></Route>
+                    <Route path='/register' element={<SignUp />} />
+                    <Route path='/passwordreset' element={<PasswordReset />} /></>)}
+                    <Route path='/verify/:verifyCode' element={<Active />} />
+                    <Route path='/:path' element={<NotFound />} />
                   </Routes>
                 </div>
               </div>

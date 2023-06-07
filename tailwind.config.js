@@ -13,7 +13,8 @@ module.exports = {
         customgray: {"notication":"#D9D9D9"}
       },
       fontFamily: {
-      'body': [
+      body: [
+        'ＭＳ Ｐゴシック',
       'Inter', 
       'ui-sans-serif', 
       'system-ui', 
@@ -30,7 +31,7 @@ module.exports = {
       'Segoe UI Symbol', 
       'Noto Color Emoji'
     ],
-        'sans': [
+        sans: [
       'Inter', 
       'ui-sans-serif', 
       'system-ui', 
