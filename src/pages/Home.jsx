@@ -200,10 +200,8 @@ function Home() {
         Destination: Destination === "",
         departure: departure === "" || departure === arrival,
         arrival: arrival === "" || departure === arrival,
-        price: price === ""||isNaN(price) ,
-        priceLength: price.length > 8,
-        priceType: isNaN(price),
-        equal: departure === arrival
+        price: price === ""||isNaN(price)||+price<0 ,
+        priceLength: price.length > 8
       };
       setError(updatedError);
       if (Object.values(updatedError).every((value) => value === false)) {
@@ -237,9 +235,11 @@ function Home() {
         setWarning(t('AlertSame'))
       }else if (updatedError.priceLength) {
         setWarning(t('warningLength'))
-      } else if (isNaN(price)||Number(price)<0) {
+      } else if (isNaN(price)) {
         setWarning(t('warningType'))
-      } 
+      } else if (+price<0){
+        setWarning(t('minusAlert'))
+      }
       else {
         setWarning(t('warning'))
       }

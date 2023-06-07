@@ -5,14 +5,14 @@ function SearchResult({ search, data, onPrice, isOn }) {
   const [selectedObject, setSelectedObject] = useState(null);
   const [selectedObject2, setSelectedObject2] = useState(null);
 
-
+  console.log(search)
   const handleObjectHover = (object) => {
     setSelectedObject(object);
   };
   const handleObjectClick = (object) => {
     setSelectedObject2(object);
     if (isOn) {
-      if(object.summary.move.fare.unit114){
+      if(object.summary.move.fare.unit114 || object.summary.move.fare.unit114 === 0){
         if (data.payment === t('ic') && data.round === t('1way')) {
           onPrice(object.summary.move.fare.unit114)
         } else if (data.payment === t('ic') && data.round === t('2way')) {

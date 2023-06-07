@@ -116,5 +116,6 @@
     "transfer":"Transit",
     "times":" Times",
     "start_pla":"Station of departure.",
-    "goal_pla":"Station of destination."
+    "goal_pla":"Station of destination.",
+    "minusAlert":"Please enter an amount greater than 0"
 }

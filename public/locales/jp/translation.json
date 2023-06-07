@@ -134,5 +134,6 @@
     "via_pla":"経由駅を入力",
     "start_bus_pla":"出発地を入力",
     "goal_bus_pla":"到着地を入力",
-    "walk":"徒歩"
+    "walk":"徒歩",
+    "minusAlert":"0より大きい金額を入力してください"
 }
