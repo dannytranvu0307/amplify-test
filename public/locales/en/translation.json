@@ -118,6 +118,8 @@
     "start_pla":"Station of departure.",
     "goal_pla":"Station of destination.",
     "walk":"Walking",
-    "minusAlert":"Please enter an amount greater than 0"
+    "minusAlert":"Please enter an amount greater than 0", 
+    "alert": "Each item must be selected or entered",
+    "AlertSame":"The departure and the arrival are the same "
 
 }

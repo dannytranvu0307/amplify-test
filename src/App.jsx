@@ -39,9 +39,7 @@ function App() {
       }
     })
     
-    return ()=>{
-      localStorage.removeItem('imageData')
-    }
+  
 
   },[])
 

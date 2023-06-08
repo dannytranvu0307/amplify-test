@@ -40,7 +40,6 @@ function Home() {
   }, [user])
 
   useEffect(() => {
-    dispatch(authenticate())
     const data = JSON.parse(localStorage.getItem('imageData'))
     if (data) {
       setImage(data.imageList)
@@ -92,7 +91,7 @@ function Home() {
     return new Promise((resolve, reject) => {
       Resizer.imageFileResizer(
         file,
-        600, // Chiều rộng mới (ví dụ: 800px)
+        700, // Chiều rộng mới (ví dụ: 800px)
         600, // Chiều cao mới (ví dụ: 600px)
         'JPEG', // Định dạng ảnh mới (ví dụ: JPEG)
         95, // Chất lượng ảnh mới (từ 0 - 100)
@@ -101,7 +100,7 @@ function Home() {
           resolve(uri);
         },
         'base64', // Loại dữ liệu đầu ra (base64)
-        600, // Chiều rộng tối đa (tùy chọn, ví dụ: 800px)
+        700, // Chiều rộng tối đa (tùy chọn, ví dụ: 800px)
         600 // Chiều cao tối đa (tùy chọn, ví dụ: 600px)
       );
     });

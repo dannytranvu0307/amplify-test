@@ -100,13 +100,20 @@ export default function(workbook,user,exportOptions){
         });
     
         // add item on row and style cell
-        exportOptions.map(item=>{
+        exportOptions.forEach(item => {
             let row = worksheet.addRow(item);
-            row.alignment = middle_left;
-            row.eachCell({ includeEmpty: true }, function(cell) {
-                worksheet.getCell(cell.address).border = border_cel;
-            })
-        });
+            row.alignment = { vertical: 'top', wrapText: true };
+            row.eachCell({ includeEmpty: true }, function (cell) {
+              worksheet.getCell(cell.address).border = border_cel;
+              worksheet.getCell(cell.address).alignment = { wrapText: true, vertical: 'top', horizontal: 'left' };
+            });
+            if (Array.isArray(item)) {
+              const contentLengths = item.map(cellValue => String(cellValue).length);
+              const maxContentLength = Math.max(...contentLengths);
+              const rowHeight = Math.ceil(maxContentLength / 10) * 15; // Adjust the divisor (10) and multiplier (15) based on your desired row height
+              row.height = rowHeight;
+            }
+          });
     
         // Total row
         worksheet.mergeCells(`A${exportOptions.length + 7}`,`F${exportOptions.length + 7}`) //merge cells
@@ -123,7 +130,20 @@ export default function(workbook,user,exportOptions){
         cost.border = border_cel 
         cost.alignment = middle_left
     
-        worksheet.eachRow({ includeEmpty: false }, function(row, rowNumber) {
-           row.height = 29.2
-        });
+        // Define the font style
+           const font = {
+           name: 'Meiryo UI',
+           size: 12,
+
+            color: { argb: 'FF000000' }, // Black color
+  };
+  
+  // Set the font for all cells
+  worksheet.eachRow(function (row) {
+    row.eachCell(function (cell) {
+      cell.font = font;
+    });
+  });
+  
+       
 }
