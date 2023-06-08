@@ -39,7 +39,7 @@
     "ex_email": "Example: xxx@vti.com.vn",
     "new_password":"New password",
     "confirm_reset_password_title":"Reset Password",
-    "save":"Add",
+    "save":"Save",
     "cancel":"Cancel",
     "password_label":"Password",
     "email_label":"Email",
@@ -50,7 +50,7 @@
     "confirm_new_password" : "New password confirm",
     "btnAdd":"Add",
     "reason_ticket":"Commuter Pass",
-    "lbviewExportFileHistory":"Exported History",
+    "lbviewExportFileHistory":"Exported history",
     "lbviewExportFileHistoryEmpty":"You don't have any file yet!",
     "btnToHome":"Home page",
     "lbDate":"Date",
@@ -121,5 +121,10 @@
     "error404":"404 - Page not found",
     "error404_des_1":"The page you are looking for doesn't exist or",
     "error404_des_2":"has been removed.",
-    "minusAlert":"Please enter an amount greater than 0"
+    "minusAlert":"Please enter an amount greater than 0.",
+    "alert":"Each field is required to be selected or entered.",
+    "API002_ER2":"Email confirmation already sent.",
+    "requiredSearchBtn":"Please click the search button.",
+    "AlertSame":"The departure and destination are the same.",
+    "requiredChoose":"Select the relevant item."
 }

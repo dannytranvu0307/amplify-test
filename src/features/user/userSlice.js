@@ -24,7 +24,6 @@ const userSlice = createSlice({
             state.updateMessage = null
         }),
         builder.addCase(userUpdate.fulfilled, (state,action)=> {
-            console.log(action.payload)
             if (action.payload.status === 200 &&  action.payload.data.type ==="INFO" && action.payload.data.message === "Update successfull") {
                 state.updateMessage = ""
             }else if (action.payload === 401){

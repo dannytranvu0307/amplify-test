@@ -41,6 +41,8 @@ const SignUp = () => {
             .then(res => {
                 if (res.data.code === 'API002_ER'){
                     setMessageError('API002_ER')
+                }else if (res.data.code === 'API002_ER2'){
+                    setMessageError('API002_ER2')
                 }
                 else{
                     setMessageError()

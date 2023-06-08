@@ -10,6 +10,7 @@ import { baseURL } from "../features/auth/loginSlice";
 import axios from "axios";
 import FormInput from "../components/FormInput";
 import ValidatorSubmit from "../functional/ValidatorSubmit";
+import { sl } from "date-fns/locale";
 
 
 const Profile = () => {
@@ -26,8 +27,9 @@ const Profile = () => {
     // user ticket mount or not
     const [mounted, setMounted] = useState(true);
     const [checkTicket, setCheckTicket] = useState(true);
+    const [checkChange, setCheckChange] = useState(true)
     const [notFound, setNotFound] = useState('')
-    const [messagePassword,setMessagePassword] = useState()
+    const [messagePassword, setMessagePassword] = useState()
     const [messageUpdate, setMessageUpdate] = useState(false)
 
     // user infor state [dependences ①]
@@ -58,7 +60,7 @@ const Profile = () => {
     // start point 
     const [startPoint, setStartPoint] = useState({
         stationCode: "",
-        stateName: ""
+        stationName: ""
     })
 
     // goal point
@@ -97,12 +99,12 @@ const Profile = () => {
     // side effect proccess
     useEffect(() => {
         dispatch(authenticate())
-        return ()=> setMessageUpdate(false)
+        return () => setMessageUpdate(false)
     }, [])
 
 
     const ApiSearchStation = async (name, value) => {
-        setInvalidError('')
+        setInvalidError()
         try {
             const res = await axios.get(`${baseURL}/stations?stationName=${value}`, { withCredentials: true })
             if (name === "start") {
@@ -116,18 +118,22 @@ const Profile = () => {
     }
 
     const handleStartPoint = (stationCode, stationName) => {
-        setStartPoint({ stationCode: stationCode, stationName: stationName+"駅" })
+        setStartPoint({ stationCode: stationCode, stationName: stationName + "駅" })
         setCommuterPass({ ...commuterPass, start: stationName })
         setStartSuggestion([])
     }
 
     const handleGoalPoint = (stationCode, stationName) => {
-        setGoalPoint({ stationCode: stationCode, stationName: stationName+"駅" })
+        setGoalPoint({ stationCode: stationCode, stationName: stationName + "駅" })
         setCommuterPass({ ...commuterPass, goal: stationName })
         setGoalSuggestion([])
     }
 
+
     const onChange = e => {
+        if (checkChange) {
+            setCheckChange(false)
+        }
         setMessagePassword()
         setForm({ ...form, [e.target.name]: e.target.value })
     }
@@ -142,47 +148,76 @@ const Profile = () => {
 
     // onclick change state mount btn
     const handleToggleTicket = () => {
-        if(checkTicket){
+        if (checkTicket) {
             setCheckTicket(true)
         }
+        setStartPoint({
+            stationCode: "",
+            stationName: ""
+        })
+        setGoalPoint({
+            stationCode: "",
+            stationName: ""
+        })
+        setInvalidError()
+        setMessagePassword()
         setMounted(!mounted)
         setLstCp([])
         setMessageUpdate(false)
         if (!mounted) {
-            if (user.commuterPass){
-                setCommuterPass({ ...commuterPass, start: user.commuterPass.departure, goal:  user.commuterPass.destination })
+            if (user.commuterPass) {
+                setCommuterPass({ ...commuterPass, start: user.commuterPass.departure, goal: user.commuterPass.destination })
             }
             else {
-                setCommuterPass({...commuterPass, start: null,goal:null})
+                setCommuterPass({ ...commuterPass, start: null, goal: null })
             }
         }
+        else {
+            setCommuterPass({ ...commuterPass, start: null, goal: null })
+        }
     }
-
     // submit to search commuter pass 
     const onSubmitSearch = async () => {
-        if ((startPoint.stationCode !== "" && startPoint.stationCode !== undefined)  && (goaltPoint.stationCode !== "" && goaltPoint.stationCode !== undefined)){
-            if (startPoint.stationCode !== goaltPoint.stationCode){
-                try {
-                    const res = await axios.get(`${baseURL}/cp-routes?start=${startPoint.stationCode}&goal=${goaltPoint.stationCode}`, { withCredentials: true })
-                    setLstCp(res.data.data)
-                } catch (err) {
-                    setLstCp([])
-                    if (err.response.data.code === "API017_ER04"){
-                        setNotFound('notFoundCp')
-                    }else if (err.response.data.code === "API017_ER"){
-                        setNotFound('notFoundCp')
+        setInvalidError()
+        const $ = document.querySelector.bind(document);
+        if (ValidatorSubmit($("#computerPass"), [$("#start"), $("#goal")])) {
+
+
+            if ((startPoint.stationCode !== "" && startPoint.stationCode !== undefined) && (goaltPoint.stationCode !== "" && goaltPoint.stationCode !== undefined)) {
+                if (startPoint.stationCode !== goaltPoint.stationCode) {
+                    try {
+                        const res = await axios.get(`${baseURL}/cp-routes?start=${startPoint.stationCode}&goal=${goaltPoint.stationCode}`, { withCredentials: true })
+                        setLstCp(res.data.data)
+                    } catch (err) {
+                        setLstCp([])
+                        if (err.response.data.code === "API017_ER04") {
+                            setNotFound('notFoundCp')
+                        } else if (err.response.data.code === "API017_ER") {
+                            setNotFound('notFoundCp')
+                        }
                     }
+                } else {
+                    setInvalidError('AlertSame')
                 }
-            }else {
-                setInvalidError('AlertSame')
+            } else if (startPoint.stationName === "" || goaltPoint.stationName === "") {
+                setLstCp([])
             }
-        }else{
+            else {
+                setLstCp([])
+                if (startPoint.stationCode === "" || startPoint.stationCode === undefined) {
+                    document.querySelector("#start").focus()
+                } else {
+                    document.querySelector("#goal").focus()
+                }
+            }
+        } else {
             setLstCp([])
-            if (startPoint.stationCode === "" || startPoint.stationCode === undefined){
+            if (startPoint.stationCode === "" || startPoint.stationCode === undefined) {
                 document.querySelector("#start").focus()
-            }else{
+            } else {
                 document.querySelector("#goal").focus()
             }
+            setInvalidError('alert')
         }
     }
 
@@ -192,10 +227,10 @@ const Profile = () => {
         const Elements = document.querySelectorAll('div.divCp')
         Elements.forEach((item, i) => {
             if (item.classList.contains("clicked")) {
-                item.classList.remove("clicked", 'bg-blue-700', 'text-white')
+                item.classList.remove("clicked", 'bg-blue-600', 'text-white')
             }
         })
-        e.target.classList.add('clicked', 'bg-blue-700', 'text-white')
+        e.target.classList.add('clicked', 'bg-blue-600', 'text-white')
     }
 
     // update commuter pass value start and goal
@@ -209,9 +244,8 @@ const Profile = () => {
             setStartSuggestion([])
             setGoalSuggestion([])
         }
+        e.target.classList.remove("border-red-500", "bg-red-100")
     }
-
-
     // submit all record on form
     const onSubmit = e => {
         setMessageUpdate(false)
@@ -227,14 +261,48 @@ const Profile = () => {
 
 
         const { departmentId, fullName, email, current_password, new_password, confirm_new_password, ...userData } = form
-        if (ValidatorSubmit(formSubmit, [eName, eDepartmentId, eOldPassword, eNewPassword, eConfirmNewPassword])){
-
-        
-
-            if ((!checkTicket && commuterPass.viaDetails.length === 0) === (checkTicket && commuterPass.viaDetails.length !== 0)) {
-                if (commuterPass.viaDetails.length === 0){
+        if (ValidatorSubmit(formSubmit, [eName, eDepartmentId, eOldPassword, eNewPassword, eConfirmNewPassword])) {
+            if (mounted) {
+                if (commuterPass.viaDetails.length === 0) {
                     dispatch(userUpdate({
-                    fullName: fullName.replace(/\s\s+/g, ' '),
+                        fullName: fullName.replace(/\s\s+/g, ' '),
+                        email: email,
+                        departmentId: +departmentId,
+                        oldPassword: current_password,
+                        newPassword: new_password,
+                        commuterPass: null
+                    })).unwrap().then(res => {
+                        if (res.status === 200) {
+                            dispatch(authenticate())
+                                .unwrap().then(() => {
+                                });
+                            setMounted(true);
+                            setCheckTicket(true);
+                            setCheckChange(true);
+                            setCommuterPass({ ...commuterPass, viaDetails: [] });
+                            setStartPoint({});
+                            setGoalPoint({});
+                            setDisabledPassword(true);
+                            setInvalidError('');
+                            setDisabledname(true);
+                            setDisabledDepartment(true);
+                            setMessageUpdate(true);
+                            oldPasswordNotMatch();
+                        } else {
+                            if (res.data.code === "API004_ER") {
+                                setMessagePassword('oldPasswordNotMatch');
+                            }
+                        }
+                    })
+                }
+            }else{
+                if (lstCp.length === 0) {
+                    setInvalidError('requiredSearchBtn')
+                }else if (commuterPass.viaDetails.length === 0){
+                    setInvalidError('requiredChoose')
+                }else{ 
+                dispatch(userUpdate({
+                    fullName: fullName,
                     email: email,
                     departmentId: +departmentId,
                     oldPassword: current_password,
@@ -242,90 +310,45 @@ const Profile = () => {
                     commuterPass: {
                         departure: commuterPass.start,
                         destination: commuterPass.goal,
-                        viaDetails: null
+                        viaDetails: [...commuterPass.viaDetails]
                     }
                 })).unwrap().then(res => {
                     if (res.status === 200) {
                         dispatch(authenticate())
                             .unwrap().then(() => {
                             });
-                            setMounted(true)
-                            setCheckTicket(true)
-                            setCommuterPass({...commuterPass, viaDetails: []})
-                            setStartPoint({})
-                            setGoalPoint({})
-                            setDisabledPassword(true)
-                            setInvalidError('')
-                            setDisabledname(true)
-                            setDisabledDepartment(true)
-                            setMessageUpdate(true)
-                            oldPasswordNotMatch()
-                    }else {
-                        if(res.data.code === "API004_ER"){
-                            console.log("loi")
-                            setMessagePassword('oldPasswordNotMatch')
+                        setMounted(true);
+                        setCheckTicket(true);
+                        setCheckChange(true);
+                        setCommuterPass({ ...commuterPass, viaDetails: [] });
+                        setStartPoint({});
+                        setGoalPoint({});
+                        setDisabledPassword(true);
+                        setInvalidError('');
+                        setDisabledname(true);
+                        setDisabledDepartment(true);
+                        setMessageUpdate(true);
+                        oldPasswordNotMatch();
+                    } else {
+                        if (res.data.code === "API004_ER") {
+                            setMessagePassword('oldPasswordNotMatch');
                         }
                     }
+
                 })
-                }
-                else{ 
-                    dispatch(userUpdate({
-                        fullName: fullName,
-                        email: email,
-                        departmentId: +departmentId,
-                        oldPassword: current_password,
-                        newPassword: new_password,
-                        commuterPass: {
-                            departure: commuterPass.start,
-                            destination: commuterPass.goal,
-                            viaDetails: [...commuterPass.viaDetails]
-                        }
-                    })).unwrap().then(res => {
-                        if (res.status === 200) {
-                            dispatch(authenticate())
-                                .unwrap().then(() => {
-                                });
-                                setMounted(true)
-                                    setCheckTicket(true)
-                                    setCommuterPass({...commuterPass, viaDetails: []})
-                                    setStartPoint({})
-                                    setGoalPoint({})
-                                    setDisabledPassword(true)
-                                    setInvalidError('')
-                                    setDisabledname(true)
-                                    setDisabledDepartment(true)
-                                    setMessageUpdate(true)
-                                    oldPasswordNotMatch()
-                        }else {
-                                if(res.data.code === "API004_ER"){
-                                    setMessagePassword('oldPasswordNotMatch')
-                                }
-                            }
-                        
-                    })
-                }
-                
-            
-            } 
-            else {
-                if (lstCp.length === 0){
-                    setInvalidError('requiredSearchBtn')
-                }else {
-                    setInvalidError('requiredChoose')
-                }
+            }
             }
         }
-        else{
+        else {
             setMessagePassword('alert')
         }
 
     }
     // ERROR
     // Not found valid commuter pass
-
     return (
         <div className="flex md:ml-16 flex-col items-center px-2 md:px-6 py-8 h-full md:h-full mb-16"
-        data-aos="fade-up"
+            data-aos="fade-up"
         >
             <div className="min-w-full lg:min-w-min bg-white rounded-lg shadow md:mt-0 xl:p-0">
                 <div className="flex flex-col px-5 py-5 md:p-6 sm:p-8">
@@ -419,8 +442,8 @@ const Profile = () => {
                                                     <button
                                                         onClick={handleToggleTicket}
                                                         className="flex ml-auto w-auto text-black border 
-                                                        border-black bg-gray-50 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none 
-                                                         focus:bg-gray-100 font-medium rounded-lg  text-sm px-5 py-2 text-center">{t("change")}</button>
+                                                        border-black bg-gray-50 hover:bg-gray-100 focus:outline-none 
+                                                         font-medium rounded-lg  text-sm px-5 py-2 text-center">{t("change")}</button>
                                                 </div>
                                             </div>
                                     ) : (
@@ -449,7 +472,7 @@ const Profile = () => {
                                                         </div>
                                                     </div>
                                                     <div className="relative">
-                                                        <FormInput value={commuterPass.goal} onChange={e => onChangeStation(e)} {...inputTickets[1]} />
+                                                        <FormInput value={commuterPass.goal} onBlur="" onChange={e => onChangeStation(e)} {...inputTickets[1]} />
                                                         <div className="absolute bg-white w-full rounded drop-shadow-lg max-h-64 overflow-y-auto">
                                                             {goaltSuggestion.map((item, i) => (
                                                                 <p className="px-2 py-1 duration-100 
@@ -468,7 +491,7 @@ const Profile = () => {
                                                 </div>
                                                 <button
                                                     onClick={e => onSubmitSearch(e)}
-                                                    className="my-4 flex text-white bg-primary-600 mx-auto hover:bg-primary-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">{t("search")}</button>
+                                                    className="my-4 flex text-white bg-primary-600 mx-auto hover:bg-primary-500 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center ">{t("search")}</button>
                                             </div>
                                             <span className="text-red-500  pt-8 text-md">{t(validError)}</span>
                                             <span className="text-red-500  pt-8 text-md">{t(notFound)}</span>
@@ -520,14 +543,14 @@ const Profile = () => {
                     <Link
                         to="/"
                         className="w-auto text-white bg-primary-600 hover:bg-primary-500 
-                        focus:ring-4 focus:outline-none  focus:ring-primary-300 font-medium rounded-lg  text-sm px-5 py-2.5 text-center ">
+                         focus:outline-none  font-medium rounded-lg  text-sm px-5 py-2.5 text-center ">
                         {t("cancel")}</Link>
                     <button
                         onClick={e => onSubmit(e)}
                         type="submit"
-                        className="w-auto text-white  bg-primary-600 hover:bg-primary-500 
-                        focus:ring-4 focus:outline-none font-medium rounded-lg  
-                        text-sm px-5 py-2.5 text-center ">
+                        className={`w-auto text-white  bg-primary-600 hover:bg-primary-500 
+                         focus:outline-none font-medium rounded-lg  
+                        text-sm px-5 py-2.5 text-center ${(checkTicket !== false) && (checkChange !== false) ? ("bg-gray-400 pointer-events-none") : ("")}`}>
                         {t("save")}</button>
 
                 </div>

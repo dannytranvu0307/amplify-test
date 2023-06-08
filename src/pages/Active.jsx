@@ -7,7 +7,8 @@ const VerifyCode = () => {
     const dispatch = useDispatch()
     const { verifyCode } = useParams('verifyCode')
     useEffect(()=>{
-        dispatch(verify({verifyCode:verifyCode})).unwrap().then(()=>navigate('/login'))
+        dispatch(verify({verifyCode:verifyCode})).unwrap().then((res)=>{
+            navigate('/login')})
     })
 }
 export default memo(VerifyCode)

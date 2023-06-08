@@ -23,6 +23,7 @@ const PasswordReset = () => {
     const onSubmit = e => {
         e.preventDefault();
         setErrSever()
+        setMessage(false)
         const submitInput = document.querySelectorAll("input")
         const formSubmit = document.querySelector("#passwordreset")
         if (ValidatorSubmit(formSubmit,submitInput)){
@@ -45,8 +46,8 @@ const PasswordReset = () => {
     }
 
     return (
-        <section className="bg-gray-50 dark:bg-gray-900 "  data-aos="flip-left">
-            <div className="flex flex-col items-center justify-center px-2 md:px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <section className="bg-gray-50 "  data-aos="flip-left">
+            <div className="flex flex-col items-center justify-center px-2 md:px-6  py-2 md:py-8 mx-auto md:h-full">
             <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                 <div className="relative p-6 space-y-4 md:space-y-6 sm:p-8">
                     <Link to="/login">
@@ -69,18 +70,16 @@ const PasswordReset = () => {
                                 className="w-auto text-white
                                 bg-primary-600
                                 hover:bg-primary-500
-                                focus:ring-4 focus:outline-none 
-                                focus:ring-primary-300 font-medium rounded-lg 
+                                focus:outline-none 
+                                font-medium rounded-lg 
                                 text-sm px-5 py-2.5 text-center ">
                             {t("send")}</button>
                         </div>
                     </form>
                 </div>
+                {message && <ErrorNotification>confirm_email_message</ErrorNotification>}
             </div>
-            {
-            message && 
-                <ErrorNotification>confirm_email_message</ErrorNotification>
-                }
+            
         </div>
         </section>
     )

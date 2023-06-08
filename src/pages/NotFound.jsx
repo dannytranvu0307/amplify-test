@@ -10,21 +10,22 @@ const NotFound = () => {
     const isAuth = useSelector(selectIsAuthenticated)
     const [mounted, setMounted] = useState(false);
     useEffect(()=>{
+        setMounted(false)
         if (path === "profile" || path === "history"){
-            setMounted(false)
             if(!isAuth){
                 setTimeout(()=>{
                     setMounted(true)
-                },1)
+                },100)
             }
         }
         else{
             setTimeout(()=>{
                 setMounted(true)
-            },1)
+            },100)
         }
 
     },[])
+
     return (
         mounted && <div className="absolute bg-gray-50 top-16 z-50 flex w-full bottom-0 font-body
         text-center justify-center align-middle items-center">

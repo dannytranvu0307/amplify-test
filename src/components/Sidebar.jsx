@@ -1,14 +1,15 @@
 import { NavLink,useNavigate } from "react-router-dom";
 import { useState,useEffect } from "react";
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from "react-redux";
-import { changeActive, logout } from '../features/auth/loginSlice';
+import { useDispatch , useSelector} from "react-redux";
+import { changeActive, logout, selectIsAuthenticated } from '../features/auth/loginSlice';
 
 const Sidebar = () => {
     const dispatch = useDispatch()
     const { t } = useTranslation();
     const [mounted, setMounted] = useState(false);
     const navigate = useNavigate()
+    // const isAuthen = useSelector(selectIsAuthenticated)
     const openSideBar = () => {
         setMounted(!mounted)
     }
@@ -55,7 +56,7 @@ const Sidebar = () => {
         }
     ]
     return (
-        <div className={`fixed
+       <div className={`fixed
             h-12
             md:h-full
             drop-shadow-md

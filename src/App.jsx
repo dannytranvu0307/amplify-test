@@ -43,7 +43,7 @@ function App() {
     }
 
   }, [])
-
+console.log("app")
   return (
     <Router>
       <div className="flex  text-sm h-screen">
@@ -61,13 +61,17 @@ function App() {
                     {isAuthenticated ? (<>
                     <Route path='/profile' element={<Profile />} />
                     <Route path='/history' element={<History />} />
-                    <Route path='' element={<Home />} /></>):(<><Route path='/' element={<Login />} />
+                    <Route path='' element={<Home />} />
+                    </>):(<>
+                    <Route path='/' element={<Login />} />
+                    <Route path='/profile' />
+                    <Route path='/history' />
                     <Route path='/login' element={<Login />} />
                     <Route path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}></Route>
                     <Route path='/register' element={<SignUp />} />
-                    <Route path='/passwordreset' element={<PasswordReset />} /></>)}
+                    <Route path='/passwordreset' element={<PasswordReset />} />
+                    </>)}
                     <Route path='/verify/:verifyCode' element={<Active />} />
-                    <Route path='/:path' element={<NotFound />} />
                   </Routes>
                 </div>
               </div>
