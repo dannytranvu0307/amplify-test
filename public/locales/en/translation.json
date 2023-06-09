@@ -127,5 +127,7 @@
     "requiredSearchBtn":"Please click the search button.",
     "AlertSame":"The departure and destination are the same.",
     "requiredChoose":"Select the relevant item.",
-    "email_type":"Please provide the correct format for an email of VTI."
+    "email_type":"Please provide the correct format for an email of VTI.",
+    "API003_ER03":"New password has been used.",
+    "API003_ER02":"Reset password has been sent."
 }

@@ -1,8 +1,8 @@
 import { useState, memo, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { fullName, email, department, password, start, goal, new_password, confirm_new_password } from '../instaces';
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, authenticate } from "../features/auth/loginSlice";
+import { selectUser, authenticate, selectIsAuthenticated } from "../features/auth/loginSlice";
 import { userUpdate } from "../features/user/userSlice";
 import { useTranslation } from 'react-i18next';
 import ErrorNotification from "../components/ErrorNotification";
@@ -10,7 +10,6 @@ import { baseURL } from "../features/auth/loginSlice";
 import axios from "axios";
 import FormInput from "../components/FormInput";
 import ValidatorSubmit from "../functional/ValidatorSubmit";
-import { sl } from "date-fns/locale";
 
 
 const Profile = () => {
@@ -19,6 +18,8 @@ const Profile = () => {
     const dispatch = useDispatch();
     // user infomation
     const user = useSelector(selectUser);
+    const isAuthen  = useSelector(selectIsAuthenticated);
+    console.log(isAuthen)
     // enable or disable state instances ①
     const [disabledName, setDisabledname] = useState(true);
     const [disabledDepartment, setDisabledDepartment] = useState(true);
@@ -549,7 +550,7 @@ const Profile = () => {
                         type="submit"
                         className={`w-auto text-white  bg-primary-600 hover:bg-primary-500 
                          focus:outline-none font-medium rounded-lg  
-                        text-sm px-5 py-2.5 text-center ${(checkTicket !== false) && (checkChange !== false) ? ("bg-gray-400 pointer-events-none") : ("")}`}>
+                        text-sm px-5 py-2.5 text-center ${(checkTicket !== false) && (checkChange !== false) && ("bg-gray-400 pointer-events-none")}`}>
                         {t("save")}</button>
 
                 </div>

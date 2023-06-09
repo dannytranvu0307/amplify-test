@@ -1,6 +1,6 @@
 import { useState, memo} from "react";
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate, useLocation} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import ErrorNotification from "../components/ErrorNotification";
 import {email, password} from "../instaces"
@@ -19,7 +19,6 @@ function Login(){
     const isActiveMessage = useSelector(selectIsActiveMessage)
     const isActiveError = useSelector(selectActiveError)
     const isActive = useSelector(selectIsActive)
-
     // input elements
     const inputs = [{...email,type:'text'}, password]
     // init function to dispatch action

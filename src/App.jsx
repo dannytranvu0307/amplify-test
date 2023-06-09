@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate,Outlet, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import './i18n.js';
 import Aos from "aos";
 import 'aos/dist/aos.css';
@@ -28,33 +28,31 @@ function App() {
 
   useEffect(() => {
     Aos.init({ duration: 900 });
-    dispatch(authenticate())
-    .unwrap()
-    .then(res =>{
-      if (res.status === 401){
-        dispatch(refreshToken())
-        .unwrap()
-        .then(res => res.status === 200 && dispatch(authenticate()))
-      }
-    })
+    dispatch(authenticate()).unwrap()
+      .then(res => {
+        if (res.status === 401) {
+          dispatch(refreshToken()).unwrap()
+            .then(res => res.status === 200 && dispatch(authenticate()))
+        }else{
+          <Navigate to={location.pathname} />;}})
   }, [])
 
-    const PrivateRoute = ( props ) => {
-      if (isAuthenticated) {
-        return  props.element
-      } else {
-        return <Navigate to="/login" />;
-      }
-    };
-  
-    const PublicRoute = ( props ) => {
-      if (!isAuthenticated) {
-        return  props.element
-      } else {
-        return <Navigate to="/" />;
-      }
-    };
-  
+  const PrivateRoute = (props) => {
+    if (isAuthenticated) {
+      return props.element
+    } else {
+      return <Navigate to="/login" />;
+    }
+  };
+
+  const PublicRoute = (props) => {
+    if (!isAuthenticated) {
+      return props.element
+    } else {
+      return <Navigate to="/" />;
+    }
+  };
+
   return (
     <Router>
       <div className="flex  text-sm h-screen">
@@ -69,13 +67,14 @@ function App() {
               <div className="w-full py-8 md:py-1 mx-auto">
                 <div className="flex flex-col w-full h-full">
                   <Routes>
-                    <Route path='/profile' element={<PrivateRoute path='/profile' element={<Profile />}/>}></Route>
-                    <Route path='/history' element={<PrivateRoute path='/history' element={<History />}/>}></Route>
-                    <Route path='/' element={<PrivateRoute path='/' element={<Home />}/>}></Route>
-                    <Route path='/register' element={<PublicRoute path='/register' element={<SignUp />}/>}></Route>
-                    <Route path='/passwordreset' element={<PublicRoute path='/passwordreset' element={<PasswordReset />}/>}></Route>
-                    <Route path='/confirmresetpassword/:authToken' element={<PublicRoute path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}/>}></Route>
-                    <Route path='/login' element={<PublicRoute path='/login' element={<Login />}/>}></Route>
+                    <Route path='/' element={<PrivateRoute path='/' element={<Home />} />}></Route>
+                    <Route path='/profile' element={<PrivateRoute path='/profile' element={<Profile />} />}></Route>
+                    <Route path='/history' element={<PrivateRoute path='/history' element={<History />} />}></Route>
+                    <Route path='/register' element={<PublicRoute path='/register' element={<SignUp />} />}></Route>
+                    <Route path='/passwordreset' element={<PublicRoute path='/passwordreset' element={<PasswordReset />} />}></Route>
+                    <Route path='/confirmresetpassword/:authToken' element={<PublicRoute path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />} />}></Route>
+                    <Route path='/login' element={<PublicRoute path='/login' element={<Login />} />}></Route>
+                    <Route path='/verify/:verifyCode' element={<PublicRoute path='/verify/:verifyCode' element={<Active />} />}></Route>
                     <Route path='/*' element={<NotFound />} />
                   </Routes>
                 </div>

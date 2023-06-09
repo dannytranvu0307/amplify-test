@@ -1,10 +1,11 @@
-import { NavLink,useNavigate } from "react-router-dom";
+import { NavLink,useNavigate, useLocation, Navigate } from "react-router-dom";
 import { useState,useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { useDispatch , useSelector} from "react-redux";
 import { changeActive, logout, selectIsAuthenticated } from '../features/auth/loginSlice';
 
 const Sidebar = () => {
+    const location = useLocation()
     const dispatch = useDispatch()
     const { t } = useTranslation();
     const [mounted, setMounted] = useState(false);
@@ -15,6 +16,7 @@ const Sidebar = () => {
     }
     useEffect(()=>{
         dispatch(changeActive())
+        navigate(location.pathname)
     },[])
 
     const handleLogout = () => {
@@ -23,6 +25,9 @@ const Sidebar = () => {
                 navigate("/login")
             }
         })
+    }
+    if (true){
+        <Navigate to={location.pathname} />
     }
 
     const sideBarItem = [
@@ -79,7 +84,7 @@ const Sidebar = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                     </svg>
                 </div>) :
-                (<div className={`flex justify-end mr-2 px-3 pt-3 cursor-pointer w-full ${!mounted && ("md:w-[300px]")} `} onClick={openSideBar}>
+                (<div className={`flex justify-end mr-2 px-3 py-3 cursor-pointer w-full ${!mounted && ("md:w-[300px]")} `} onClick={openSideBar}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6  rotate-90 md:rotate-0">
                         <path fillRule="evenodd" d="M11.03 3.97a.75.75 0 010 1.06l-6.22 6.22H21a.75.75 0 010 1.5H4.81l6.22 
                         6.22a.75.75 0 11-1.06 1.06l-7.5-7.5a.75.75 0 010-1.06l7.5-7.5a.75.75 0 011.06 0z" clipRule="evenodd" />
@@ -103,6 +108,7 @@ const Sidebar = () => {
                                         <div className={`w-16 transition ease-in-out duration-300 w-full ${mounted && "md:w-[300px]"}`}>
                                             <div
                                                 className={` 
+                                                rounded
                                             items-center
                                             group-[.active]:bg-gradient-to-r from-cyan-200 to-blue-300 
                                             h-12 m-1
@@ -125,11 +131,12 @@ const Sidebar = () => {
                                 <div className={`w-16 transition ease-in-out duration-200 ${mounted && "w-full md:w-[300px] lg:w-[300px]"}`}>
                                     <div
                                         className={` 
+                                        rounded
                                     items-center
                                     transition
                                     ease-in-out
                                     group-[.active]:bg-gradient-to-r from-cyan-200 to-blue-300 
-                                    h-12 mt-2
+                                    h-12 m-1
                                     hover:bg-gradient-to-r from-cyan-200 to-blue-300 flex  
                                     duration-300
                                     `}>

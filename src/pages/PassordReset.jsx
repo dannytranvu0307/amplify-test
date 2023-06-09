@@ -28,8 +28,10 @@ const PasswordReset = () => {
         const formSubmit = document.querySelector("#passwordreset")
         if (ValidatorSubmit(formSubmit,submitInput)){
             dispatch(passwordReset(form)).unwrap().then(res=>{
-                if (res.data.code === "API003_ER" && res.data.message){
+                if (res.data.code === "API003_ER01" && res.data.message){
                     setErrSever('invalidEmail')
+                }else if (res.data.code === "API003_ER02" && res.data.message){
+                    setErrSever('API003_ER02')
                 }else {
                     setErrSever('')
                     setMessage(true)
