@@ -5,7 +5,7 @@ import Worksheet from '../../functional/Worksheet';
 import WorksheetImg from '../../functional/WorksheetImg';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { authenticate } from '../../features/auth/loginSlice';
+import { authenticate , refreshToken} from '../../features/auth/loginSlice';
 import { baseURL } from '../../features/auth/loginSlice';
 function HomeFooter2({onFileChange, tableData ,img, deleteAllFile}){
     const { t } = useTranslation();
@@ -59,14 +59,11 @@ function HomeFooter2({onFileChange, tableData ,img, deleteAllFile}){
     const formData = new FormData();
     formData.append('file', file);
 
-    axios.post(`${baseURL}/files`, formData, {
+  const callApi =()=>  axios.post(`${baseURL}/files`, formData, {
         withCredentials: true,
       })
         .then(response => {
- 
-        
        deleteAllFile()
-      
        const anchor = document.createElement("a");
        anchor.href = url;
        anchor.download = `交通費精算書_${user.fullname.replace(/\s/g,'_')}_${toDay.getMonth()+1}月分.xlsx`;
@@ -76,9 +73,21 @@ function HomeFooter2({onFileChange, tableData ,img, deleteAllFile}){
        window.URL.revokeObjectURL(url);
         })
         .catch(error => {
+            if(error.response.status===401){
+                dispatch(refreshToken())
+                .unwrap()
+                .then(
+                    res => {
+                        if (res.data.message === 'refresh token is null') {
+                          dispatch(authenticate())
+                        } else {
+                          callApi()
+                        }
+                      }
+                )
+            }
         });
-
-         
+        callApi();
     })   
 }
 }
