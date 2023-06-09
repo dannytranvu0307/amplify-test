@@ -8,6 +8,7 @@ const VerifyCode = () => {
     const { verifyCode } = useParams('verifyCode')
     useEffect(()=>{
         dispatch(verify({verifyCode:verifyCode})).unwrap().then((res)=>{
+            console.log(res)
             navigate('/login')})
     })
 }

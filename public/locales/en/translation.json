@@ -126,5 +126,6 @@
     "API002_ER2":"Email confirmation already sent.",
     "requiredSearchBtn":"Please click the search button.",
     "AlertSame":"The departure and destination are the same.",
-    "requiredChoose":"Select the relevant item."
+    "requiredChoose":"Select the relevant item.",
+    "email_type":"Please provide the correct format for an email of VTI."
 }

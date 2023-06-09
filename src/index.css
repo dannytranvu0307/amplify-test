@@ -56,3 +56,27 @@
   background: #646060;
 
 }
+
+
+@keyframes errorAnimate {
+
+
+  0% { box-shadow: 0px 0px 1px 1px #b91c1c; }
+  14% { box-shadow: 0px 0px 1px 5px   #ef4444; }
+  28% { box-shadow: 0px 0px 1px 10px #f87171; }
+  52% { box-shadow: 0px 0px 1px 15px #fca5a5; }
+  66% { box-shadow: 0px 0px 1px 20px #fecaca; }
+  80% { box-shadow: 0px 0px 1px 25px #fef2f2; }
+  100% { box-shadow: 0px 0px 1px 30px #fef2f2; }
+} 
+
+@keyframes slide-right {
+  90%
+ {
+    transform: translate(10rem, 0);
+  }
+}
+
+.dat {
+  animation: errorAnimate ease-in-out .8s infinite;
+}

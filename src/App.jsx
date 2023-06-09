@@ -38,6 +38,22 @@ function App() {
       }
     })
   }, [])
+
+    const PrivateRoute = ( props ) => {
+      if (isAuthenticated) {
+        return  props.element
+      } else {
+        return <Navigate to="/login" />;
+      }
+    };
+  
+    const PublicRoute = ( props ) => {
+      if (!isAuthenticated) {
+        return  props.element
+      } else {
+        return <Navigate to="/" />;
+      }
+    };
   
   return (
     <Router>
@@ -53,19 +69,14 @@ function App() {
               <div className="w-full py-8 md:py-1 mx-auto">
                 <div className="flex flex-col w-full h-full">
                   <Routes>
-                    {isAuthenticated ? (<>
-                    <Route path='/profile' element={<Profile />} />
-                    <Route path='/history' element={<History />} />
-                    <Route path='' element={<Home />} />
-                    </>):(<>
-                    <Route path='/' element={<Login />} />
-                    <Route path='/login' element={<Login />} />
-                    <Route path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}></Route>
-                    <Route path='/register' element={<SignUp />} />
-                    <Route path='/passwordreset' element={<PasswordReset />} />
-                    </>)}
+                    <Route path='/profile' element={<PrivateRoute path='/profile' element={<Profile />}/>}></Route>
+                    <Route path='/history' element={<PrivateRoute path='/history' element={<History />}/>}></Route>
+                    <Route path='/' element={<PrivateRoute path='/' element={<Home />}/>}></Route>
+                    <Route path='/register' element={<PublicRoute path='/register' element={<SignUp />}/>}></Route>
+                    <Route path='/passwordreset' element={<PublicRoute path='/passwordreset' element={<PasswordReset />}/>}></Route>
+                    <Route path='/confirmresetpassword/:authToken' element={<PublicRoute path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}/>}></Route>
+                    <Route path='/login' element={<PublicRoute path='/login' element={<Login />}/>}></Route>
                     <Route path='/*' element={<NotFound />} />
-                    <Route path='/verify/:verifyCode' element={<Active />} />
                   </Routes>
                 </div>
               </div>

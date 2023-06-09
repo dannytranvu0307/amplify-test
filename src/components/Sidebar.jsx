@@ -20,7 +20,7 @@ const Sidebar = () => {
     const handleLogout = () => {
         dispatch(logout()).unwrap().then(res => {
             if(res.data.type === "INFO"){
-                navigate("")
+                navigate("/login")
             }
         })
     }

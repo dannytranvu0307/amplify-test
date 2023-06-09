@@ -27,7 +27,6 @@ const FormInput = (props) => {
     const onFocus = e => {
         setHidden(true)
     }   
-    console.log("re-render")
 
     const onBlur = () => {
         setError(Validators(ref.current.parentElement.parentElement,ref.current,ref.current.value))

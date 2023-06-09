@@ -98,7 +98,6 @@ const Profile = () => {
 
     // side effect proccess
     useEffect(() => {
-        dispatch(authenticate())
         return () => setMessageUpdate(false)
     }, [])
 
@@ -455,7 +454,7 @@ const Profile = () => {
                                             <div className="relative">
                                                 <div className="flex justify-between space-x-5" id="ReasonTicket">
                                                     <div className="relative">
-                                                        <FormInput value={commuterPass.start} onBlur="" onChange={e => onChangeStation(e)} {...inputTickets[0]} />
+                                                        <FormInput value={commuterPass.start} onBlur={""} onChange={e => onChangeStation(e)} {...inputTickets[0]} />
 
                                                         <div className="absolute top-full bg-white w-full rounded drop-shadow-lg max-h-64 overflow-y-auto">
                                                             {startSuggestion.map((item, i) => (
@@ -472,7 +471,7 @@ const Profile = () => {
                                                         </div>
                                                     </div>
                                                     <div className="relative">
-                                                        <FormInput value={commuterPass.goal} onBlur="" onChange={e => onChangeStation(e)} {...inputTickets[1]} />
+                                                        <FormInput value={commuterPass.goal} onBlur={""} onChange={e => onChangeStation(e)} {...inputTickets[1]} />
                                                         <div className="absolute bg-white w-full rounded drop-shadow-lg max-h-64 overflow-y-auto">
                                                             {goaltSuggestion.map((item, i) => (
                                                                 <p className="px-2 py-1 duration-100 

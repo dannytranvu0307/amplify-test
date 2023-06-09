@@ -1,6 +1,6 @@
 import { useState, memo} from "react";
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useNavigate} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import ErrorNotification from "../components/ErrorNotification";
 import {email, password} from "../instaces"
@@ -14,7 +14,6 @@ import { login, authenticate,
 function Login(){
     // change language
     const { t } = useTranslation();
-    const location = useLocation();
     // message store
     const [errSever, setErrSever] = useState('')
     const isActiveMessage = useSelector(selectIsActiveMessage)
@@ -58,7 +57,7 @@ function Login(){
                 if (res.status === 200){
                     dispatch(authenticate()).unwrap()
                     .then(res=>{
-                        navigate(location.pathname)
+                        navigate('/')
                     })
                 }else {
                     setErrSever('Unauthorized')

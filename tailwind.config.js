@@ -66,7 +66,6 @@ module.exports = {
         fadeLeft: 'fadeLeft .3s ease-in-out',
         fadeRight: 'fadeLeft .3s ease-in-out',
         showNotation: 'showNotation 5s ease-in-out'
-      
       },
       keyframes: {
         fadeLeft: {
@@ -93,8 +92,7 @@ module.exports = {
           '100%': { 
             opacity: "0"
           }
-        }
-      
+        },
       }
     }
   },

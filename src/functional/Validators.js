@@ -160,20 +160,20 @@ function Validators (formId,options,value){
             }
         };
         if (options.name === "via"){
-            if (value === ""){
-                error.id = "via"
-                error.name = "er_input_empty"
-            }
-            else if (!regex_japanese.test(value)){
-                error.name = "er_input_japanese"
-            }
-            else if (value.length < 2){
-                error.id = "goal"
-                error.name = "er_input_search_length"
-            }
-            else {
+            // if (value === ""){
+            //     error.id = "via"
+            //     error.name = "er_input_empty"
+            // }
+            // else if (!regex_japanese.test(value)){
+            //     error.name = "er_input_japanese"
+            // }
+            // else if (value.length < 2){
+            //     error.id = "goal"
+            //     error.name = "er_input_search_length"
+            // }
+            // else {
                 error.name = ""
-            }
+            // }
         };  
         
         if ( options.getAttribute("exclude") && `${options.getAttribute("exclude")}`.includes(formId.id)){
