@@ -29,18 +29,15 @@ function App() {
   useEffect(() => {
     Aos.init({ duration: 900 });
     dispatch(authenticate())
-      .unwrap()
-      .then(res => {
-        if (res.status === 401) {
-          dispatch(refreshToken())
-            .unwrap()
-            .then(res => res.status === 200 && dispatch(authenticate()))
-        }
-      })
-
-    return () => {
-      localStorage.removeItem('imageData')
-    }
+    .unwrap()
+    .then(res =>{
+      if (res.status === 401){
+        dispatch(refreshToken())
+        .unwrap()
+        .then(res => res.status === 200 && dispatch(authenticate()))
+      }
+    })
+    
 
   }, [])
 console.log("app")

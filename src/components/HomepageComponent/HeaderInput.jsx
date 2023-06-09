@@ -12,7 +12,7 @@ function HeaderInput({  data, onVehiclechange, error, setError , setData,setSele
                     <span className='whitespace-nowrap text-xs'>{t("date")}</span>
                     <div className='flex bg-[#F9FAFB] relative border border-black '>
                         <DatePicker
-                            className={`w-full text-sm h-6  px-2 ${error.date && ("border-red-500 bg-red-100")}`}
+                            className={`w-full text-xs h-6  px-2 ${error.date && ("border-red-500 bg-red-100")}`}
                             selected={data.date}
                             onChange={date => { setData({ ...data, date: date }) , setError({ ...error, date: false }) }}
                             maxDate={new Date()}
@@ -121,7 +121,7 @@ function HeaderInput({  data, onVehiclechange, error, setError , setData,setSele
             <div className='py-5 '>
                 <span className='text-xs'>{t('Destination')}</span>
                 <div className='w-full relative' >
-                <input value={data.Destination} className={`w-full h-8 px-2 bg-[#F9FAFB] border border-black rounded ${error.Destination && ("border-red-500 bg-red-100")}`} 
+                <input value={data.Destination} className={`w-full text-xs h-8 px-2 bg-[#F9FAFB] border border-black rounded ${error.Destination && ("border-red-500 bg-red-100")}`} 
                 placeholder={t('Destination_pla')} 
                 onChange={(e) => { setData({...data,Destination:e.target.value}), setError({ ...error, Destination: false }) }} 
                />

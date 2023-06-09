@@ -17,7 +17,6 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
   const [alert, setAlert] = useState('')
   const user = useSelector(state => state.login.user)
 
-
   const handleClick = () => {
     setInputVisible(true)
   };
@@ -32,7 +31,6 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
     setId({ ...id, goal: suggestion.stationCode })
     setSuggestionsArrival([])
   };
-
   const handleSuggestionClickTransport = (suggestion) => {
     onTransport(suggestion.stationName);
     setId({ ...id, viaCode: suggestion.stationCode })
@@ -52,8 +50,6 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
 
 
   const handleSearch = () => {
-    
-    
     const { date, Destination, departure, arrival, payment, } = data;
     const updatedError = {
       date: date === "" || date === null || date === undefined,
@@ -63,8 +59,6 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
       payment: payment === "",
       equal: departure === arrival,
     };
-
-
 
     setError(updatedError);
     if (Object.values(updatedError).every((value) => value === false)) {
@@ -84,8 +78,8 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
         })
         .catch(error => {
           // Handle the error
-         
           onSearching({ noData: t('Result') })
+          setAlert('')
         });
     } else if (date === "" || date === null ||departure===''|| departure === null|| departure=== undefined || arrival==='' || arrival===null ||arrival===undefined||payment ==='' ||payment===null||payment===undefined || Destination===''||Destination===null||Destination===undefined) {
       setAlert(t('alert'))
@@ -94,8 +88,7 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
     }
   }
 
-
-
+  //Departure
   useEffect(() => {
     if (data.departure.length > 1 && focus.departure) {
       axios.get(`${baseURL}/stations`, {
@@ -137,8 +130,8 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
     }
   }, [data.arrival])
 
-  // transport 
 
+  // transport 
   useEffect(() => {
     if (data.transport.length > 1 && focus.transport) {
       axios.get(`${baseURL}/stations`, {
@@ -156,34 +149,27 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
     } else if (data.transport === '' || data.transport === undefined || data.transport === null) {
       setSuggestionsTransport([])
     }
-
-
-
   }, [data.transport])
 
-
-  return (
+return (
     <div className='pt-3 w-full min-h-min border-b-[1.5px] border-gray-500 pb-3'>
       <div className='flex'>
         <div className='flex-auto '>
           <span className='my-2 text-xs'>{t("departure")}</span>
           <div className='relative '>
           
-            <input className={`w-full border-[1px] bg-[#F9FAFB] border-black rounded h-8 px-2 ${error.departure && ("border-red-500 bg-red-100")}`}
+            <input className={`w-full border-[1px] bg-[#F9FAFB] border-black rounded h-8 text-xs px-2 ${error.departure && ("border-red-500 bg-red-100")}`}
               value={data.departure}
               placeholder={t("start_pla")}
               onChange={e => { setData({...data,departure:e.target.value}), setError({ ...error, departure: false }) }}
               onFocus={(prev) => setFocus({ ...prev, departure: true })}
               onBlur={(prev) => setFocus({ ...prev, departure: false })}
-          
             />
              <svg
              onClick={()=>{setData({...data,departure:""}) , setId({...id,start:""})}}
              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" absolute right-1 top-1 w-4 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
              </svg>
-       
-
             <ul className='absolute z-10 w-full bg-white rounded-md shadow-md max-h-64 overflow-y-scroll '>
               {suggestions.map((suggestion, index) => (
                 <li key={index} onClick={() => handleSuggestionClick(suggestion)} className='text-sm px-2 hover:bg-blue-200 rounded py-1'>
@@ -201,7 +187,7 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
 
             <input
               placeholder={t("goal_pla")}
-              className={`w-full border-[1px] border-black bg-[#F9FAFB] rounded h-8 px-2 ${error.arrival && ("border-red-500 bg-red-100")}`}
+              className={`w-full border-[1px] border-black bg-[#F9FAFB] text-xs rounded h-8 px-2 ${error.arrival && ("border-red-500 bg-red-100")}`}
               value={data.arrival}
               onFocus={(prev) => setFocus({ ...prev, arrival: true })}
               onBlur={(prev) => setFocus({ ...prev, arrival: false })}
@@ -225,7 +211,7 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
           {isInputVisible ? (
             <>
             <input
-              className='w-full border-[1px] border-black rounded h-8 px-2 bg-[#F9FAFB]'
+              className='w-full border-[1px] border-black text-xs rounded h-8 px-2 bg-[#F9FAFB]'
               type="text"
               placeholder={t("via_pla")}
               value={data.transport}
