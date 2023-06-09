@@ -48,7 +48,7 @@ const PasswordReset = () => {
     return (
         <section className="bg-gray-50 "  data-aos="flip-left">
             <div className="flex flex-col items-center justify-center px-2 md:px-6  py-2 md:py-8 mx-auto md:h-full">
-            <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+            <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
                 <div className="relative p-6 space-y-4 md:space-y-6 sm:p-8">
                     <Link to="/login">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" 
@@ -57,7 +57,7 @@ const PasswordReset = () => {
                         </svg>
                     </Link>
 
-                    <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                    <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                         {t("ResetPassword")}
                     </h1>
                     <div className="py-4 text-gray-500">{t("ConfirmEmaiMessage")}</div>

@@ -13,7 +13,9 @@ const FormInput = (props) => {
     }
 
     useEffect(()=>{
-        dispatch(departments())
+        if (type === "departmentId"){
+            dispatch(departments())
+        }
     },[])
  
     const [show,checkShow] = useState(true)

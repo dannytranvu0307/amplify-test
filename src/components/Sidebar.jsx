@@ -9,7 +9,7 @@ const Sidebar = () => {
     const { t } = useTranslation();
     const [mounted, setMounted] = useState(false);
     const navigate = useNavigate()
-    // const isAuthen = useSelector(selectIsAuthenticated)
+    const isAuthen = useSelector(selectIsAuthenticated)
     const openSideBar = () => {
         setMounted(!mounted)
     }
@@ -56,7 +56,7 @@ const Sidebar = () => {
         }
     ]
     return (
-       <div className={`fixed
+        isAuthen && <div className={`fixed
             h-12
             md:h-full
             drop-shadow-md

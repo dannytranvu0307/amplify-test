@@ -41,7 +41,6 @@ function Login(){
     const handleCheck = () =>{
         setRemember(!remember)
     }
-
     // send form
     const onSubmit = async e => {
         e.preventDefault();
@@ -76,11 +75,11 @@ function Login(){
         data-aos="fade-right"
         data-aos-offset="3"
         data-aos-easing="ease-in-sine"
-        className="bg-gray-50 dark:bg-gray-900"
+        className="bg-gray-50"
         key="login"
         >
             <div className="flex flex-col items-center justify-center px-2 md:px-6 py-8 mx-auto md:h-screen lg:py-0">
-            <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
+            <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 ">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
                         {t("login")}
@@ -100,10 +99,10 @@ function Login(){
                                 <div className="ml-3 text-sm">
                                     <label htmlFor="remember" 
                     
-                                    className="text-gray-500 dark:text-gray-300">{t("remember")}</label>
+                                    className="text-gray-500">{t("remember")}</label>
                                 </div>
                             </div>
-                            <Link to="/passwordreset" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">{t("forgot_password")}</Link>
+                            <Link to="/passwordreset" className="text-sm font-medium text-primary-600 hover:underline">{t("forgot_password")}</Link>
                         </div>
                         <div>
 
@@ -121,7 +120,7 @@ function Login(){
                         text-sm px-5 py-2.5 text-center ">{t("login")}</button>
                         <p className="text-sm font-light text-gray-500">
                         {t("sign_up_description")}
-                        <Link to="/register" className="font-medium text-primary-600 hover:underline dark:text-primary-500">{t("sign_up_link")}</Link>
+                        <Link to="/register" className="font-medium text-primary-600 hover:underline">{t("sign_up_link")}</Link>
                         </p>
                     </form>
                 </div>

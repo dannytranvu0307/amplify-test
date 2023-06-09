@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { useEffect,useState } from 'react';
 import { selectIsAuthenticated } from '../features/auth/loginSlice';
 import { useSelector } from 'react-redux';
@@ -23,7 +23,6 @@ const NotFound = () => {
                 setMounted(true)
             },100)
         }
-
     },[])
 
     return (

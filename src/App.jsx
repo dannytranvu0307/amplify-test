@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-
+import { BrowserRouter as Router, Routes, Route, Navigate,Outlet, useLocation } from 'react-router-dom';
+import './i18n.js';
 import Aos from "aos";
 import 'aos/dist/aos.css';
 import Navbar from './components/Navbar'
@@ -37,10 +37,8 @@ function App() {
         .then(res => res.status === 200 && dispatch(authenticate()))
       }
     })
-    
-
   }, [])
-console.log("app")
+  
   return (
     <Router>
       <div className="flex  text-sm h-screen">
@@ -50,7 +48,7 @@ console.log("app")
             <Language />
           </header>
           <div className="flex h-full bg-gray-50 mb-1">
-            {isAuthenticated && <Sidebar />}
+            <Sidebar />
             <main className="flex flex-col w-full overflow-x-hidden overflow-y-auto left-16 -z-1">
               <div className="w-full py-8 md:py-1 mx-auto">
                 <div className="flex flex-col w-full h-full">
@@ -61,13 +59,12 @@ console.log("app")
                     <Route path='' element={<Home />} />
                     </>):(<>
                     <Route path='/' element={<Login />} />
-                    <Route path='/profile' />
-                    <Route path='/history' />
                     <Route path='/login' element={<Login />} />
                     <Route path='/confirmresetpassword/:authToken' element={<ConfirmResetPassword />}></Route>
                     <Route path='/register' element={<SignUp />} />
                     <Route path='/passwordreset' element={<PasswordReset />} />
                     </>)}
+                    <Route path='/*' element={<NotFound />} />
                     <Route path='/verify/:verifyCode' element={<Active />} />
                   </Routes>
                 </div>
