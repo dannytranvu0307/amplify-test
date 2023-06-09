@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import SwitchButton from './SwitchButton';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { baseURL } from '../../features/auth/loginSlice'
-import { useSelector } from 'react-redux';
+import { authenticate, baseURL } from '../../features/auth/loginSlice'
+import { useSelector , useDispatch} from 'react-redux';
+import { refreshToken  } from '../../features/auth/loginSlice';
+
 
 function SearchTrain({ setData,data, onTransport, error, setError, onSearching, isOn, setIsOn , onWarning  , id , setId,isInputVisible, setInputVisible,setSelectedObject2}) {
   const { t } = useTranslation();
@@ -12,6 +14,7 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
   const [suggestionsArrival, setSuggestionsArrival] = useState([]);
   const [suggestionsTransport, setSuggestionsTransport] = useState([]);
   const [focus, setFocus] = useState({ departure: false, arrival: false, transport: false });
+  const dispatch =useDispatch();
 
   //trigger of switch button 
   const [alert, setAlert] = useState('')
@@ -63,7 +66,7 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
     setError(updatedError);
     if (Object.values(updatedError).every((value) => value === false)) {
 
-      axios.get(`${baseURL}/routes`, {
+     const callApi = ()=> axios.get(`${baseURL}/routes`, {
         params: {
           ...id,
           commuterPass: user.commuterPass ? 1 : 0,
@@ -77,10 +80,25 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
           onWarning('')
         })
         .catch(error => {
-          // Handle the error
+          if(error.response.status ===401){ 
+            dispatch(refreshToken())
+            .unwrap()
+            .then(res =>{
+            if(res.data.message ==='refresh token is null'){
+            
+             dispatch(authenticate())
+            }else{
+              callApi()
+            }})
+
+         }else{
           onSearching({ noData: t('Result') })
           setAlert('')
+         }
         });
+      callApi();
+
+
     } else if (date === "" || date === null ||departure===''|| departure === null|| departure=== undefined || arrival==='' || arrival===null ||arrival===undefined||payment ==='' ||payment===null||payment===undefined || Destination===''||Destination===null||Destination===undefined) {
       setAlert(t('alert'))
     } else if (departure !== "" && arrival !== "" && departure===arrival) {
@@ -101,7 +119,16 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
           setSuggestions(response.data.data)
         })
         .catch(error => {
-          // Handle the error
+          if(error.response.status ===401){ 
+             dispatch(refreshToken())
+             .unwrap()
+             .then(res =>{
+             if(res.data.message ==='refresh token is null'){
+             
+              dispatch(authenticate())
+             }
+             })
+          }
         });
     } else if (data.departure === '' || data.departure === undefined || data.departure === null) {
       setSuggestions([])
@@ -122,9 +149,20 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
         .then(response => {
           setSuggestionsArrival(response.data.data)
         })
-        .catch(error => {
-          return error
-        });
+        .catch(error =>{
+          if(error.response.status ===401){ 
+             dispatch(refreshToken())
+             .unwrap()
+             .then(res =>{
+             if(res.data.message ==='refresh token is null'){
+           
+              dispatch(authenticate())
+             }
+             })
+          }
+        }
+          
+          );
     } else if (data.arrival === '' || data.arrival === undefined || data.arrival === null) {
       setSuggestionsArrival([])
     }
@@ -144,7 +182,16 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
           setSuggestionsTransport(response.data.data)
         })
         .catch(error => {
-          // Handle the error
+          if(error.response.status ===401){ 
+             dispatch(refreshToken())
+             .unwrap()
+             .then(res =>{
+             if(res.data.message ==='refresh token is null'){
+             
+              dispatch(authenticate())
+             }
+             })
+          }
         });
     } else if (data.transport === '' || data.transport === undefined || data.transport === null) {
       setSuggestionsTransport([])
@@ -167,8 +214,8 @@ return (
             />
              <svg
              onClick={()=>{setData({...data,departure:""}) , setId({...id,start:""})}}
-             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" absolute right-1 top-1 w-4 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className=" absolute right-1 top-1 w-4 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
              </svg>
             <ul className='absolute z-10 w-full bg-white rounded-md shadow-md max-h-64 overflow-y-scroll '>
               {suggestions.map((suggestion, index) => (
@@ -194,8 +241,8 @@ return (
               onChange={e => {setData({...data,arrival:e.target.value}), setError({ ...error, arrival: false }) }} />
                <svg 
                 onClick={()=>{setData({...data,arrival:""}) , setId({...id,goal:""})}}
-                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" absolute right-1 top-1 w-4 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className=" absolute right-1 top-1 w-4 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
              </svg>
             <ul className='absolute z-10 w-full bg-white rounded-md shadow-md overflow-auto max-h-64 overflow-y-scroll ' >
               {suggestionsArrival.map((suggestion, index) => (
@@ -222,8 +269,8 @@ return (
             />
              <svg 
               onClick={()=>{setData({...data,transport:""}) , setId({...id,viaCode:""})}}
-             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" absolute right-1 top-1 w-4 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className=" absolute right-1 top-1 w-4 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
              </svg>
             </>
             

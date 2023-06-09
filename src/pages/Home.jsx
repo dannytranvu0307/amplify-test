@@ -1,5 +1,5 @@
 
-import { useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import HeaderInput from '../components/HomepageComponent/HeaderInput';
 import SearchBus from '../components/HomepageComponent/SearchBus';
@@ -14,7 +14,7 @@ import FormatDate from '../functional/FormatDate';
 import { useSelector, useDispatch } from 'react-redux';
 import { baseURL } from '../features/auth/loginSlice';
 import axios from 'axios';
-import { authenticate } from '../features/auth/loginSlice';
+import { authenticate, refreshToken } from '../features/auth/loginSlice';
 import Resizer from "react-image-file-resizer";
 
 
@@ -44,21 +44,21 @@ function Home() {
     if (data) {
       setImage(data.imageList)
     }
-    
+
   }, [])
   const handleVehicleChange = (option) => {
-    setData({ date:data.date, vehicle: option, Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" });
+    setData({ date: data.date, vehicle: option, Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" });
     setError({ date: false, payment: false, Destination: false, departure: false, arrival: false, price: false });
     setSearching([])
     setWarning('')
   };
-  
- 
+
+
 
   const handleTransport = (option) => {
 
-    if(option===''){
-    delete id.viaCode
+    if (option === '') {
+      delete id.viaCode
     }
     setData({ ...data, transport: option });
   };
@@ -66,9 +66,9 @@ function Home() {
     setData({ ...data, price: option });
   };
 
- 
+
   //convert all image
-  const  handleFileChange= async (img) => {
+  const handleFileChange = async (img) => {
     const base64Images = [];
     for (const file of img) {
       const compressedImage = await compressImage(file);
@@ -139,12 +139,12 @@ function Home() {
     if (data.vehicle === 'train') {
       const { date, Destination, departure, arrival, payment, price } = data;
       const updatedError = {
-        date: date === "" || date ===null || data === undefined,
+        date: date === "" || date === null || data === undefined,
         Destination: Destination === "",
         departure: departure === "" || departure === arrival,
         arrival: arrival === "" || departure === arrival,
         payment: payment === "",
-        price:price === ""||isNaN(price)||+price<0 ,
+        price: price === "" || isNaN(price) || +price < 0,
         priceLength: price.length > 8,
         priceType: isNaN(price),
         equal: departure === arrival
@@ -159,36 +159,47 @@ function Home() {
           payMethod: data.payment === t('IC') ? "1" : "2",
           useCommuterPass: isOn,
           isRoundTrip: data.round === t('2way'),
-          fee: data.price ,
+          fee: data.price,
           transportation: data.vehicle,
           visitDate: FormatDate(data.date, "YYYY/MM/DD")
         }
 
-        axios.post(`${baseURL}/fares`, form, {
+        const callApi = () => axios.post(`${baseURL}/fares`, form, {
           withCredentials: true,
         })
           .then(response => {
 
-            const newTb= [...TableData,response.data.data]
+            const newTb = [...TableData, response.data.data]
             const sortedTable = [...newTb].sort((a, b) => new Date(a.visitDate) - new Date(b.visitDate));
             setTableData(sortedTable)
-            setData({...data,price:''})
+            setData({ ...data, price: '' })
             setSelectedObject2(null)
             setWarning('')
             setInputVisible(false)
           })
           .catch(error => {
-            return error
+            if (error.response.status === 401) {
+              dispatch(refreshToken())
+                .unwrap()
+                .then(res => {
+                  if (res.data.message === 'refresh token is null') {
+                    dispatch(authenticate())
+                  } else {
+                    callApi()
+                  }
+                })
+            }
           });
-      } else if(departure === arrival) { 
+        callApi();
+      } else if (departure === arrival) {
         setWarning(t('AlertSame'))
-      }else if(+price<0){
+      } else if (+price < 0) {
         setWarning(t('minusAlert'))
-      }else if(updatedError.priceLength) {
+      } else if (updatedError.priceLength) {
         setWarning(t('warningLength'))
-      }else if(isNaN(price)) {
+      } else if (isNaN(price)) {
         setWarning(t('warningType'))
-      }else {
+      } else {
         setWarning(t('warning'))
       }
     }
@@ -199,7 +210,7 @@ function Home() {
         Destination: Destination === "",
         departure: departure === "" || departure === arrival,
         arrival: arrival === "" || departure === arrival,
-        price: price === ""||isNaN(price)||+price<0 ,
+        price: price === "" || isNaN(price) || +price < 0,
         priceLength: price.length > 8
       };
       setError(updatedError);
@@ -215,28 +226,38 @@ function Home() {
           transportation: data.vehicle,
           visitDate: FormatDate(data.date, "YYYY/MM/DD")
         }
-        axios.post(`${baseURL}/fares`, form, {
+       const callApi =()=> axios.post(`${baseURL}/fares`, form, {
           withCredentials: true,
         })
           .then(response => {
-            const newTb= [...TableData,response.data.data]
+            const newTb = [...TableData, response.data.data]
             const sortedTable = [...newTb].sort((a, b) => new Date(a.visitDate) - new Date(b.visitDate));
             setTableData(sortedTable)
             // setData({ date: "", vehicle: data.vehicle, Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" })
-           
+
             setWarning('')
           })
           .catch(error => {
-            return error
+            if (error.response.status === 401) {
+              dispatch(refreshToken())
+                .unwrap()
+                .then(res => {
+                  if (res.data.message === 'refresh token is null') {
+                    dispatch(authenticate())
+                  } else {
+                    callApi()
+                  }
+                })
+            }
           })
-
-      }else if ( departure!==''&&departure === arrival) {
+       callApi()
+      } else if (departure !== '' && departure === arrival) {
         setWarning(t('AlertSame'))
-      }else if (updatedError.priceLength) {
+      } else if (updatedError.priceLength) {
         setWarning(t('warningLength'))
       } else if (isNaN(price)) {
         setWarning(t('warningType'))
-      } else if (+price<0){
+      } else if (+price < 0) {
         setWarning(t('minusAlert'))
       }
       else {
@@ -247,13 +268,13 @@ function Home() {
 
   return (
     <div className="w-full h-full overflow-auto bg-[#F9FAFB]"
-    data-aos="fade-down"
-    data-aos-easing="ease-out-cubic"
+      data-aos="fade-down"
+      data-aos-easing="ease-out-cubic"
     >
       <div className='flex flex-col lg:flex-row h-full mx-auto mt-10 md:mt-0 md:pl-16'>
         <div className='flex flex-col ml-0 lg:mx-auto md:basis-1/3  px-3 h-full'>
           <div className='flex '>
-            <HeaderInput 
+            <HeaderInput
               data={data}
               setData={setData}
               onVehiclechange={handleVehicleChange}
@@ -271,19 +292,19 @@ function Home() {
               onWarning={setWarning}
               setIsOn={setIsOn}
               onSearching={setSearching}
-              onTransport={handleTransport} 
-              data={data} 
+              onTransport={handleTransport}
+              data={data}
               setData={setData}
               setSelectedObject2={setSelectedObject2}
               error={error}
               setError={setError} />}
-            {data.vehicle === 'bus' && <SearchBus   setData={setData} data={data} error={error} setError={setError} />}
-            {data.vehicle === 'taxi' && <SearchBus   setData={setData} data={data} error={error} setError={setError} />}
+            {data.vehicle === 'bus' && <SearchBus setData={setData} data={data} error={error} setError={setError} />}
+            {data.vehicle === 'taxi' && <SearchBus setData={setData} data={data} error={error} setError={setError} />}
           </div>
-          <SearchResult 
-          search={searching} 
-          data={data}
-           onPrice={handlePrice}
+          <SearchResult
+            search={searching}
+            data={data}
+            onPrice={handlePrice}
             isOn={isOn} selectedObject2={selectedObject2} setSelectedObject2={setSelectedObject2} />
           <div className='flex mt-auto pb-[200px]'>
             {data.vehicle === 'train' ? (searching.length > 0 && <HomeFooter warning={warning} onPrice={handlePrice} data={data} onAdd={handleAddTable} error={error} setError={setError} />) : <HomeFooter warning={warning} onPrice={handlePrice} data={data} onAdd={handleAddTable} error={error} setError={setError} />}
@@ -293,7 +314,7 @@ function Home() {
         <div className='px-5 w-full h-full'>
           <div className='flex flex-col w-full h-full'>
             <div className='flex '><HomeUserData /></div>
-            <div className='w-full '> <Table tableData={TableData} setTableData={setTableData}/>
+            <div className='w-full '> <Table tableData={TableData} setTableData={setTableData} />
               <div className='w-full my-2 h-32  max-w-[700px]  '>{TableData.length >= 1 && <PreviewImage image={image} onDelete={handleDeleteImage} />}</div>
             </div>
             <div className='max-w-[700px] flex mt-auto pb-[214px]' ><HomeFooter2 img={image} deleteAllFile={handleDeleteAll} onFileChange={handleFileChange} tableData={TableData} /></div>
