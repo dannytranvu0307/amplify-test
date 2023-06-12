@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-
 function SearchBus({setData, data ,error,setError}){
     const { t } = useTranslation();
     return(
@@ -14,9 +13,7 @@ function SearchBus({setData, data ,error,setError}){
             <span className='my-2 text-xs'>{t("arrival")}</span>
                <div className=' '><input  placeholder={t("goal_bus_pla")}  className={`w-full border-[1px] border-black rounded h-8 px-2 ${error.arrival&&("border-red-500 bg-red-100")}`} value={data.arrival} onChange={e =>{setData({...data,arrival:e.target.value}),setError({...error,arrival:false})}}/></div> 
             </div>
-            
         </div>
-     
     </div>      
     )
 }
