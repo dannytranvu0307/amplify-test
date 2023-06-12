@@ -18,8 +18,6 @@ const Profile = () => {
     const dispatch = useDispatch();
     // user infomation
     const user = useSelector(selectUser);
-    const isAuthen  = useSelector(selectIsAuthenticated);
-    console.log(isAuthen)
     // enable or disable state instances ①
     const [disabledName, setDisabledname] = useState(true);
     const [disabledDepartment, setDisabledDepartment] = useState(true);
@@ -32,6 +30,7 @@ const Profile = () => {
     const [notFound, setNotFound] = useState('')
     const [messagePassword, setMessagePassword] = useState()
     const [messageUpdate, setMessageUpdate] = useState(false)
+    const [cancel, setCancel] = useState(false)
 
     // user infor state [dependences ①]
     const infor = [
@@ -95,7 +94,7 @@ const Profile = () => {
                 })
             }
         }
-    }, [user])
+    }, [user,cancel])
 
     // side effect proccess
     useEffect(() => {
@@ -280,14 +279,14 @@ const Profile = () => {
                             setCheckTicket(true);
                             setCheckChange(true);
                             setCommuterPass({ ...commuterPass, viaDetails: [] });
-                            setStartPoint({});
-                            setGoalPoint({});
+                            setStartPoint({ stationCode: "", stationName: "" });
+                            setGoalPoint({ stationCode: "", stationName: "" });
                             setDisabledPassword(true);
                             setInvalidError('');
                             setDisabledname(true);
                             setDisabledDepartment(true);
                             setMessageUpdate(true);
-                            oldPasswordNotMatch();
+                            setMessagePassword();
                         } else {
                             if (res.data.code === "API004_ER") {
                                 setMessagePassword('oldPasswordNotMatch');
@@ -321,14 +320,14 @@ const Profile = () => {
                         setCheckTicket(true);
                         setCheckChange(true);
                         setCommuterPass({ ...commuterPass, viaDetails: [] });
-                        setStartPoint({});
-                        setGoalPoint({});
+                        setStartPoint({ stationCode: "", stationName: "" });
+                        setGoalPoint({ stationCode: "", stationName: "" });
                         setDisabledPassword(true);
                         setInvalidError('');
                         setDisabledname(true);
                         setDisabledDepartment(true);
                         setMessageUpdate(true);
-                        oldPasswordNotMatch();
+                        setMessagePassword();
                     } else {
                         if (res.data.code === "API004_ER") {
                             setMessagePassword('oldPasswordNotMatch');
@@ -343,6 +342,23 @@ const Profile = () => {
             setMessagePassword('alert')
         }
 
+    }
+    const handleCancel = () => {
+        setStartPoint({ stationCode: "", stationName: "" })
+        setGoalPoint({ stationCode: "", stationName: "" })
+        setStartSuggestion([])
+        setGoalSuggestion([])
+        setLstCp([])
+        setCommuterPass({ ...commuterPass, viaDetails: [] });
+        setMounted(true);
+        setCheckTicket(true);
+        setCheckChange(true);
+        setDisabledPassword(true);
+        setInvalidError();
+        setDisabledname(true);
+        setDisabledDepartment(true);
+        setMessagePassword()
+        setCancel(!cancel)
     }
     // ERROR
     // Not found valid commuter pass
@@ -540,11 +556,11 @@ const Profile = () => {
                     </div>
                 </div>
                 <div className="w-full px-8 mb-4 mt-4 flex col-span-2 justify-between">
-                    <Link
-                        to="/"
+                    <button
+                        onClick={handleCancel}
                         className="w-auto text-white bg-primary-600 hover:bg-primary-500 
                          focus:outline-none  font-medium rounded-lg  text-sm px-5 py-2.5 text-center ">
-                        {t("cancel")}</Link>
+                        {t("cancel")}</button>
                     <button
                         onClick={e => onSubmit(e)}
                         type="submit"

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useState,useRef,memo,useEffect } from "react";
+import { useState,useRef,memo,useEffect, useCallback } from "react";
 import Validators from "../functional/Validators";
 import { departments  ,selectDepartments} from '../features/department/departmentsSlice';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,15 +8,22 @@ const FormInput = (props) => {
     const {label, placeholder,forHtml,value,type,onChange,invalidError,...inputProps} = props
     const dispatch = useDispatch()
     const departments_lst = useSelector(selectDepartments)
-    const handleCheckShow = () => {
+    const handleCheckShow = useCallback(() => {
         checkShow(!show)
-    }
+    },[])
 
     useEffect(()=>{
         if (type === "departmentId"){
             dispatch(departments())
         }
     },[])
+
+    const handleCopy = useCallback((e) => {
+        let name = e.target.name 
+        if (name=== "password" || name=== "confirm_password" || name === "confirm_new_password" || name === "new_password"){
+            e.preventDefault();
+        }
+    },[label]);
  
     const [show,checkShow] = useState(true)
     const [error, setError]= useState({ id:"", name:"",});
@@ -24,15 +31,13 @@ const FormInput = (props) => {
     const ref = useRef();
     const { t } = useTranslation();
 
-    const onFocus = e => {
+    const onFocus = useCallback(e =>{
         setHidden(true)
-    }   
+    },[])
 
     const onBlur = () => {
         setError(Validators(ref.current.parentElement.parentElement,ref.current,ref.current.value))
-        if (error.name === ""){
-                    ref.current.classList.remove("border-red-500","bg-red-100")
-        }
+        if (error.name === ""){ref.current.classList.remove("border-red-500","bg-red-100")}
     }
 
     return (
@@ -54,8 +59,9 @@ const FormInput = (props) => {
                         value={value}
                         type = { type ==='password' && show ? 'password':'text'}
                         placeholder={t(placeholder)}
+                        onCopy={handleCopy}
                         className={`
-                        peer
+                        peer select-none
                         bg-gray-50 border border-gray-300 
                         text-gray-900 sm:text-sm rounded-lg 
                         disabled:text-gray-600

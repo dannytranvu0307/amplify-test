@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from "react-router-dom";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import axios from 'axios';
 import { baseURL } from '../features/auth/loginSlice';
 function History() {
@@ -122,4 +122,4 @@ function History() {
         </div>
     )
 }
-export default History
+export default memo(History)

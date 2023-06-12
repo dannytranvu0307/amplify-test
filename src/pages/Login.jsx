@@ -1,6 +1,6 @@
-import { useState, memo} from "react";
+import { useState, memo, useMemo} from "react";
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate, useLocation} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import ErrorNotification from "../components/ErrorNotification";
 import {email, password} from "../instaces"
@@ -66,6 +66,7 @@ function Login(){
                 setErrSever('alert')
         }
     }
+    const resetPassword = useMemo(()=><Link to="/register" className="font-medium text-primary-600 hover:underline">{t("sign_up_link")}</Link>,[])
 
     return (
         <>
@@ -118,7 +119,8 @@ function Login(){
                         text-sm px-5 py-2.5 text-center ">{t("login")}</button>
                         <p className="text-sm font-light text-gray-500">
                         {t("sign_up_description")}
-                        <Link to="/register" className="font-medium text-primary-600 hover:underline">{t("sign_up_link")}</Link>
+                        {/* <Link to="/register" className="font-medium text-primary-600 hover:underline">{t("sign_up_link")}</Link> */}
+                        {resetPassword}
                         </p>
                     </form>
                 </div>

@@ -117,8 +117,8 @@ const authSlice = createSlice({
                     activeError: null,
                     registerError: null,
                     sendMailNotification: null,
+                    // isAuthenticated:localStorage.getItem('auth')||false,
                     isAuthenticated:false,
-                    checkPass: false,
                     isLoading: true, 
                     // acctive parameter
                     isActiveMessage: null,
@@ -141,7 +141,6 @@ const authSlice = createSlice({
         builder.addCase(login.pending, (state,action)=> {
             state.error = null
             state.isLoading = true
-            state.checkPass = false
         }),
         builder.addCase(login.fulfilled, (state,action)=> {
             if(action.payload.status === 200){
@@ -160,6 +159,7 @@ const authSlice = createSlice({
             if(action.payload.status === 200){
             state.isLoading = false
             state.isAuthenticated = true
+            // localStorage.setItem('auth',true)
             state.user = action.payload.data.data
             }else if (action.payload.status === 401){
                 state.isLoading = false
@@ -263,6 +263,7 @@ const authSlice = createSlice({
                 state.isLoading = false
                 state.user = null
                 state.isAuthenticated = false
+                localStorage.removeItem('auth')
             }
         })
 
