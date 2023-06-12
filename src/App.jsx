@@ -34,7 +34,7 @@ function App() {
           dispatch(refreshToken()).unwrap()
             .then(res => res.status === 200 && dispatch(authenticate()))
         }else{
-          <Navigate to={location.pathname} />;}})
+          <Navigate to="/login" />;}})
   }, [])
 
 

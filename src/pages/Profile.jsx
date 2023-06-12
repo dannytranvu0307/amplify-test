@@ -2,7 +2,7 @@ import { useState, memo, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { fullName, email, department, password, start, goal, new_password, confirm_new_password } from '../instaces';
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, authenticate, selectIsAuthenticated } from "../features/auth/loginSlice";
+import { selectUser, authenticate} from "../features/auth/loginSlice";
 import { userUpdate } from "../features/user/userSlice";
 import { useTranslation } from 'react-i18next';
 import ErrorNotification from "../components/ErrorNotification";
@@ -102,6 +102,23 @@ const Profile = () => {
         return () => setMessageUpdate(false)
     }, [])
 
+    // callback authen process
+    const timeOutAuthen = async () => {
+            dispatch(authenticate()).unwrap().then(res => {
+            if (res.status === 401) {
+                dispatch(refreshToken()).unwrap()
+                .then(res => {
+                    if (res.status === 200){ 
+                        dispatch(authenticate()).unwrap().then(res =>{
+                    })
+                }   else {
+                    localStorage.removeItem('auth')
+                    return <Navigate to="/login" />
+                }
+            })
+            }})
+    }
+
 
     const ApiSearchStation = async (name, value) => {
         setInvalidError()
@@ -113,7 +130,9 @@ const Profile = () => {
                 setGoalSuggestion([...res.data.data])
             }
         } catch (err) {
-            return err.response
+            if (err.response.status === 401){
+                timeOutAuthen()
+            }
         }
     }
 
@@ -193,6 +212,8 @@ const Profile = () => {
                             setNotFound('notFoundCp')
                         } else if (err.response.data.code === "API017_ER") {
                             setNotFound('notFoundCp')
+                        }else if (err.response.status === 401){
+                            timeOutAuthen()
                         }
                     }
                 } else {
@@ -345,10 +366,6 @@ const Profile = () => {
                 }
             }
         }
-        // else {
-        //     setMessagePassword('alert')
-        // }
-
     }
     const onBlur = (e) => {
 
