@@ -144,7 +144,7 @@ function Home() {
         departure: departure === "" || departure === arrival,
         arrival: arrival === "" || departure === arrival,
         payment: payment === "",
-        price: price === "" || isNaN(price) || +price < 0,
+        price: price === "" || isNaN(price) || +price < 0||+price ===0,
         priceLength: price.length > 8,
         priceType: isNaN(price),
         equal: departure === arrival
@@ -193,7 +193,7 @@ function Home() {
         callApi();
       } else if (departure === arrival) {
         setWarning(t('AlertSame'))
-      } else if (+price < 0) {
+      } else if (+price < 0||+price ===0) {
         setWarning(t('minusAlert'))
       } else if (updatedError.priceLength) {
         setWarning(t('warningLength'))
@@ -210,7 +210,7 @@ function Home() {
         Destination: Destination === "",
         departure: departure === "" || departure === arrival,
         arrival: arrival === "" || departure === arrival,
-        price: price === "" || isNaN(price) || +price < 0,
+        price: price === "" || isNaN(price) || +price < 0||+price===0,
         priceLength: price.length > 8
       };
       setError(updatedError);
@@ -257,7 +257,7 @@ function Home() {
         setWarning(t('warningLength'))
       } else if (isNaN(price)) {
         setWarning(t('warningType'))
-      } else if (+price < 0) {
+      } else if (+price < 0||+price ===0) {
         setWarning(t('minusAlert'))
       }
       else {

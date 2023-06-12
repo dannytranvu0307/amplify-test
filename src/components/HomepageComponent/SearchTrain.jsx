@@ -8,7 +8,7 @@ import { useSelector , useDispatch} from 'react-redux';
 import { refreshToken  } from '../../features/auth/loginSlice';
 
 
-function SearchTrain({ setData,data, onTransport, error, setError, onSearching, isOn, setIsOn , onWarning  , id , setId,isInputVisible, setInputVisible,setSelectedObject2}) {
+function SearchTrain({ setData,data, onTransport, error, setError, onSearching, isOn, setIsOn , onWarning , id , setId,isInputVisible, setInputVisible,setSelectedObject2}) {
   const { t } = useTranslation();
   const [suggestions, setSuggestions] = useState([]);
   const [suggestionsArrival, setSuggestionsArrival] = useState([]);
@@ -85,12 +85,10 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
             .unwrap()
             .then(res =>{
             if(res.data.message ==='refresh token is null'){
-            
              dispatch(authenticate())
             }else{
               callApi()
             }})
-
          }else{
           onSearching({ noData: t('Result') })
           setAlert('')
@@ -101,8 +99,10 @@ function SearchTrain({ setData,data, onTransport, error, setError, onSearching, 
 
     } else if (date === "" || date === null ||departure===''|| departure === null|| departure=== undefined || arrival==='' || arrival===null ||arrival===undefined||payment ==='' ||payment===null||payment===undefined || Destination===''||Destination===null||Destination===undefined) {
       setAlert(t('alert'))
+      onSearching({ noData: t('Result') })
     } else if (departure !== "" && arrival !== "" && departure===arrival) {
       setAlert(t('AlertSame'))
+      onSearching({ noData: t('Result') })
     }
   }
 
@@ -205,7 +205,7 @@ return (
           <span className='my-2 text-xs'>{t("departure")}</span>
           <div className='relative '>
           
-            <input className={`w-full border-[1px] bg-[#F9FAFB] border-black rounded h-8 text-xs px-2 ${error.departure && ("border-red-500 bg-red-100")}`}
+            <input className={`w-full border-[1px] bg-[#F9FAFB] border-black rounded h-8 text-xs pl-2 pr-5 ${error.departure && ("border-red-500 bg-red-100")}`}
               value={data.departure}
               placeholder={t("start_pla")}
               onChange={e => { setData({...data,departure:e.target.value}), setError({ ...error, departure: false }) }}
@@ -234,7 +234,7 @@ return (
 
             <input
               placeholder={t("goal_pla")}
-              className={`w-full border-[1px] border-black bg-[#F9FAFB] text-xs rounded h-8 px-2 ${error.arrival && ("border-red-500 bg-red-100")}`}
+              className={`w-full border-[1px] border-black bg-[#F9FAFB] text-xs rounded h-8 pl-2 pr-5 ${error.arrival && ("border-red-500 bg-red-100")}`}
               value={data.arrival}
               onFocus={(prev) => setFocus({ ...prev, arrival: true })}
               onBlur={(prev) => setFocus({ ...prev, arrival: false })}
@@ -258,7 +258,7 @@ return (
           {isInputVisible ? (
             <>
             <input
-              className='w-full border-[1px] border-black text-xs rounded h-8 px-2 bg-[#F9FAFB]'
+              className='w-full border-[1px] border-black text-xs rounded h-8 pl-2 pr-5 bg-[#F9FAFB]'
               type="text"
               placeholder={t("via_pla")}
               value={data.transport}

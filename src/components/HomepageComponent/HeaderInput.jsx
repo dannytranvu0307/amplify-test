@@ -121,11 +121,11 @@ function HeaderInput({  data, onVehiclechange, error, setError , setData,setSele
             <div className='py-5 '>
                 <span className='text-xs'>{t('Destination')}</span>
                 <div className='w-full relative' >
-                <input value={data.Destination} className={`w-full text-xs h-8 px-2 bg-[#F9FAFB] border border-black rounded ${error.Destination && ("border-red-500 bg-red-100")}`} 
+                <input value={data.Destination} className={`w-full text-xs h-8 pl-2 pr-6  bg-[#F9FAFB] border border-black rounded ${error.Destination && ("border-red-500 bg-red-100")}`} 
                 placeholder={t('Destination_pla')} 
                 onChange={(e) => { setData({...data,Destination:e.target.value}), setError({ ...error, Destination: false }) }} 
                />
-              <svg   onClick={()=>setData({...data,Destination:""})} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className=" absolute right-1 top-1 w-4 h-6">
+              <svg   onClick={()=>setData({...data,Destination:""})} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className=" absolute  right-1 top-1 w-4 h-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
              </svg>
                 </div>
