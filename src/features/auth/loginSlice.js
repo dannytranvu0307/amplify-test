@@ -104,7 +104,7 @@ export const logout = createAsyncThunk(
             const response = await axios.get(`${baseURL}/auth/logout`, {withCredentials: true} )
             return response
         }catch(err){
-            return err.response
+            return err.response;
         }
     }
 )

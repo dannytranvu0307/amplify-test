@@ -24,20 +24,33 @@ const Table = ({tableData , setTableData})=>{
         return table;
       };
  
+
     const deleteRecord=(id)=>{
 
-      axios.delete(`${baseURL}/fares`,{
+      const callApi=()=> axios.delete(`${baseURL}/fares`,{
         params: {
           recordId:id
         },withCredentials: true
-      } )
+      })
       .then(response => {
       setTableData(()=>tableData.filter(obj => obj.recordId !== id) )
       })
       .catch(error => {
-        return error
-      });
-       
+        if(error.response.status===401){
+            dispatch(refreshToken())
+            .unwrap()
+            .then(
+                res => {
+                    if (res.data.message === 'refresh token is null') {
+                      dispatch(authenticate())
+                    } else {
+                      callApi()
+                    }
+                  }
+            )
+        }
+    });
+    callApi();
     }
 
 

@@ -22,11 +22,11 @@ const Sidebar = () => {
     const handleLogout = () => {
         dispatch(logout()).unwrap().then(res => {
             if(res.data.type === "INFO"){
-                // localStorage.removeItem('auth')
                 navigate("/login")
             }
         })
     }
+    
     if (true){
         <Navigate to={location.pathname} />
     }
