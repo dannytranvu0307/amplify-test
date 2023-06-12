@@ -10,6 +10,7 @@ import { baseURL } from "../features/auth/loginSlice";
 import axios from "axios";
 import FormInput from "../components/FormInput";
 import ValidatorSubmit from "../functional/ValidatorSubmit";
+import CheckEmpty from "../functional/CheckEmpty";
 
 
 const Profile = () => {
@@ -94,7 +95,7 @@ const Profile = () => {
                 })
             }
         }
-    }, [user,cancel])
+    }, [user, cancel])
 
     // side effect proccess
     useEffect(() => {
@@ -179,9 +180,8 @@ const Profile = () => {
     const onSubmitSearch = async () => {
         setInvalidError()
         const $ = document.querySelector.bind(document);
-        if (ValidatorSubmit($("#computerPass"), [$("#start"), $("#goal")])) {
-
-
+        // if (ValidatorSubmit($("#computerPass"), [$("#start"), $("#goal")],t)) {
+        if (CheckEmpty($("#computerPass"), [$("#start"), $("#goal")], t)) {
             if ((startPoint.stationCode !== "" && startPoint.stationCode !== undefined) && (goaltPoint.stationCode !== "" && goaltPoint.stationCode !== undefined)) {
                 if (startPoint.stationCode !== goaltPoint.stationCode) {
                     try {
@@ -203,11 +203,6 @@ const Profile = () => {
             }
             else {
                 setLstCp([])
-                if (startPoint.stationCode === "" || startPoint.stationCode === undefined) {
-                    document.querySelector("#start").focus()
-                } else {
-                    document.querySelector("#goal").focus()
-                }
             }
         } else {
             setLstCp([])
@@ -243,6 +238,18 @@ const Profile = () => {
             setStartSuggestion([])
             setGoalSuggestion([])
         }
+        if (e.target.name === "start"){
+            setStartPoint({
+                stationCode: "",
+                stationName: ""
+            })
+        } else if (e.target.name === "goal"){
+            setGoalPoint({
+                stationCode: "",
+                stationName: ""
+            })
+        }
+        
         e.target.classList.remove("border-red-500", "bg-red-100")
     }
     // submit all record on form
@@ -260,7 +267,7 @@ const Profile = () => {
 
 
         const { departmentId, fullName, email, current_password, new_password, confirm_new_password, ...userData } = form
-        if (ValidatorSubmit(formSubmit, [eName, eDepartmentId, eOldPassword, eNewPassword, eConfirmNewPassword])) {
+        if (ValidatorSubmit(formSubmit, [eName, eDepartmentId, eOldPassword, eNewPassword, eConfirmNewPassword], t)) {
             if (mounted) {
                 if (commuterPass.viaDetails.length === 0) {
                     dispatch(userUpdate({
@@ -294,53 +301,56 @@ const Profile = () => {
                         }
                     })
                 }
-            }else{
+            } else {
                 if (lstCp.length === 0) {
                     setInvalidError('requiredSearchBtn')
-                }else if (commuterPass.viaDetails.length === 0){
+                } else if (commuterPass.viaDetails.length === 0) {
                     setInvalidError('requiredChoose')
-                }else{ 
-                dispatch(userUpdate({
-                    fullName: fullName,
-                    email: email,
-                    departmentId: +departmentId,
-                    oldPassword: current_password,
-                    newPassword: new_password,
-                    commuterPass: {
-                        departure: commuterPass.start,
-                        destination: commuterPass.goal,
-                        viaDetails: [...commuterPass.viaDetails]
-                    }
-                })).unwrap().then(res => {
-                    if (res.status === 200) {
-                        dispatch(authenticate())
-                            .unwrap().then(() => {
-                            });
-                        setMounted(true);
-                        setCheckTicket(true);
-                        setCheckChange(true);
-                        setCommuterPass({ ...commuterPass, viaDetails: [] });
-                        setStartPoint({ stationCode: "", stationName: "" });
-                        setGoalPoint({ stationCode: "", stationName: "" });
-                        setDisabledPassword(true);
-                        setInvalidError('');
-                        setDisabledname(true);
-                        setDisabledDepartment(true);
-                        setMessageUpdate(true);
-                        setMessagePassword();
-                    } else {
-                        if (res.data.code === "API004_ER") {
-                            setMessagePassword('oldPasswordNotMatch');
+                } else {
+                    dispatch(userUpdate({
+                        fullName: fullName,
+                        email: email,
+                        departmentId: +departmentId,
+                        oldPassword: current_password,
+                        newPassword: new_password,
+                        commuterPass: {
+                            departure: commuterPass.start,
+                            destination: commuterPass.goal,
+                            viaDetails: [...commuterPass.viaDetails]
                         }
-                    }
+                    })).unwrap().then(res => {
+                        if (res.status === 200) {
+                            dispatch(authenticate())
+                                .unwrap().then(() => {
+                                });
+                            setMounted(true);
+                            setCheckTicket(true);
+                            setCheckChange(true);
+                            setCommuterPass({ ...commuterPass, viaDetails: [] });
+                            setStartPoint({ stationCode: "", stationName: "" });
+                            setGoalPoint({ stationCode: "", stationName: "" });
+                            setDisabledPassword(true);
+                            setInvalidError('');
+                            setDisabledname(true);
+                            setDisabledDepartment(true);
+                            setMessageUpdate(true);
+                            setMessagePassword();
+                        } else {
+                            if (res.data.code === "API004_ER") {
+                                setMessagePassword('oldPasswordNotMatch');
+                            }
+                        }
 
-                })
-            }
+                    })
+                }
             }
         }
-        else {
-            setMessagePassword('alert')
-        }
+        // else {
+        //     setMessagePassword('alert')
+        // }
+
+    }
+    const onBlur = (e) => {
 
     }
     const handleCancel = () => {
@@ -394,7 +404,7 @@ const Profile = () => {
                                     </div>
                                     {disabledPassWord ?
                                         <div className="relative mt-6">
-                                            <FormInput value="" onChange={(e) => onChange(e)}  {...infor[3]} />
+                                            <FormInput onChange={(e) => onChange(e)}  {...infor[3]} />
                                             <svg onClick={() => setDisabledPassword(false)} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
                                                 className="w-6 h-6 absolute right-0 top-0 translate-y-[35px]  cursor-pointer mr-2 hover:text-gray-600">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
@@ -471,7 +481,7 @@ const Profile = () => {
                                             <div className="relative">
                                                 <div className="flex justify-between space-x-5" id="ReasonTicket">
                                                     <div className="relative">
-                                                        <FormInput value={commuterPass.start} onBlur={""} onChange={e => onChangeStation(e)} {...inputTickets[0]} />
+                                                        <FormInput onBlur={e => onBlur(e)} value={commuterPass.start} onChange={e => onChangeStation(e)} {...inputTickets[0]} />
 
                                                         <div className="absolute top-full bg-white w-full rounded drop-shadow-lg max-h-64 overflow-y-auto">
                                                             {startSuggestion.map((item, i) => (
@@ -488,7 +498,7 @@ const Profile = () => {
                                                         </div>
                                                     </div>
                                                     <div className="relative">
-                                                        <FormInput value={commuterPass.goal} onBlur={""} onChange={e => onChangeStation(e)} {...inputTickets[1]} />
+                                                        <FormInput onBlur={e => onBlur(e)} value={commuterPass.goal} onChange={e => onChangeStation(e)} {...inputTickets[1]} />
                                                         <div className="absolute bg-white w-full rounded drop-shadow-lg max-h-64 overflow-y-auto">
                                                             {goaltSuggestion.map((item, i) => (
                                                                 <p className="px-2 py-1 duration-100 
@@ -564,9 +574,9 @@ const Profile = () => {
                     <button
                         onClick={e => onSubmit(e)}
                         type="submit"
-                        className={`w-auto text-white  bg-primary-600 hover:bg-primary-500 
+                        className={`w-auto text-white hover:bg-primary-500 
                          focus:outline-none font-medium rounded-lg  
-                        text-sm px-5 py-2.5 text-center ${(checkTicket !== false) && (checkChange !== false) && ("bg-gray-400 pointer-events-none")}`}>
+                        text-sm px-5 py-2.5 text-center ${(checkTicket !== false) && (checkChange !== false) ? "bg-gray-400 pointer-events-none" : " bg-primary-600"}`}>
                         {t("save")}</button>
 
                 </div>

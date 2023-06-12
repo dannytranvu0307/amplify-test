@@ -37,9 +37,11 @@ const FormInput = (props) => {
 
     const onBlur = () => {
         setError(Validators(ref.current.parentElement.parentElement,ref.current,ref.current.value))
-        if (error.name === ""){ref.current.classList.remove("border-red-500","bg-red-100")}
+        if (error.name === ""){
+            ref.current.classList.remove("border-red-500","bg-red-100"); 
+            ref.current.parentNode.querySelector("span").innerHTML = "";
+        }
     }
-
     return (
         <div id="input-field"  className= "grid  relative">
             <label 

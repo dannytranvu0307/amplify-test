@@ -1,6 +1,6 @@
 import Validators from "./Validators";
 
-const ValidatorSubmit = (form, objs) =>{
+const ValidatorSubmit = (form, objs,t) =>{
     const arr = []
     for (let i = 0; i < objs.length ; i++) {
         if (objs[i] !== null){
@@ -8,8 +8,12 @@ const ValidatorSubmit = (form, objs) =>{
             if (a.name !== "") {
                 const input = form.querySelector(`#${objs[i].id}`);
                 input.classList.add('border-red-500','bg-red-100')
+                input.parentNode.querySelector("span").innerHTML = t(a.name)
                 arr.push(a.name);
-            } 
+            }else {
+                const input = form.querySelector(`#${objs[i].id}`);
+                input.parentNode.querySelector("span").innerHTML = ""
+            }
         }
     }
     return arr.length === 0;

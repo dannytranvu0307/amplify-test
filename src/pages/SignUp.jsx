@@ -19,8 +19,6 @@ const SignUp = () => {
     useEffect(()=>{
        return ()=>dispatch(changeActive())
     },[])
-    // input elements
-    // const inputs =  [fullName,email,department,password,confirm_password]
 
     // change language
     const [form, setForm] = useState({})
@@ -34,7 +32,7 @@ const SignUp = () => {
         const formSubmit = document.querySelector("#signup")
         
         // pass or not
-        if (ValidatorSubmit(formSubmit,[...submitInput,select])){
+        if (ValidatorSubmit(formSubmit,[...submitInput,select], t)){
             let {departmentId, confirm_password,password, fullName, email} = {...form}
             dispatch(register({departmentId:departmentId,password,fullName: fullName.replace(/\s\s+/g, ' '),email:email.replace(/\s\s+/g, '').trim()})).unwrap()
             .then(res => {
@@ -47,9 +45,7 @@ const SignUp = () => {
                     setMessageError()
                     setIsSuccess(true)
                 }})}
-        else {
-            setMessageError('alert')
-        }
+
     }
 
     // every times typing tha target will be changed value
@@ -67,16 +63,6 @@ return (
                     {t("register")}
                 </h1>
                 <form id="signup" className="space-y-4 md:space-y-6" onSubmit={e => onSubmit(e)} autoComplete="off">
-                    {/* {inputs.map((input,i)=>
-                    {   
-                        return  (
-                            <FormInput 
-                                onChange={e=>onChange(e)}
-                                key={i}  
-                                {...input}                      
-                            />        
-                        )}
-                    )} */}
                      <FormInput 
                                 onChange={e=>onChange(e)}   {...fullName}               
                             />     

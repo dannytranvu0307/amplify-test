@@ -10,7 +10,6 @@ import ValidatorSubmit from "../functional/ValidatorSubmit";
 import { login, authenticate,
     selectIsActive,selectIsActiveMessage,
     selectActiveError } from "../features/auth/loginSlice";
-
 function Login(){
     // change language
     const { t } = useTranslation();
@@ -49,7 +48,8 @@ function Login(){
         const submitPassword = $("input#password")
         const formSubmit = $("#login")
         // pass or not
-        if (ValidatorSubmit(formSubmit,[submitEmail,submitPassword])){        
+        // if (CheckEmpty(formSubmit,[submitEmail,submitPassword])){
+            if (ValidatorSubmit(formSubmit,[submitEmail,submitPassword],t)){        
             dispatch(login({...form, ["remember"]:remember}))
             .unwrap()
             .then(res=>{
@@ -61,10 +61,10 @@ function Login(){
                 }else {
                     setErrSever('Unauthorized')
                 }}) 
-            }
-            else{
-                setErrSever('alert')
-        }
+                }
+        // } else{
+        //     setErrSever('alert')
+        // }
     }
     const resetPassword = useMemo(()=><Link to="/register" className="font-medium text-primary-600 hover:underline">{t("sign_up_link")}</Link>,[])
 
@@ -114,8 +114,8 @@ function Login(){
                         text-white 
                         bg-primary-600
                         hover:bg-primary-500
-                        focus:ring-4 focus:outline-none 
-                        focus:ring-primary-500 font-medium rounded-lg 
+                        focus:outline-none 
+                        font-medium rounded-lg 
                         text-sm px-5 py-2.5 text-center ">{t("login")}</button>
                         <p className="text-sm font-light text-gray-500">
                         {t("sign_up_description")}

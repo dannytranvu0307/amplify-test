@@ -129,5 +129,6 @@
     "requiredChoose":"Select the relevant item.",
     "email_type":"Please provide the correct format for an email of VTI.",
     "API003_ER03":"New password has been used.",
-    "API003_ER02":"Reset password has been sent."
+    "API003_ER02":"Reset password has been sent.",
+    "er_input_confirm_new_password":"The new password and the password confirmation do not match"
 }
