@@ -133,7 +133,8 @@
     "Search_Result": "Search Result",
     "Result":"There is no search result",
     "start_bus_pla":"departure",
-    "goal_bus_pla":"arrival"
+    "goal_bus_pla":"arrival",
+    "via_pla":"transit point"
 
 
 }

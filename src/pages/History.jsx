@@ -3,18 +3,26 @@ import { Link } from "react-router-dom";
 import { useState, useEffect, memo } from 'react';
 import axios from 'axios';
 import { baseURL } from '../features/auth/loginSlice';
+import { useDispatch } from 'react-redux';
+import { refreshToken , authenticate} from '../features/auth/loginSlice';
 function History() {
     const { t } = useTranslation();
-
+    const  dispatch = useDispatch()
     const [files, setFiles] = useState([]);
 
     const getFiles = async () => {
-        try {
-            const res = await axios.get(`${baseURL}/files`,{withCredentials: true})
-            return setFiles([...res.data.data]) 
-        }catch(err){
-            return err.response
+
+            const res =()=> {
+                axios.get(`${baseURL}/files`,{withCredentials: true})
+                .then(res=>setFiles([...res.data.data]))
+                .catch(error =>{if(error.response.status){
+                    dispatch(refreshToken()).unwrap()
+                    .then(res => {if(res.status===2000){res()}else{dispatch(authenticate())}})
+
+                }})
         }
+        res();
+                        
     }
 
 
