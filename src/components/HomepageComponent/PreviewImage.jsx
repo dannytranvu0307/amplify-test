@@ -1,10 +1,8 @@
-
 function PreviewImage({image , onDelete}){
     return(
         <div className='flex flex-row h-full mx-auto border-dotted border border-gray-400 overflow-auto bg-[#ffffff] scrol'>
             {image.map((img,i)=>(
                 <div key={i} className="basis-1/5 flex flex-col h-full  px-2 ">
-
                 <button onClick={() => onDelete(i)} className="   py-2 mx-auto">     
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 text-red-400">
                  <path strokeLinecap="round" strokeLinejoin="round"
@@ -13,13 +11,10 @@ function PreviewImage({image , onDelete}){
                </button>
                 <img src={img.fileURL} className='w-3/4 h-1/2 flex mt-2 mx-auto min-w-[120px] '/>
                 <div className="w-20  pb-2 flex mt-auto mx-auto"> <span className="text-xs whitespace-nowrap text-ellipsis overflow-hidden" >{img.name}</span></div>
-
                 </div>
             ))}
- 
         </div>
     )
-
 }
 
 export default PreviewImage

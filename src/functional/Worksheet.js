@@ -1,5 +1,7 @@
-import FormatDate from "./FormatDate"
+import FormatDate from "./FormatDate";
+
 export default function(workbook,user,exportOptions){
+
         const toDay = new Date();
 
         // Tính total tất cả record
@@ -39,7 +41,7 @@ export default function(workbook,user,exportOptions){
     
         // define column for sheet
         worksheet.columns = [
-            { header: '日付', key: 'visitDate' ,width: 20},
+            {  header: '日付', key: 'visitDate' ,width: 20},
             {  header: '訪問先', key: 'visitLocation',width: 30  },
             {  header: '交通機関', key: 'transportation' }, 
             {  header: '出発地', key: 'departure' },

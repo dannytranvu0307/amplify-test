@@ -2,7 +2,7 @@ import { NavLink,useNavigate, useLocation, Navigate } from "react-router-dom";
 import { useState,useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { useDispatch , useSelector} from "react-redux";
-import { changeActive, logout, selectIsAuthenticated } from '../features/auth/loginSlice';
+import { changeActive, logout, selectIsAuthenticated, authenticate } from '../features/auth/loginSlice';
 
 const Sidebar = () => {
     const location = useLocation()
@@ -24,6 +24,8 @@ const Sidebar = () => {
             if(res.data.type === "INFO"){
                 // localStorage.removeItem('auth')
                 navigate("/login")
+            }else{
+                dispatch(authenticate())
             }
         })
     }
