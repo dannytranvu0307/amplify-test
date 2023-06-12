@@ -42,13 +42,10 @@ function Login(){
     const onSubmit = async e => {
         e.preventDefault();
         const $ = document.querySelector.bind(document)
-
-        // get elements
         const submitEmail = $("input#email")
         const submitPassword = $("input#password")
         const formSubmit = $("#login")
-        // pass or not
-        // if (CheckEmpty(formSubmit,[submitEmail,submitPassword])){
+
             if (ValidatorSubmit(formSubmit,[submitEmail,submitPassword],t)){        
             dispatch(login({...form, ["remember"]:remember}))
             .unwrap()
@@ -62,11 +59,10 @@ function Login(){
                     setErrSever('Unauthorized')
                 }}) 
                 }
-        // } else{
-        //     setErrSever('alert')
-        // }
+
     }
-    const resetPassword = useMemo(()=><Link to="/register" className="font-medium text-primary-600 hover:underline">{t("sign_up_link")}</Link>,[])
+
+   // const resetPassword = useMemo(()=><Link to="/register" className="font-medium text-primary-600 hover:underline">{t("sign_up_link")}</Link>,[localStorage.getItem('language')])
 
     return (
         <>
@@ -117,10 +113,11 @@ function Login(){
                         focus:outline-none 
                         font-medium rounded-lg 
                         text-sm px-5 py-2.5 text-center ">{t("login")}</button>
+
                         <p className="text-sm font-light text-gray-500">
                         {t("sign_up_description")}
-                        {/* <Link to="/register" className="font-medium text-primary-600 hover:underline">{t("sign_up_link")}</Link> */}
-                        {resetPassword}
+                        <Link to="/register" className="font-medium text-primary-600 hover:underline">{t("sign_up_link")}</Link>
+                    
                         </p>
                     </form>
                 </div>

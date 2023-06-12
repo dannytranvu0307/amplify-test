@@ -100,8 +100,7 @@ export const logout = createAsyncThunk(
     'login/logout',
     async () => {
         try {
-
-            const response = await axios.get(`${baseURL}/auth/logout`, {withCredentials: true} )
+            const response = await axios.get(`${baseURL}/auth/logout`, {withCredentials: true})
             return response
         }catch(err){
             return err.response;
@@ -117,8 +116,7 @@ const authSlice = createSlice({
                     activeError: null,
                     registerError: null,
                     sendMailNotification: null,
-                    // isAuthenticated:localStorage.getItem('auth')||false,
-                    isAuthenticated:false,
+                    isAuthenticated:localStorage.getItem('auth')||false,
                     isLoading: true, 
                     // acctive parameter
                     isActiveMessage: null,
@@ -159,7 +157,7 @@ const authSlice = createSlice({
             if(action.payload.status === 200){
             state.isLoading = false
             state.isAuthenticated = true
-            // localStorage.setItem('auth',true)
+             localStorage.setItem('auth',true)
             state.user = action.payload.data.data
             }else if (action.payload.status === 401){
                 state.isLoading = false
