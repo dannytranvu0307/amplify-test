@@ -95,91 +95,123 @@ function SearchTrain({ setData, data, onTransport, error, setError, onSearching,
   }
   //Departure
   useEffect(() => {
+    let timerId;
+  
     if (data.departure.length > 1 && focus.departure) {
-      axios.get(`${baseURL}/stations`, {
-        params: {
-          stationName: data.departure
-        }, withCredentials: true
-      })
-        .then(response => {
-          // Handle the response
-          setSuggestions(response.data.data)
+      clearTimeout(timerId);
+  
+      // Set a new timeout to delay the API call
+      timerId = setTimeout(() => {
+        axios.get(`${baseURL}/stations`, {
+          params: {
+            stationName: data.departure
+          },
+          withCredentials: true
         })
-        .catch(error => {
-          if (error.response.status === 401) {
-            dispatch(refreshToken())
-            
-              .unwrap()
-              .then(res => {
-                console.log(res)
-                if (res.data.type !== 'INFO') {
-                  localStorage.removeItem('auth')
-                  dispatch(authenticate())
-                }
-              })
-          }
-        });
+          .then(response => {
+            // Handle the response
+            setSuggestions(response.data.data);
+          })
+          .catch(error => {
+            if (error.response.status === 401) {
+              dispatch(refreshToken())
+                .unwrap()
+                .then(res => {
+                  console.log(res);
+                  if (res.data.type !== 'INFO') {
+                    localStorage.removeItem('auth');
+                    dispatch(authenticate());
+                  }
+                });
+            }
+          });
+      }, 1000); // Delay of 3000 milliseconds (3 seconds)
     } else if (data.departure === '' || data.departure === undefined || data.departure === null) {
-      setSuggestions([])
+      setSuggestions([]);
     }
-
-  }, [data.departure])
+  
+    // Cleanup the timeout when the component unmounts or data.departure changes
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [data.departure]);
+  
   //Arrival
   useEffect(() => {
+    let timerId; // Declare a variable to store the timeout ID
+  
     if (data.arrival.length > 1 && focus.arrival) {
-      axios.get(`${baseURL}/stations`, {
-        params: {
-          stationName: data.arrival
-        }, withCredentials: true
-      })
-        .then(response => {
-          setSuggestionsArrival(response.data.data)
+      clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        axios.get(`${baseURL}/stations`, {
+          params: {
+            stationName: data.arrival
+          },
+          withCredentials: true
         })
-        .catch(error => {
-          if (error.response.status === 401) {
-            dispatch(refreshToken())
-              .unwrap()
-              .then(res => {
-                if (res.data.type !== 'INFO') {
-                  localStorage.removeItem('auth')
-                  dispatch(authenticate())
-                }
-              })
-          }
-        });
+          .then(response => {
+            setSuggestionsArrival(response.data.data);
+          })
+          .catch(error => {
+            if (error.response.status === 401) {
+              dispatch(refreshToken())
+                .unwrap()
+                .then(res => {
+                  if (res.data.type !== 'INFO') {
+                    localStorage.removeItem('auth');
+                    dispatch(authenticate());
+                  }
+                });
+            }
+          });
+      }, 1000); // Delay of 3000 milliseconds (3 seconds)
     } else if (data.arrival === '' || data.arrival === undefined || data.arrival === null) {
-      setSuggestionsArrival([])
+      setSuggestionsArrival([]);
     }
-  }, [data.arrival])
+  
+    // Cleanup the timeout when the component unmounts or data.arrival changes
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [data.arrival]);
+  
   // transport 
   useEffect(() => {
+    let timerId; // Declare a variable to store the timeout ID
+  
     if (data.transport.length > 1 && focus.transport) {
-      axios.get(`${baseURL}/stations`, {
-        params: {
-          stationName: data.transport
-        }, withCredentials: true
-      })
-        .then(response => {
-          // Handle the response
-          setSuggestionsTransport(response.data.data)
+      clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        axios.get(`${baseURL}/stations`, {
+          params: {
+            stationName: data.transport
+          },
+          withCredentials: true
         })
-        .catch(error => {
-          if (error.response.status === 401) {
-            dispatch(refreshToken())
-              .unwrap()
-              .then(res => {
-                if (res.data.type !== 'INFO') {
-                  localStorage.removeItem('auth')
-                  dispatch(authenticate())
-                }
-              })
-          }
-        });
+          .then(response => {
+            setSuggestionsTransport(response.data.data);
+          })
+          .catch(error => {
+            if (error.response.status === 401) {
+              dispatch(refreshToken())
+                .unwrap()
+                .then(res => {
+                  if (res.data.type !== 'INFO') {
+                    localStorage.removeItem('auth');
+                    dispatch(authenticate());
+                  }
+                });
+            }
+          });
+      }, 1000); // Delay of 3000 milliseconds (3 seconds)
     } else if (data.transport === '' || data.transport === undefined || data.transport === null) {
-      setSuggestionsTransport([])
+      setSuggestionsTransport([]);
     }
-  }, [data.transport])
-
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [data.transport]);
+  
   
   return (
     <div className='pt-3 w-full min-h-min border-b-[1.5px] border-gray-500 pb-3'>
