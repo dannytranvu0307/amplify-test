@@ -18,9 +18,10 @@ const FormInput = (props) => {
         }
     },[])
 
-    const handleCopy = useCallback((e) => {
+
+    const handlePast = useCallback((e) => {
         let name = e.target.name 
-        if (name=== "password" || name=== "confirm_password" || name === "confirm_new_password" || name === "new_password"){
+        if (name=== "password" || name=== "confirm_password" || name === "confirm_new_password" || name === "new_password" || name === "current_password"){
             e.preventDefault();
         }
     },[label]);
@@ -61,7 +62,7 @@ const FormInput = (props) => {
                         value={value}
                         type = { type ==='password' && show ? 'password':'text'}
                         placeholder={t(placeholder)}
-                        onCopy={handleCopy}
+                        onPaste={handlePast}
                         className={`
                         peer select-none
                         bg-gray-50 border border-gray-300 

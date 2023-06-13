@@ -18,7 +18,7 @@ function History() {
                 .catch(error => {
                     if (error.response.status) {
                         dispatch(refreshToken()).unwrap()
-                            .then(res => { if (res.status === 2000) { res() } else {
+                            .then(res => { if (res.status === 200) { res() } else {
                                 localStorage.removeItem('auth')
                                 dispatch(authenticate()) } })
                     }
@@ -26,9 +26,11 @@ function History() {
         }
         res();
     }
+    
     useEffect(() => {
         getFiles()
     }, [])
+
     const renderTable = () => {
         const table = [];
         for (let i = 0; i < (10 - files.length); i++) {

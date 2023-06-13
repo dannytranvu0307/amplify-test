@@ -1,4 +1,4 @@
-import { useEffect, useState,useRef } from 'react'
+import { useEffect} from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n.js'
@@ -51,13 +51,18 @@ function App() {
 
   useEffect(() => {
     Aos.init({ duration: 900 });
-    dispatch(authenticate())
-      .unwrap()
+    dispatch(authenticate()).unwrap()
       .then(res => {
         if (res.status === 401) {
-          dispatch(refreshToken())
-            .unwrap()
-            .then(res => res.status === 200 && dispatch(authenticate()))}})
+          dispatch(refreshToken()).unwrap()
+            .then(res => {
+              if (res.status === 200){
+                dispatch(authenticate()) 
+              } else {
+                  localStorage.removeItem('auth')
+              }
+        })
+      }})
   }, [])
 
   return (

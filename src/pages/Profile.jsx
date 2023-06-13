@@ -2,7 +2,7 @@ import { useState, memo, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { fullName, email, department, password, start, goal, new_password, confirm_new_password } from '../instaces';
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, authenticate} from "../features/auth/loginSlice";
+import { selectUser, authenticate, refreshToken } from "../features/auth/loginSlice";
 import { userUpdate } from "../features/user/userSlice";
 import { useTranslation } from 'react-i18next';
 import ErrorNotification from "../components/ErrorNotification";
@@ -102,21 +102,21 @@ const Profile = () => {
         return () => setMessageUpdate(false)
     }, [])
 
-    // callback authen process
-    const timeOutAuthen = async () => {
-            dispatch(authenticate()).unwrap().then(res => {
-            if (res.status === 401) {
-                dispatch(refreshToken()).unwrap()
-                .then(res => {
-                    if (res.status === 200){ 
-                        dispatch(authenticate()).unwrap().then(res =>{
-                    })
-                }   else {
-                    localStorage.removeItem('auth')
-                    return <Navigate to="/login" />
+    // callback every time timeout token
+    const timeOutAuthen = async (callback,e) => {
+        dispatch(refreshToken()).unwrap().then(res => {
+            console.log(res)
+            if (res.response.status === 403 || res.response.status === 404) {
+                localStorage.removeItem('auth')
+                return <Navigate to="/login" />
+            }else if (res.response.data.type === "INFO" && res.response.code === ""){
+                if (e){
+                    callback(e)
+                }else {
+                    callback()
                 }
-            })
-            }})
+            }
+        })
     }
 
 
@@ -130,8 +130,8 @@ const Profile = () => {
                 setGoalSuggestion([...res.data.data])
             }
         } catch (err) {
-            if (err.response.status === 401){
-                timeOutAuthen()
+            if (err.response.status === 401) {
+                timeOutAuthen(ApiSearchStation)
             }
         }
     }
@@ -199,7 +199,6 @@ const Profile = () => {
     const onSubmitSearch = async () => {
         setInvalidError()
         const $ = document.querySelector.bind(document);
-        // if (ValidatorSubmit($("#computerPass"), [$("#start"), $("#goal")],t)) {
         if (CheckEmpty($("#computerPass"), [$("#start"), $("#goal")], t)) {
             if ((startPoint.stationCode !== "" && startPoint.stationCode !== undefined) && (goaltPoint.stationCode !== "" && goaltPoint.stationCode !== undefined)) {
                 if (startPoint.stationCode !== goaltPoint.stationCode) {
@@ -207,13 +206,14 @@ const Profile = () => {
                         const res = await axios.get(`${baseURL}/cp-routes?start=${startPoint.stationCode}&goal=${goaltPoint.stationCode}`, { withCredentials: true })
                         setLstCp(res.data.data)
                     } catch (err) {
+                        console.log(err.response)
                         setLstCp([])
                         if (err.response.data.code === "API017_ER04") {
                             setNotFound('notFoundCp')
                         } else if (err.response.data.code === "API017_ER") {
                             setNotFound('notFoundCp')
-                        }else if (err.response.status === 401){
-                            timeOutAuthen()
+                        } else if (err.response.status === 401) {
+                            timeOutAuthen(onSubmitSearch)
                         }
                     }
                 } else {
@@ -259,18 +259,18 @@ const Profile = () => {
             setStartSuggestion([])
             setGoalSuggestion([])
         }
-        if (e.target.name === "start"){
+        if (e.target.name === "start") {
             setStartPoint({
                 stationCode: "",
                 stationName: ""
             })
-        } else if (e.target.name === "goal"){
+        } else if (e.target.name === "goal") {
             setGoalPoint({
                 stationCode: "",
                 stationName: ""
             })
         }
-        
+
         e.target.classList.remove("border-red-500", "bg-red-100")
     }
     // submit all record on form
@@ -316,8 +316,11 @@ const Profile = () => {
                             setMessageUpdate(true);
                             setMessagePassword();
                         } else {
+                            
                             if (res.data.code === "API004_ER") {
                                 setMessagePassword('oldPasswordNotMatch');
+                            }else if (res.status === 401){
+                                timeOutAuthen(onSubmit,e)
                             }
                         }
                     })
@@ -359,6 +362,8 @@ const Profile = () => {
                         } else {
                             if (res.data.code === "API004_ER") {
                                 setMessagePassword('oldPasswordNotMatch');
+                            }else if (res.status === 401){
+                                timeOutAuthen(onSubmit(e))
                             }
                         }
 

@@ -102,8 +102,5 @@ return (
         } 
     </div>
     </section>
-
-)
-
-}
- export default memo(SignUp);
+)}
+export default memo(SignUp);
