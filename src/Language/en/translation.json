@@ -135,5 +135,12 @@
     "Result":"There is no search result",
     "start_bus_pla":"Departure",
     "goal_bus_pla":"Arrival",
-    "via_pla":"Transit point"
+    "via_pla":"Transit point",
+    "Delete_ALert":"Are you sure you want to remove this record?",
+    "oke":"Confirm",
+    "delete_Alert_Title":"Delete record",
+    "export_Alert_Title":"File export",
+    "export_Alert_Header":"File contain",
+    "export_Alert_Body":"records and",
+    "export_Alert_Tail":"pictures will be deleted after exported"
 }

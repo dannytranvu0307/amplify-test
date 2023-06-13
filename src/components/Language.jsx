@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 const Language = () => {
     const {t,i18n} = useTranslation();
     const handleChange = (e) => {
-        console.log(e.target.value)
+        
         i18n.changeLanguage(e.target.value)
         localStorage.setItem('language',e.target.value)
     }

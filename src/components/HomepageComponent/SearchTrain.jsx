@@ -73,7 +73,7 @@ function SearchTrain({ setData, data, onTransport, error, setError, onSearching,
             dispatch(refreshToken())
               .unwrap()
               .then(res => {
-                if (res.data.message === 'refresh token is null') {
+                if (res.data.type !== 'INFO') {
                   localStorage.removeItem('auth')
                   dispatch(authenticate())
                 } else {
@@ -111,9 +111,11 @@ function SearchTrain({ setData, data, onTransport, error, setError, onSearching,
         .catch(error => {
           if (error.response.status === 401) {
             dispatch(refreshToken())
+            
               .unwrap()
               .then(res => {
-                if (res.data.message === 'refresh token is null') {
+                console.log(res)
+                if (res.data.type !== 'INFO') {
                   localStorage.removeItem('auth')
                   dispatch(authenticate())
                 }
@@ -127,7 +129,6 @@ function SearchTrain({ setData, data, onTransport, error, setError, onSearching,
   }, [data.departure])
   //Arrival
   useEffect(() => {
-
     if (data.arrival.length > 1 && focus.arrival) {
       axios.get(`${baseURL}/stations`, {
         params: {
@@ -142,15 +143,13 @@ function SearchTrain({ setData, data, onTransport, error, setError, onSearching,
             dispatch(refreshToken())
               .unwrap()
               .then(res => {
-                if (res.data.message === 'refresh token is null') {
+                if (res.data.type !== 'INFO') {
                   localStorage.removeItem('auth')
                   dispatch(authenticate())
                 }
               })
           }
-        }
-
-        );
+        });
     } else if (data.arrival === '' || data.arrival === undefined || data.arrival === null) {
       setSuggestionsArrival([])
     }
@@ -172,7 +171,7 @@ function SearchTrain({ setData, data, onTransport, error, setError, onSearching,
             dispatch(refreshToken())
               .unwrap()
               .then(res => {
-                if (res.data.message === 'refresh token is null') {
+                if (res.data.type !== 'INFO') {
                   localStorage.removeItem('auth')
                   dispatch(authenticate())
                 }

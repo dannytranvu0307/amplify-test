@@ -76,7 +76,7 @@ const Sidebar = () => {
             ${mounted ? ("h-full md:w-[300px]") : ""} 
             duration-200
             overflow-hidden
-            z-40
+            z-10
             `}>
             {!mounted ?
                 (<div className={`flex items-center ml-2 px-3 py-3 cursor-pointer w-full

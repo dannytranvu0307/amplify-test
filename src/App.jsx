@@ -56,7 +56,7 @@ function App() {
         if (res.status === 401) {
           dispatch(refreshToken()).unwrap()
             .then(res => {
-              if (res.status === 200){
+              if (res.data.type === 'INFO'){
                 dispatch(authenticate()) 
               } else {
                   localStorage.removeItem('auth')
@@ -88,7 +88,7 @@ function App() {
                         <Route path="/register" element={<PublicRoute><SignUp /></PublicRoute>} />
                         <Route path="/passwordreset" element={<PublicRoute><PasswordReset /></PublicRoute>} />
                         <Route path="/confirmresetpassword/:authToken" element={<PublicRoute><ConfirmResetPassword /></PublicRoute>} />
-                        <Route path="/verify/:verifyCode" element={<PublicRoute><Active /></PublicRoute>} />
+                        <Route path="/verify/:verifyCode" element={<Active />} />
                         <Route path="*" element={<NotFound />} />
                       </Routes>
                     </div>

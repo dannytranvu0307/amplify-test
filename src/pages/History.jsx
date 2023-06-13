@@ -10,25 +10,45 @@ function History() {
     const dispatch = useDispatch()
     const [files, setFiles] = useState([]);
 
-    const getFiles = async () => {
+    // const getFiles = async () => {
 
-        const res = () => {
+    //     const res = () => {
+    //         axios.get(`${baseURL}/files`, { withCredentials: true })
+    //             .then(res => setFiles([...res.data.data]))
+    //             .catch(error => {
+    //                 if (error.response.status) {
+    //                     dispatch(refreshToken()).unwrap()
+    //                         .then(res => {
+    //                              if (res.data.type === 'INFO') 
+    //                              { res() } 
+    //                              else {
+    //                             localStorage.removeItem('auth')
+    //                             dispatch(authenticate()) } })
+    //                 }
+    //             })
+    //     }
+    //     res();
+    // }
+    
+    useEffect(() => {
+
+
             axios.get(`${baseURL}/files`, { withCredentials: true })
                 .then(res => setFiles([...res.data.data]))
                 .catch(error => {
                     if (error.response.status) {
                         dispatch(refreshToken()).unwrap()
-                            .then(res => { if (res.status === 200) { res() } else {
+                            .then(res => {
+                                 if (res.data.type === 'INFO'){ 
+                                    axios.get(`${baseURL}/files`, { withCredentials: true })
+                                    .then(res => setFiles([...res.data.data]))
+                                 } 
+                                 else {
                                 localStorage.removeItem('auth')
                                 dispatch(authenticate()) } })
                     }
                 })
-        }
-        res();
-    }
-    
-    useEffect(() => {
-        getFiles()
+        
     }, [])
 
     const renderTable = () => {

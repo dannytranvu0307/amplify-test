@@ -45,7 +45,6 @@ function Login(){
         const submitEmail = $("input#email")
         const submitPassword = $("input#password")
         const formSubmit = $("#login")
-
             if (ValidatorSubmit(formSubmit,[submitEmail,submitPassword],t)){        
             dispatch(login({...form, ["remember"]:remember}))
             .unwrap()
