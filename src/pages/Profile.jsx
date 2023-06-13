@@ -116,7 +116,6 @@ const Profile = () => {
         })
     }
 
-
     const ApiSearchStation = async (name, value) => {
         setInvalidError()
         try {
@@ -245,6 +244,39 @@ const Profile = () => {
         e.target.classList.add('clicked', 'bg-blue-600', 'text-white')
     }
 
+    function debounce(func, delay) {
+        let timerId;
+        return function (...args) {
+            console.log(args)
+          clearTimeout(timerId);
+          timerId = setTimeout(() => {
+            func.apply(this, args);
+          }, delay);
+        };
+      }
+    //   set timeout every times type to call api
+    useEffect(() => {
+        const debounceTimer = setTimeout(() => {
+            if (start.stationName !== "" ){
+            ApiSearchStation(startPoint.stationName, startPoint.stationId);
+            }
+        }, 1000);
+        
+        return () => {
+          clearTimeout(debounceTimer);
+        };
+      }, [startPoint.stationName]);
+      //   set timeout every times type to call api
+      useEffect(() => {
+            const debounceTimer = setTimeout(() => {
+                if (goaltPoint.stationName !== "" ){
+                ApiSearchStation(goaltPoint.stationName,goaltPoint.stationId);
+                }}, 1000);
+            return () => {
+                clearTimeout(debounceTimer);
+            };
+      }, [goaltPoint.stationName]);
+
     // update commuter pass value start and goal
     const onChangeStation = e => {
         setNotFound('')
@@ -270,6 +302,7 @@ const Profile = () => {
 
         e.target.classList.remove("border-red-500", "bg-red-100")
     }
+
     // submit all record on form
     const onSubmit = e => {
         setMessageUpdate(false)

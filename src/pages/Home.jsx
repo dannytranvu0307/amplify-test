@@ -65,6 +65,7 @@ function Home() {
     setData({ ...data, price: option });
   };
 
+  console.log(id)
 
   //convert all image
   const handleFileChange = async (img) => {
