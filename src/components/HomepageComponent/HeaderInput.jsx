@@ -104,7 +104,7 @@ function HeaderInput({ data, onVehiclechange, error, setError, setData, setSelec
             <div className='py-5 '>
                 <span className='text-xs'>{t('Destination')}</span>
                 <div className='w-full relative' >
-                    <input value={data.Destination} className={`w-full text-xs h-8 pl-2 pr-6  bg-[#F9FAFB] border border-black rounded ${error.Destination && ("border-red-500 bg-red-100")}`}
+                    <input value={data.Destination} className={`w-full  h-8 pl-2 pr-6  bg-[#F9FAFB] border border-black rounded ${error.Destination && ("border-red-500 bg-red-100")}`}
                         placeholder={t('Destination_pla')}
                         onChange={(e) => { setData({ ...data, Destination: e.target.value }), setError({ ...error, Destination: false }) }}
                     />
