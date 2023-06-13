@@ -56,7 +56,6 @@ function Home() {
 
 
   const handleTransport = (option) => {
-
     if (option === '') {
       delete id.viaCode
     }
@@ -113,7 +112,6 @@ function Home() {
       const data = {
         imageList: [...image.filter((_, i) => i !== index)],
       };
-
       const dataJSON = JSON.stringify(data);
       localStorage.setItem('imageData', dataJSON);
     } catch (error) {
@@ -182,7 +180,7 @@ function Home() {
               dispatch(refreshToken())
                 .unwrap()
                 .then(res => {
-                  if (res.data.message === 'refresh token is null') {
+                  if (res.data.type!=='INFO') {
                     localStorage.removeItem('auth')
                     dispatch(authenticate())
                   } else {
@@ -234,8 +232,6 @@ function Home() {
             const newTb = [...TableData, response.data.data]
             const sortedTable = [...newTb].sort((a, b) => new Date(a.visitDate) - new Date(b.visitDate));
             setTableData(sortedTable)
-            // setData({ date: "", vehicle: data.vehicle, Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" })
-
             setWarning('')
           })
           .catch(error => {
@@ -243,15 +239,13 @@ function Home() {
               dispatch(refreshToken())
                 .unwrap()
                 .then(res => {
-                  if (res.data.message === 'refresh token is null') {
+                  callApi()
+                  if (res.data.type!== 'INFO') {
                     localStorage.removeItem('auth')
                     dispatch(authenticate())
-                  } else {
-                    callApi()
-                  }
-                })
-            }
-          })
+                  } 
+                }) 
+              }})
         callApi()
       } else if (departure !== '' && departure === arrival) {
         setWarning(t('AlertSame'))

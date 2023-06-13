@@ -10,13 +10,15 @@ function History() {
     const dispatch = useDispatch()
     const [files, setFiles] = useState([]);
 
+
     const getFiles = async () => {
         axios.get(`${baseURL}/files`, { withCredentials: true })
             .then(res => setFiles([...res.data.data]))
             .catch(error => {
                 if (error.response.status === 401){
                     timeOutAuthen(getFiles)
-                }})
+            }
+        })
     }
     
     useEffect(() => {
@@ -32,8 +34,8 @@ function History() {
                     callback()
                 }
             }else { 
-                    localStorage.removeItem('auth');
-                    dispatch(authenticate())}
+                localStorage.removeItem('auth');
+                dispatch(authenticate())}
         })
     }
 
