@@ -11,37 +11,58 @@ function History() {
     const [files, setFiles] = useState([]);
 
     const getFiles = async () => {
-
-        const res = () => {
-            axios.get(`${baseURL}/files`, { withCredentials: true })
-                .then(res => setFiles([...res.data.data]))
-                .catch(error => {
-                    if (error.response.status) {
-                        dispatch(refreshToken()).unwrap()
-                            .then(res => { if (res.status === 200) { res() } else {
-                                localStorage.removeItem('auth')
-                                dispatch(authenticate()) } })
-                    }
-                })
-        }
-        res();
+        axios.get(`${baseURL}/files`, { withCredentials: true })
+            .then(res => setFiles([...res.data.data]))
+            .catch(error => {
+                if (error.response.status === 401){
+                    timeOutAuthen(getFiles)
+                }})
     }
     
     useEffect(() => {
         getFiles()
     }, [])
 
+    const timeOutAuthen = async (callback,id,name) => {
+        dispatch(refreshToken()).unwrap().then(res => {
+            if (res.data.type === "INFO" && res.data.code === ""){
+                if (id && name){
+                    callback(id,name)
+                }else {
+                    callback()
+                }
+            }else { 
+                    localStorage.removeItem('auth');
+                    dispatch(authenticate())}
+        })
+    }
+
+    const handleDowload = async (fileId,fileName) =>{
+        axios.get(`${baseURL}` + "/files/" + fileId, { responseType: 'blob',withCredentials: true})
+        .then(res =>{
+            const anchor = document.createElement('a')
+            const url = window.URL.createObjectURL(res.data);
+            anchor.href = url;
+            anchor.download = fileName;
+            anchor.download;
+            anchor.click()
+        })
+        .catch(err=>{
+            if (err.response.status===401){
+                timeOutAuthen(handleDowload,fileId,fileName)
+            }
+        })
+    }
+
     const renderTable = () => {
         const table = [];
         for (let i = 0; i < (10 - files.length); i++) {
             const row = [];
-
             for (let j = 0; j < 2; j++) {
                 row.push(
                     <td className="text-sm h-9 border font-extrabold border-borderTable-borderTable font-light px-6 py-2 whitespace-nowrap" key={j}>{``}</td>
                 );
             }
-
             table.push(<tr className="bg-white border h-9  border-borderTable-borderTable transition duration-300 ease-in-out hover:bg-gray-100" key={i}>{row}</tr>);
         }
 
@@ -92,7 +113,8 @@ function History() {
                                                             {files.map((file, key) => (
                                                                 <tr className="bg-white border h-4  border-borderTable-borderTable transition duration-300 ease-in-out hover:bg-gray-100" key={key}>
                                                                     <td className="text-sm bg-white h-4  overflow-hidden border font-extrabold text-ellipsis border-borderTable-borderTable font-light px-2 md:px-6 py-2 whitespace-nowrap" title={file.exportedDate} >{file.exportedDate}</td>
-                                                                    <td className="text-sm bg-white h-4  overflow-hidden text-blue-700 underline px-2 md:px-6 py-2 text-ellipsis whitespace-nowrap overflow-hidden underline-offset-4" title={file.fileName}><Link to={`${baseURL}` + "/files/" + file.fileId}>{file.fileName}</Link></td>
+                                                                    <td className="text-sm bg-white h-4  overflow-hidden text-blue-700 underline px-2 md:px-6 py-2 text-ellipsis whitespace-nowrap overflow-hidden underline-offset-4" title={file.fileName}>
+                                                                        <span onClick={()=>handleDowload(file.fileId,file.fileName)}>{file.fileName}</span></td>
                                                                 </tr>))}
                                                             {renderTable()}
                                                         </tbody>

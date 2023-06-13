@@ -45,10 +45,6 @@ function App() {
       : <Navigate to="/" state={{ from: location }} replace />;
   }
 
-
-
-
-
   useEffect(() => {
     Aos.init({ duration: 900 });
     dispatch(authenticate()).unwrap()

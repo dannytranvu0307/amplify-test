@@ -1,5 +1,4 @@
 import { useState, memo, useEffect } from "react";
-import { Link, Navigate } from "react-router-dom";
 import { fullName, email, department, password, start, goal, new_password, confirm_new_password } from '../instaces';
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, authenticate, refreshToken } from "../features/auth/loginSlice";
@@ -54,7 +53,11 @@ const Profile = () => {
             htmlFor: "current_password",
         }, new_password,
         confirm_new_password]
-
+    const a = '{"departure":"東京駅","stationId":"000001"}'
+    const b = '{"departure":"志木駅","stationId":"000002"}'
+    const c = JSON.parse(a)
+    const d = JSON.parse(b)
+    console.log(c,d)
     // commuter pass state
     const [commuterPass, setCommuterPass] = useState({ start: null, goal: null, viaDetails: [] })
 
@@ -102,20 +105,18 @@ const Profile = () => {
         return () => setMessageUpdate(false)
     }, [])
 
-    // callback every time timeout token
+    // callback every time timeout
     const timeOutAuthen = async (callback,e) => {
         dispatch(refreshToken()).unwrap().then(res => {
-            console.log(res)
-            if (res.response.status === 403 || res.response.status === 404) {
-                localStorage.removeItem('auth')
-                return <Navigate to="/login" />
-            }else if (res.response.data.type === "INFO" && res.response.code === ""){
+            if (res.data.type === "INFO" && res.data.code === ""){
                 if (e){
                     callback(e)
                 }else {
                     callback()
                 }
-            }
+            }else { 
+                    localStorage.removeItem('auth');
+                    dispatch(authenticate())}
         })
     }
 
@@ -316,7 +317,7 @@ const Profile = () => {
                             setMessageUpdate(true);
                             setMessagePassword();
                         } else {
-                            
+                            console.log(res)
                             if (res.data.code === "API004_ER") {
                                 setMessagePassword('oldPasswordNotMatch');
                             }else if (res.status === 401){
@@ -375,6 +376,7 @@ const Profile = () => {
     const onBlur = (e) => {
 
     }
+    
     const handleCancel = () => {
         setStartPoint({ stationCode: "", stationName: "" })
         setGoalPoint({ stationCode: "", stationName: "" })
