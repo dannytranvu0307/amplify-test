@@ -183,6 +183,7 @@ function Home() {
                 .unwrap()
                 .then(res => {
                   if (res.data.message === 'refresh token is null') {
+                    localStorage.removeItem('auth')
                     dispatch(authenticate())
                   } else {
                     callApi()
@@ -243,6 +244,7 @@ function Home() {
                 .unwrap()
                 .then(res => {
                   if (res.data.message === 'refresh token is null') {
+                    localStorage.removeItem('auth')
                     dispatch(authenticate())
                   } else {
                     callApi()

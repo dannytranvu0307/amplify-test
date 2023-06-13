@@ -22,9 +22,9 @@ const Sidebar = () => {
     const handleLogout = () => {
         dispatch(logout()).unwrap().then(res => {
             if(res.data.type === "INFO"){
-                // localStorage.removeItem('auth')
                 navigate("/login")
             }else{
+                localStorage.removeItem('auth')
                 dispatch(authenticate())
             }
         })

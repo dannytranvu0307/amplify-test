@@ -79,6 +79,7 @@ function HomeFooter2({onFileChange, tableData ,img, deleteAllFile}){
                 .then(
                     res => {
                         if (res.data.message === 'refresh token is null') {
+                          localStorage.removeItem('auth')
                           dispatch(authenticate())
                         } else {
                           callApi()

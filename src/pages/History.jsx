@@ -18,13 +18,13 @@ function History() {
                 .catch(error => {
                     if (error.response.status) {
                         dispatch(refreshToken()).unwrap()
-                            .then(res => { if (res.status === 2000) { res() } else { dispatch(authenticate()) } })
-
+                            .then(res => { if (res.status === 2000) { res() } else {
+                                localStorage.removeItem('auth')
+                                dispatch(authenticate()) } })
                     }
                 })
         }
         res();
-
     }
     useEffect(() => {
         getFiles()

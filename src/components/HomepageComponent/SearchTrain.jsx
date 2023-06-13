@@ -74,6 +74,7 @@ function SearchTrain({ setData, data, onTransport, error, setError, onSearching,
               .unwrap()
               .then(res => {
                 if (res.data.message === 'refresh token is null') {
+                  localStorage.removeItem('auth')
                   dispatch(authenticate())
                 } else {
                   callApi()
@@ -113,7 +114,7 @@ function SearchTrain({ setData, data, onTransport, error, setError, onSearching,
               .unwrap()
               .then(res => {
                 if (res.data.message === 'refresh token is null') {
-
+                  localStorage.removeItem('auth')
                   dispatch(authenticate())
                 }
               })
@@ -142,7 +143,7 @@ function SearchTrain({ setData, data, onTransport, error, setError, onSearching,
               .unwrap()
               .then(res => {
                 if (res.data.message === 'refresh token is null') {
-
+                  localStorage.removeItem('auth')
                   dispatch(authenticate())
                 }
               })
@@ -172,7 +173,7 @@ function SearchTrain({ setData, data, onTransport, error, setError, onSearching,
               .unwrap()
               .then(res => {
                 if (res.data.message === 'refresh token is null') {
-
+                  localStorage.removeItem('auth')
                   dispatch(authenticate())
                 }
               })
@@ -182,6 +183,8 @@ function SearchTrain({ setData, data, onTransport, error, setError, onSearching,
       setSuggestionsTransport([])
     }
   }, [data.transport])
+
+  
   return (
     <div className='pt-3 w-full min-h-min border-b-[1.5px] border-gray-500 pb-3'>
       <div className='flex'>

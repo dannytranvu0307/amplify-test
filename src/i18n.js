@@ -17,8 +17,8 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: localStorage.getItem('language')||'jp',
-    fallbackLng: localStorage.getItem('language')||'jp',
+    lng: 'jp',
+    fallbackLng:'jp',
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     }
