@@ -87,13 +87,10 @@ function SearchTrain({ setData, data, onTransport, error, setError, onSearching,
         });
       callApi();
 
-
     } else if (date === "" || date === null || departure === '' || departure === null || departure === undefined || arrival === '' || arrival === null || arrival === undefined || payment === '' || payment === null || payment === undefined || Destination === '' || Destination === null || Destination === undefined) {
       setAlert(t('alert'))
-      onSearching({ noData: t('Result') })
     } else if (departure !== "" && arrival !== "" && departure === arrival) {
       setAlert(t('AlertSame'))
-      onSearching({ noData: t('Result') })
     }
   }
   //Departure

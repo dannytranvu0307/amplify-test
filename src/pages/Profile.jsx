@@ -53,11 +53,7 @@ const Profile = () => {
             htmlFor: "current_password",
         }, new_password,
         confirm_new_password]
-    const a = '{"departure":"東京駅","stationId":"000001"}'
-    const b = '{"departure":"志木駅","stationId":"000002"}'
-    const c = JSON.parse(a)
-    const d = JSON.parse(b)
-    console.log(c,d)
+  
     // commuter pass state
     const [commuterPass, setCommuterPass] = useState({ start: null, goal: null, viaDetails: [] })
 
