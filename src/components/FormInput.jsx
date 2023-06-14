@@ -8,9 +8,9 @@ const FormInput = (props) => {
     const {label, placeholder,forHtml,value,type,onChange,invalidError,...inputProps} = props
     const dispatch = useDispatch()
     const departments_lst = useSelector(selectDepartments)
-    const handleCheckShow = useCallback(() => {
+    const handleCheckShow = () => {
         checkShow(!show)
-    },[])
+    }
 
     useEffect(()=>{
         if (type === "departmentId"){
@@ -95,7 +95,7 @@ const FormInput = (props) => {
                 <span className={`text-red-500 text-xs`}>{t("") || t(error.name)}</span>
                 {
                     type === "password" && hidden &&
-                    <div className="absolute cursor-pointer right-2 top-9" onClick={handleCheckShow}>
+                    <div className={`absolute cursor-pointer right-2 top-9 ${show ? "after:absolute after:content-[''] after:w-8 after:rounded after:h-[2px] after:bg-black after:-rotate-45 after:top-1/2 after:-translate-x-1":""}`} onClick={handleCheckShow}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 peer">
                     <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
                     <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" clipRule="evenodd" />

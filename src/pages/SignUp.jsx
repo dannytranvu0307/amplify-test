@@ -55,6 +55,7 @@ const SignUp = () => {
     }
 
 return (
+    <>
     <section className="bg-gray-50 h-full align-middle pb-12" data-aos="fade-left">
         <div className="flex flex-col items-center justify-center px-2 md:px-6 py-2 md:py-8 mx-auto md:h-full lg:py-0">
         <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
@@ -65,19 +66,19 @@ return (
                 <form id="signup" className="space-y-4 md:space-y-6" onSubmit={e => onSubmit(e)} autoComplete="off">
                      <FormInput 
                                 onChange={e=>onChange(e)}   {...fullName}               
-                            />     
+                                />     
                             <FormInput 
                                 onChange={e=>onChange(e)}   {...email}               
-                            /> 
+                                /> 
                             <FormInput 
                                 onChange={e=>onChange(e)}    {...department}              
-                            /> 
+                                /> 
                             <FormInput 
                                 onChange={e=>onChange(e)}    {...password}              
-                            /> 
+                                /> 
                             <FormInput 
                                 onChange={e=>onChange(e)}   {...confirm_password}               
-                            /> 
+                                /> 
                     <div>
                     {messageError && <span className="text-red-500 text-xs">{t(messageError)}</span>}
                     </div>
@@ -96,11 +97,12 @@ return (
                 </form>
             </div>
         </div>
-        {
-        isSuccess && 
-        <ErrorNotification>registerSuccess</ErrorNotification>
-        } 
     </div>
-    </section>
+        </section>
+        {
+            isSuccess && 
+            <ErrorNotification>registerSuccess</ErrorNotification>
+        } 
+        </>
 )}
 export default memo(SignUp);
