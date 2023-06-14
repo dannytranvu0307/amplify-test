@@ -3,7 +3,6 @@ import {useEffect, useState} from 'react';
 const Language = () => {
     const {t,i18n} = useTranslation();
     const handleChange = (e) => {
-        
         i18n.changeLanguage(e.target.value)
         localStorage.setItem('language',e.target.value)
     }
@@ -24,7 +23,7 @@ const Language = () => {
             </label>
             <select
             onChange={(e)=>handleChange(e) }
-            defaultValue={localStorage.getItem('language')}
+            defaultValue={localStorage.getItem('language')? localStorage.getItem('language'):'jp'}
             className="
             text-base font-bold rounded 
             border-2 border-white
