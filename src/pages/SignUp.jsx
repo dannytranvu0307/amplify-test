@@ -98,11 +98,8 @@ return (
             </div>
         </div>
     </div>
-        </section>
-        {
-            isSuccess && 
-            <ErrorNotification>registerSuccess</ErrorNotification>
-        } 
-        </>
+    </section>
+    {isSuccess && <ErrorNotification>registerSuccess</ErrorNotification>} 
+    </>
 )}
 export default memo(SignUp);

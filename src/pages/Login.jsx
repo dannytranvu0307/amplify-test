@@ -124,7 +124,7 @@ function Login(){
             </div>
        
         </section>  
-        {isActive &&  <ErrorNotification>{isActiveMessage}</ErrorNotification>}
+        {isActive && <ErrorNotification>{isActiveMessage}</ErrorNotification>}
         {isActiveError && <Modal />}
     </>
     )
