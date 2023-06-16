@@ -23,7 +23,7 @@ import NotFound from './pages/NotFound';
 
 
 function App() {
-
+  console.log('mount')
   const isAuthenticated = useSelector(selectIsAuthenticated)
   const dispatch = useDispatch();
  

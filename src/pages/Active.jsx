@@ -7,8 +7,19 @@ const VerifyCode = () => {
     const dispatch = useDispatch()
     const { verifyCode } = useParams('verifyCode')
     useEffect(()=>{
-        dispatch(verify({verifyCode:verifyCode})).unwrap().then((res)=>{
+        let timerId;
+        timerId = setTimeout(()=>{
+            dispatch(verify({verifyCode:verifyCode}))
+            .unwrap()
+            .then((res)=>{
             navigate('/login')});
-    })
+        },500)
+        return () => {
+            clearTimeout(timerId);
+          };
+    },[])
+
+
+
 }
-export default memo(VerifyCode)
+export default memo(VerifyCode) 

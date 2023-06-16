@@ -117,7 +117,7 @@ function SearchTrain({ setData, data, onTransport, error, setError, onSearching,
               dispatch(refreshToken())
                 .unwrap()
                 .then(res => {
-                  console.log(res);
+                  
                   if (res.data.type !== 'INFO') {
                     localStorage.removeItem('auth');
                     dispatch(authenticate());

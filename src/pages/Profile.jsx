@@ -202,7 +202,6 @@ const Profile = () => {
                         const res = await axios.get(`${baseURL}/cp-routes?start=${startPoint.stationCode}&goal=${goaltPoint.stationCode}`, { withCredentials: true })
                         setLstCp(res.data.data)
                     } catch (err) {
-                        console.log(err.response)
                         setLstCp([])
                         if (err.response.data.code === "API017_ER04") {
                             setNotFound('notFoundCp')
@@ -247,7 +246,6 @@ const Profile = () => {
     function debounce(func, delay) {
         let timerId;
         return function (...args) {
-            console.log(args)
           clearTimeout(timerId);
           timerId = setTimeout(() => {
             func.apply(this, args);
@@ -267,9 +265,10 @@ const Profile = () => {
         };
       }, [startPoint.stationName]);
       //   set timeout every times type to call api
+
       useEffect(() => {
             const debounceTimer = setTimeout(() => {
-                if (goaltPoint.stationName !== "" ){
+                if (goaltPoint.stationName.length>1  ){
                 ApiSearchStation(goaltPoint.stationName,goaltPoint.stationId);
                 }}, 1000);
             return () => {
@@ -346,7 +345,6 @@ const Profile = () => {
                             setMessageUpdate(true);
                             setMessagePassword();
                         } else {
-                            console.log(res)
                             if (res.data.code === "API004_ER") {
                                 setMessagePassword('oldPasswordNotMatch');
                             }else if (res.status === 401){
