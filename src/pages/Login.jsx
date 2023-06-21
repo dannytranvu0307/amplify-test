@@ -1,4 +1,4 @@
-import { useState, memo, useMemo} from "react";
+import { useState, memo,useEffect} from "react";
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,7 +9,7 @@ import FormInput from "../components/FormInput";
 import ValidatorSubmit from "../functional/ValidatorSubmit";
 import { login, authenticate,
     selectIsActive,selectIsActiveMessage,
-    selectActiveError } from "../features/auth/loginSlice";
+    selectActiveError , changeActive  } from "../features/auth/loginSlice";
 function Login(){
     // change language
     const { t } = useTranslation();
@@ -60,7 +60,11 @@ function Login(){
                 }
 
     }
-
+    useEffect(()=>{
+        return ()=>{
+        dispatch(changeActive())
+        }
+    },[])
    // const resetPassword = useMemo(()=><Link to="/register" className="font-medium text-primary-600 hover:underline">{t("sign_up_link")}</Link>,[localStorage.getItem('language')])
 
     return (

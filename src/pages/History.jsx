@@ -76,18 +76,19 @@ function History() {
         mx-auto items-center
         w-full
         px-2
-        mb-16 py-8 h-full
-        py-2
+        mt-[-10px]
+        mb-16  h-full
         md:w-4/5
         lg:w-2/3
-        lg:py-8"
+        lg:py-6"
+        
             data-aos="zoom-out-up">
             <div className="bg-white rounded-lg shadow md:mt-0 w-full h-full xl:p-0">
                 <div className="flex flex-col px-4 h-full">
-                    <h1 className="text-xl pt-8 px-2 md:px-12 text-ms md:text-lg font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
+                    <h1 className="text-xl pt-8  md:px-12 text-ms md:text-lg font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
                         {t("lbviewExportFileHistory")}
                     </h1>
-                    <div className="py-8 flex mx-auto xl:px-8 sm:py-1 sm:px-1 md:py-8 md:px-8">
+                    <div className="py-4 flex mx-auto xl:px-8 sm:py-1 sm:px-1 md:px-8">
                         <div className="flex mx-auto">
                             <div className="bg-white flex mx-auto overflow-hidden">
                                 <div className="item mb-2 flex flex-wrap ">

@@ -40,12 +40,14 @@ function Home() {
   }, [user])
 
   useEffect(() => {
+    dispatch(authenticate())
     const data = JSON.parse(localStorage.getItem('imageData'))
     if (data) {
       setImage(data.imageList)
     }
-
   }, [])
+
+
   const handleVehicleChange = (option) => {
     setData({ date: data.date, vehicle: option, Destination: "", price: "", round: t('1way'), departure: "", arrival: "", payment: "", transport: "" });
     setError({ date: false, payment: false, Destination: false, departure: false, arrival: false, price: false });
@@ -82,7 +84,6 @@ function Home() {
     } catch (error) {
       return error
     }
-
   };
   //covert image too
   const compressImage = (file) => {
