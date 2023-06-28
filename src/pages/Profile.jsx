@@ -1,9 +1,9 @@
 import { useState, memo, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fullName, email, department, password, start, goal } from '../instaces';
+import { fullName, email, department, password, start, goal, new_password, confirm_new_password } from '../instaces';
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, authenticate } from "../features/auth/loginSlice";
-import { userUpdate, selectUpdateSuccess, selectUpdateMessage } from "../features/user/userSlice";
+import { userUpdate, selectUpdateMessage } from "../features/user/userSlice";
 import { useTranslation } from 'react-i18next';
 import ErrorNotification from "../components/ErrorNotification";
 import { baseURL } from "../features/auth/loginSlice";
@@ -27,13 +27,15 @@ const Profile = () => {
     const [mounted, setMounted] = useState(true);
     const [checkTicket, setCheckTicket] = useState(true);
     const [notFound, setNotFound] = useState('')
+    const [messagePassword,setMessagePassword] = useState()
+    const [messageUpdate, setMessageUpdate] = useState(false)
 
     // user infor state [dependences ①]
     const infor = [
         { ...fullName, disabled: disabledName },
         { ...department, disabled: disabledDepartment, type: "departmentId" },
         { ...email, disabled: true },
-        { ...password, text: 'type', disabled: disabledPassWord, placeholder: "●●●●●●●●●●●●", }
+        { ...password, type: 'text', disabled: disabledPassWord, placeholder: "●●●●●●●●●●●●", }
     ]
     // commuter pass search instances
     const inputTickets = [start, goal]
@@ -45,27 +47,10 @@ const Profile = () => {
             label: "current_password",
             name: "current_password",
             type: "password",
-            required: true,
             placeholder: "current_password_pla",
             htmlFor: "current_password",
-        }, {
-            id: "new_password",
-            label: "new_password",
-            name: "new_password",
-            type: "password",
-            htmlFor: "new_password",
-            placeholder: "new_password_pla",
-            required: true,
-        },
-        {
-            id: "confirm_new_password",
-            label: "confirm_new_password",
-            name: "confirm_new_password",
-            type: "password",
-            htmlFor: "confirm_new_password",
-            placeholder: "confirm_new_password",
-            required: true,
-        }]
+        }, new_password,
+        confirm_new_password]
 
     // commuter pass state
     const [commuterPass, setCommuterPass] = useState({ start: null, goal: null, viaDetails: [] })
@@ -81,9 +66,7 @@ const Profile = () => {
         stationCode: "",
         stationName: ""
     })
-    // update success message state
-    const isSuccess = useSelector(selectUpdateSuccess);
-    const message = useSelector(selectUpdateMessage);
+
     // form input for user infomation
     const [form, setForm] = useState({});
 
@@ -105,7 +88,7 @@ const Profile = () => {
                 setCommuterPass({
                     start: user.commuterPass.departure,
                     goal: user.commuterPass.destination,
-                    viaDetails: user.commuterPass.viaDetails
+                    viaDetails: []
                 })
             }
         }
@@ -114,10 +97,12 @@ const Profile = () => {
     // side effect proccess
     useEffect(() => {
         dispatch(authenticate())
+        return ()=> setMessageUpdate(false)
     }, [])
 
 
     const ApiSearchStation = async (name, value) => {
+        setInvalidError('')
         try {
             const res = await axios.get(`${baseURL}/stations?stationName=${value}`, { withCredentials: true })
             if (name === "start") {
@@ -160,26 +145,38 @@ const Profile = () => {
         }
         setMounted(!mounted)
         setLstCp([])
+        setMessageUpdate(false)
         if (!mounted) {
-            setCommuterPass({ ...commuterPass, start: commuterPass.start, goal: commuterPass.goal })
+            if (user.commuterPass){
+                setCommuterPass({ ...commuterPass, start: user.commuterPass.departure, goal:  user.commuterPass.destination })
+            }
+            else {
+                setCommuterPass({...commuterPass, start: null,goal:null})
+            }
         }
     }
 
     // submit to search commuter pass 
     const onSubmitSearch = async () => {
-        if (startPoint.stationCode !== "" && goaltPoint.stationCode !== ""){
-            try {
-                const res = await axios.get(`${baseURL}/cp-routes?start=${startPoint.stationCode}&goal=${goaltPoint.stationCode}`, { withCredentials: true })
-                setLstCp(res.data.data)
-            } catch (err) {
-                setLstCp([])
-                if (err.response.data.message === "The specified route is not found."){
-                    setNotFound('notFoundCp')
+        if ((startPoint.stationCode !== "" && startPoint.stationCode !== undefined)  && (goaltPoint.stationCode !== "" && goaltPoint.stationCode !== undefined)){
+            if (startPoint.stationCode !== goaltPoint.stationCode){
+                try {
+                    const res = await axios.get(`${baseURL}/cp-routes?start=${startPoint.stationCode}&goal=${goaltPoint.stationCode}`, { withCredentials: true })
+                    setLstCp(res.data.data)
+                } catch (err) {
+                    setLstCp([])
+                    if (err.response.data.code === "API017_ER04"){
+                        setNotFound('notFoundCp')
+                    }else if (err.response.data.code === "API017_ER"){
+                        setNotFound('notFoundCp')
+                    }
                 }
+            }else {
+                setInvalidError('AlertSame')
             }
         }else{
             setLstCp([])
-            if (startPoint.stationCode === ""){
+            if (startPoint.stationCode === "" || startPoint.stationCode === undefined){
                 document.querySelector("#start").focus()
             }else{
                 document.querySelector("#goal").focus()
@@ -215,6 +212,7 @@ const Profile = () => {
 
     // submit all record on form
     const onSubmit = e => {
+        setMessageUpdate(false)
         e.preventDefault();
         const $ = document.querySelector.bind(document)
         const formSubmit = $('#profile')
@@ -227,9 +225,10 @@ const Profile = () => {
 
         const { departmentId, fullName, email, current_password, new_password, confirm_new_password, ...userData } = form
         if (ValidatorSubmit(formSubmit, [eName, eDepartmentId, eOldPassword, eNewPassword, eConfirmNewPassword]))
-            if ((checkTicket && commuterPass.viaDetails === undefined) || (!checkTicket && commuterPass.viaDetails !== undefined)) {
-                dispatch(userUpdate({
-                    fullName: fullName,
+            if ((!checkTicket && commuterPass.viaDetails.length === 0) === (checkTicket && commuterPass.viaDetails.length !== 0)) {
+                if (commuterPass.viaDetails.length === 0){
+                    dispatch(userUpdate({
+                    fullName: fullName.replace(/\s\s+/g, ' '),
                     email: email,
                     departmentId: +departmentId,
                     oldPassword: current_password,
@@ -237,15 +236,71 @@ const Profile = () => {
                     commuterPass: {
                         departure: commuterPass.start,
                         destination: commuterPass.goal,
-                        viaDetails: commuterPass.viaDetails
+                        viaDetails: null
                     }
                 })).unwrap().then(res => {
                     if (res.status === 200) {
                         dispatch(authenticate())
-                            .unwrap().then(() => setMounted(true))
+                            .unwrap().then(() => {
+                            });
+                            setMounted(true)
+                            setCheckTicket(true)
+                            setCommuterPass({...commuterPass, viaDetails: []})
+                            setStartPoint({})
+                            setGoalPoint({})
+                            setDisabledPassword(true)
+                            setInvalidError('')
+                            setDisabledname(true)
+                            setDisabledDepartment(true)
+                            setMessageUpdate(true)
+                            oldPasswordNotMatch()
+                    }else {
+                        if(res.data.code === "API004_ER"){
+                            setMessagePassword('oldPasswordNotMatch')
+                        }
                     }
                 })
-            } else {
+                }
+                else{ 
+                    dispatch(userUpdate({
+                        fullName: fullName,
+                        email: email,
+                        departmentId: +departmentId,
+                        oldPassword: current_password,
+                        newPassword: new_password,
+                        commuterPass: {
+                            departure: commuterPass.start,
+                            destination: commuterPass.goal,
+                            viaDetails: [...commuterPass.viaDetails]
+                        }
+                    })).unwrap().then(res => {
+                        if (res.status === 200) {
+                            dispatch(authenticate())
+                                .unwrap().then(() => {
+                                });
+                                setMounted(true)
+                                    setCheckTicket(true)
+                                    setCommuterPass({...commuterPass, viaDetails: []})
+                                    setStartPoint({})
+                                    setGoalPoint({})
+                                    setDisabledPassword(true)
+                                    setInvalidError('')
+                                    setDisabledname(true)
+                                    setDisabledDepartment(true)
+                                    setMessageUpdate(true)
+                                    oldPasswordNotMatch()
+                        }else {
+                                if(res.data.code === "API004_ER"){
+                                    setMessagePassword('oldPasswordNotMatch')
+                                }
+                            }
+                        
+                    })
+                }
+                
+            
+            } 
+            else {
                 if (lstCp.length === 0){
                     setInvalidError('requiredSearchBtn')
                 }else {
@@ -258,15 +313,15 @@ const Profile = () => {
     // Not found valid commuter pass
 
     return (
-        <div className="flex lg:text-lg sm:text-sm md:text-md xl:text-xl flex-col items-center px-6 py-8 h-full md:h-full lg:py-0 mb-16">
-            <div className="min-w-77 bg-white rounded-lg shadow md:mt-0 xl:p-0">
-                <div className="flex flex- p-6  sm:p-8">
+        <div className="flex md:ml-16 flex-col items-center px-2 md:px-6 py-8 h-full md:h-full mb-16">
+            <div className="min-w-full lg:min-w-min bg-white rounded-lg shadow md:mt-0 xl:p-0">
+                <div className="flex flex-col px-5 py-5 md:p-6 sm:p-8">
                     <div className="flex flex-col">
-                        <h1 title="aaaa-aaaaaa-aaaaaaa-aaaaaaaaaaaa" className="w-full text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                        <h1 className="w-full text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                             {t("profile")}
                         </h1>
-                        <div className="flex">
-                            <form className="flex flex-wrap min-w-[500px]" onSubmit={e => onSubmit(e)}>
+                        <div className="flex flex-col md:flex-row ">
+                            <form className="flex flex-wrap min-w-full md:min-w-[300px] lg:min-w-[500px]" onSubmit={e => onSubmit(e)}>
                                 {/* <div className="flex flex-col  w-full flex-none"> */}
                                 <div id="profile" className="relative mt-6 flex flex-col  w-full flex-none">
                                     <FormInput onChange={(e) => onChange(e)} value={form.fullName} {...infor[0]} />
@@ -304,20 +359,24 @@ const Profile = () => {
                                                     <div className="relative  mt-6" >
                                                         <FormInput onChange={(e) => onChange(e)} value={form.confirm_new_password} {...passwords[2]} />
                                                     </div>
-                                                    <div className="absolute right-0 bg-red-500 rounded-full h-7 w-7 text-white flex my-5 cursor-pointer">
+                                                    <div className="absolute 
+                                                    left-1/2 translate-y-1/2 -translate-x-1/2
+                                                    md:-translate-x-full md:left-full md:translate-y-1/2
+                                                    bg-red-500 rounded-full 
+                                                    h-7 w-7 text-white flex md:my-5 cursor-pointer">
                                                         <svg onClick={handleDisable} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor"
                                                             className="w-6 h-6 flex mx-auto translate-y-[1px]">
                                                             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
                                                         </svg>
                                                     </div>
 
-                                                </div> <span className="text-red-500  pt-8 text-xs">{message && t(message)}</span></>)
+                                                </div> <span className="text-red-500  pt-8 text-xs">{messagePassword && t(messagePassword)}</span></>)
                                     }
                                 </div>
                                 {/* </div> */}
                             </form>
                             <div id="computerPass" className="flex flex-wrap" >
-                                <div className="ml-6 flex-1">
+                                <div className="mt-12 md:mt-6 md:ml-6 flex-1">
                                     <span
                                         className="flex mb-2 text-sm font-medium text-gray-900 grow-0 items-end">
                                         {t("reason_ticket")}
@@ -362,14 +421,14 @@ const Profile = () => {
                                                     <div className="relative">
                                                         <FormInput value={commuterPass.start} onChange={e => onChangeStation(e)} {...inputTickets[0]} />
 
-                                                        <div className="absolute bg-white w-full rounded drop-shadow-lg">
+                                                        <div className="absolute bottom bg-white w-full rounded drop-shadow-lg">
                                                             {startSuggestion.map((item, i) => (
                                                                 <p className="px-2 py-1  duration-100 
-                                                        transision-all cursor-pointer 
-                                                        hover:bg-blue-200
-                                                        last:rounded-b
-                                                        first:rounded-t
-                                                        "
+                                                                    transision-all cursor-pointer 
+                                                                    hover:bg-blue-200
+                                                                    last:rounded-b
+                                                                    first:rounded-t
+                                                                    "
                                                                     onClick={() => handleStartPoint(item.stationCode, item.stationName)}
                                                                     key={i}>{item.stationName}
                                                                 </p>
@@ -400,12 +459,12 @@ const Profile = () => {
                                             </div>
                                             <span className="text-red-500  pt-8 text-md">{t(validError)}</span>
                                             <span className="text-red-500  pt-8 text-md">{t(notFound)}</span>
-                                            <div className="space-y-3 lg:text-lg sm:text-sm md:text-md xl:text-xl">
+                                            <div className="space-y-3 text-sm  md:text-md last:bottom-0">
                                                 {lstCp && lstCp.map((item, i) => (
                                                     <div key={i} className="group cursor-pointer">
                                                         <div className={`divCp justify-items-stretch w-full border rounded-[10px] border-black flex h-10 px-3 pointer`}
                                                             onClick={(e) => handleUpdateItem(e, item.summary.start.stationName, item.summary.goal.stationName, item.commuterPassLink)} key={i}>
-                                                            <span className="pointer-events-none flex my-auto after:content-['ー'] after:px-1">{item.summary.start.stationName}</span>
+                                                            <span className="pointer-events-none flex my-auto whitespace-nowrap text-ellipsis overflow-hidden  after:content-['ー'] after:px-1">{item.summary.start.stationName}</span>
                                                             <span className="pointer-events-none flex my-auto  whitespace-nowrap text-ellipsis overflow-hidden max-w-[200px]">
                                                                 {item.sections.map((e, i) => {
                                                                     if (e.type === "point" && e.stationName !== item.summary.start.stationName && e.stationName !== item.summary.goal.stationName) {
@@ -414,10 +473,15 @@ const Profile = () => {
                                                                 })
                                                                 }
                                                             </span>
-                                                            <span className="pointer-events-none flex my-auto ">{item.summary.goal.stationName}</span>
-                                                            <span className="pointer-events-none flex my-auto pl-3 ml-auto">{t("transfer")}：{item.summary.move.transitCount}{t('times')}</span>
+                                                            <span className="pointer-events-none flex my-auto whitespace-nowrap text-ellipsis overflow-hidden  ">{item.summary.goal.stationName}</span>
+                                                            <span className="pointer-events-none flex my-auto pl-3 ml-auto whitespace-nowrap">{t("transfer")}：{item.summary.move.transitCount}{t('times')}</span>
                                                         </div>
-                                                        <div className="absolute flex flex-col hidden group-hover:block z-99 bg-white drop-shadow-lg rounded max-h-[150px] overflow-y-auto">
+                                                        <div className="relative md:absolute w-full flex 
+                                                        flex-col hidden group-hover:translate-x-0 
+                                                        md:group-hover:-translate-y-1/2 group-hover:block 
+                                                        z-50 bg-white shadow-md drop-shadow-lg 
+                                                        md:group-hover:-translate-x-full rounded 
+                                                        max-h-[150px] overflow-y-auto">
                                                             {item.sections.map((e, i) => {
                                                                 if (e.type === "move" && e.transport) {
                                                                     return <div key={i} style={{ color: e.transport.lineColor }} className="pointer-events-none px-3 flex my-auto after:px-1"><span className="border border-2 rounded mx-2" style={{ borderColor: e.transport.lineColor }}></span >{e.transport.lineName}</div>
@@ -452,7 +516,9 @@ const Profile = () => {
 
                 </div>
             </div>
-            {isSuccess && <ErrorNotification>userInfoUpdateMessageSuccess</ErrorNotification>}
+            {messageUpdate && 
+            <ErrorNotification>userInfoUpdateMessageSuccess</ErrorNotification>
+            }
         </div>
     )
 }

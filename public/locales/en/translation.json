@@ -24,7 +24,7 @@
     "er_username_undi": "Please enter your full name in all uppercase and without special characters.",
     "er_username_len": "Please enter a name between 6 and 64 characters.",
     "er_input_empty": "This field is required.",
-    "er_input_len_password":"Please enter at least 8 characters for the password.",
+    "er_input_len_password":"Please enter at 8-32 characters for the password.",
     "er_input_rule_password":"Passwords must contain at least one uppercase letter, one lowercase letter, and one number.",
     "er_input_confirm_password": "No password or password confirmation.",
     "chooseDepartmentId":"Please select a department.",
@@ -52,7 +52,7 @@
     "reason_ticket":"Commuter Pass",
     "lbviewExportFileHistory":"Exported History",
     "lbviewExportFileHistoryEmpty":"You don't have any file yet",
-    "btnToHome":"Homepage",
+    "btnToHome":"Home page",
     "lbDate":"Date",
     "lbFileName":"FileName",
     "start":"Departure",
@@ -105,5 +105,5 @@
     "userInfoUpdateMessageSuccess":"個人設定を更新されました。",
     "change":"Change",
     "transfer":"Transit",
-    "times":"Time da sua toi day"
+    "times":" Times"
 }

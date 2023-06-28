@@ -8,7 +8,6 @@ export default configureStore({
     login: loginReducer,
     departments: departmentsReducer,
     user: userReducer 
-
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -1,5 +1,6 @@
 import {  createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+// export const baseURL = `https://api.vtitransports.link/api/v1`;
 export const baseURL = 'http://localhost:8080/api/v1';
 
 // get cookie accesstoken/ refresh token
@@ -8,7 +9,6 @@ export const login = createAsyncThunk(
     async (form) => {
         try {
             const response = await axios.post(`${baseURL}/auth/login`,form,{withCredentials: true})
-            console.log(response)
             return response
         }catch(err){
             return err.response
@@ -24,7 +24,6 @@ export const authenticate = createAsyncThunk(
             const response = await axios.get(`${baseURL}/users`,{withCredentials: true})
             return response
         }catch(err){
-            console.log(err.response)
             return err.response
         }
     }
@@ -51,8 +50,7 @@ export const verify = createAsyncThunk(
     'login/verify',
     async (form) => {
         try {
-            const response = await axios.post(`${baseURL}/users/active`,form,{withCredentials: true})
-            console.log(response)
+            const response = await axios.post(`${baseURL}/users/active`,form)
             return response
         }catch(err){
             return err.response
@@ -63,13 +61,10 @@ export const verify = createAsyncThunk(
 export const refreshToken =  createAsyncThunk(
     'login/refreshToken',
     async () => {
-
         try {
             const response = await axios.get(`${baseURL}/auth/refreshToken`,{withCredentials: true})
-            console.log(response)
             return response
         }catch(err){
-            console.log(err.response)
             return err.response
         }
     }
@@ -131,13 +126,16 @@ const authSlice = createSlice({
                     passwordResetError: null,
                     // email reset password instace
                     sendMailMessage: null,
-                    // login error 
-                    errorLogin: null,
                     // mailTimeOut: false
                     // confirm password and auth token message
                     confirmPasswordResetSuccess: null,
                     confirmPasswordResetReject: false
                 },
+    reducers : {
+        changeActive: (state) => {
+            state.isActive = false
+        }
+    },
     extraReducers:(builder) =>  {
         // login thunk
         builder.addCase(login.pending, (state,action)=> {
@@ -148,13 +146,7 @@ const authSlice = createSlice({
         builder.addCase(login.fulfilled, (state,action)=> {
             if(action.payload.status === 200){
                 state.error = null
-                state.errorLogin = null
                 state.isAuthenticated = true
-            }else if (action.payload.status === 401){
-                state.errorLogin = 'Unauthorized'
-            }
-            else if (action.payload.status === 400){
-                state.errorLogin = 'Unauthorized'
             }
         }),
 
@@ -195,7 +187,10 @@ const authSlice = createSlice({
         // active verify thunk
         builder.addCase(verify.pending, (state, action)=>{
             state.error= null
+            state.isActive = false
             state.isLoading = true
+            state.activeError = null
+            state.isActiveMessage = null
         }),
         builder.addCase(verify.fulfilled, (state, action)=>{
             if(action.payload.status === 200){
@@ -203,7 +198,7 @@ const authSlice = createSlice({
                 state.isActive = true
                 state.activeError = null
                 state.isActiveMessage = "activeIsSuccess"
-            }else if (action.payload.status === 400){
+            }else if (action.payload.data.code === "API005_ER" && action.payload.data.type=== "ERROR"){
                 state.isLoading = false
                 state.isActive = false
                 state.activeError = 'TIMEOUT'
@@ -274,13 +269,13 @@ const authSlice = createSlice({
     }
 })
 
+export const { changeActive } = authSlice.actions
 export default authSlice.reducer
 
 
 // 
 export const selectIsLoading = (state ) => state.login.isLoading
 export const selectError = (state) => state.login.error
-export const selectErrorLogin = (state) => state.login.errorLogin
 // user info
 export const selectUser = (state) => state.login.user
 // is authen

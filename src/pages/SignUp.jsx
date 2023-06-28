@@ -7,16 +7,18 @@ import { email, department,password, confirm_password, fullName} from "../instac
 import ErrorNotification from "../components/ErrorNotification";
 
 import { useDispatch, useSelector } from "react-redux";
-import { register, selectIsSuccess,selectRegisterError } from "../features/auth/loginSlice";
+import { register, selectIsSuccess,selectRegisterError, changeActive } from "../features/auth/loginSlice";
 
 const SignUp = () => {
     const { t } = useTranslation();
-
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     // error message
-    const error = useSelector(selectRegisterError)
-    const isSuccess = useSelector(selectIsSuccess)
+    const error = useSelector(selectRegisterError);
+    const isSuccess = useSelector(selectIsSuccess);
 
+    useEffect(()=>{
+       return ()=>dispatch(changeActive())
+    },[])
     // input elements
     const inputs =  [fullName,email,department,password,confirm_password]
 
@@ -33,7 +35,7 @@ const SignUp = () => {
         // pass or not
         if (ValidatorSubmit(formSubmit,[...submitInput,select])){
             let {departmentId, confirm_password,password, fullName, email} = {...form}
-            dispatch(register({departmentId:departmentId,password,fullName,email}))
+            dispatch(register({departmentId:departmentId,password,fullName: fullName.replace(/\s\s+/g, ' '),email:email.replace(/\s\s+/g, '').trim()}))
             .unwrap()
         }
     }
@@ -46,7 +48,7 @@ const SignUp = () => {
 
 return (
     <section className="bg-gray-50 dark:bg-gray-900 h-full pb-12">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-full lg:py-0">
+        <div className="flex flex-col items-center justify-center px-2 md:px-6 py-2 md:py-8 mx-auto md:h-full lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">

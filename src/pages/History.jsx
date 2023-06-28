@@ -11,7 +11,7 @@ function History() {
     const getFiles = async () => {
         try {
             const res = await axios.get(`${baseURL}/files`,{withCredentials: true})
-            return setFiles([...res.data.data])
+            return setFiles([...res.data.data]) 
         }catch(err){
             return err.response
         }
@@ -39,36 +39,43 @@ function History() {
       };
   
     return (
-        <div className="flex flex-col mx-auto items-center -sm:py-4 sm:px-6 mb-16 py-8 h-full xl:w-3/5 lg:w-full sm:w-full 2xl:w-3/5 md:w-full lg:py-0">
-            <div className="bg-white rounded-lg shadow md:mt-0 2xl:w-full sm:w-full h-full xl:p-0">
-                <div className="flex flex-col  h-full">
-                    <h1 className="text-xl pt-8 px-12 sm:px-12 sm:text-lg  md:text-lg  lg:text-lg 2xl:text-2xl  font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
+        <div className="flex flex-col 
+        mx-auto items-center
+        w-full
+        px-2
+        mb-16 py-8 h-full
+         lg:w-3/5
+         lg:py-0">
+            <div className="bg-white rounded-lg shadow  md:mt-0 w-full h-full xl:p-0">
+                
+                <div className="flex flex-col px-6 h-full">
+                    <h1 className="text-xl pt-8 px-12 sm:px-12 text-ms md:text-lg font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
                         {t("lbviewExportFileHistory")}
                     </h1>
-                    <div className="xl:py-8 xl:px-8 sm:py-1 sm:px-1 md:py-8 md:px-8">
-                        <div className="mx-auto">
-                            <div className="bg-white overflow-hidden">
-                                <div className="item mb-2 md:flex md:flex-wrap md:justify-between">
-                                    <div className="container">
-                                            <div className="overflow-x-hidden">
-                                                <div className="border-borderTable-borderTable">
-                                                    <div className="table-wrp  max-h-[420px]">
-                                                        <table className="border table-fixed w-full border-borderTable-borderTable">
+                    <div className="py-8 flex mx-auto xl:px-8 sm:py-1 sm:px-1 md:py-8 md:px-8">
+                        <div className="flex mx-auto">
+                            <div className="bg-white flex mx-auto overflow-hidden">
+                                <div className="item mb-2 flex flex-wrap ">
+                                    { files.length !== 0 ? (<div className="container">
+                                            <div className="overflow-y-auto">
+                                                <div className="border-borderTable-borderTable ">
+                                                    <div className="max-h-[403px] ">
+                                                        <table className="border table-fixed w-full border-borderTable-borderTable ">
                                                             <thead className="border sticky top-0">
                                                                 <tr>
-                                                                    <th  className="bg-gray-300 text-md w-1/4 text-center border border-borderTable-borderTable font-medium text-gray-900 px-6 py-2 text-left">
+                                                                    <th  className="bg-primary-600 text-md w-1/4 text-center border border-borderTable-borderTable font-medium text-white px-2 md:px-6 py-2 text-left">
                                                                         {t("lbDate")}
                                                                     </th>
-                                                                    <th  className="bg-gray-300 text-md text-center border border-borderTable-borderTable   font-medium text-gray-900 px-6 py-2 text-left">
+                                                                    <th  className="bg-primary-600 text-md text-center border border-borderTable-borderTable font-medium text-white px-2 md:px-6 py-2 text-left">
                                                                         {t("lbFileName")}
                                                                     </th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody className="border bg-white w-1/5 h-96 ">
+                                                            <tbody className="border bg-white w-1/5 min-h-96">
                                                                 {files.map((file, key) => (
                                                                     <tr className="bg-white border h-4  border-borderTable-borderTable transition duration-300 ease-in-out hover:bg-gray-100" key={key}>
-                                                                        <td className="text-sm bg-white  h-4   border font-extrabold border-borderTable-borderTable font-light px-6 py-2 whitespace-nowrap">{file.exportedDate}</td>
-                                                                        <td  className="text-sm bg-white h-4   text-blue-700 underline px-6 py-2 whitespace-nowrap underline-offset-4"><Link to={'http://localhost:8080/api/v1'+"/files/"+file.fileId}>{file.fileName}</Link></td>
+                                                                        <td className="text-sm bg-white  h-4  overflow-hidden border font-extrabold text-ellipsis border-borderTable-borderTable font-light px-2 md:px-6 py-2 whitespace-nowrap" title={file.exportedDate} >{file.exportedDate}</td>
+                                                                        <td  className="text-sm bg-white h-4  overflow-hidden text-blue-700 underline px-2 md:px-6 py-2 text-ellipsis whitespace-nowrap overflow-hidden underline-offset-4" title={file.fileName}><Link to={`${baseURL}`+"/files/"+file.fileId}>{file.fileName}</Link></td>
                                                                     </tr>))}
                                                                 {renderTable()} 
                                                             </tbody>
@@ -76,7 +83,12 @@ function History() {
                                                     </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>):(<div className="h-96 w-full items-center
+                                    ">
+
+                                    <span className="flex justify-center text-gray-500">{t("lbviewExportFileHistoryEmpty")}</span>
+                                    </div>)}
+                                    
                                     
                                 </div>     
                             </div>
@@ -85,13 +97,14 @@ function History() {
 
 
 
-                    <Link className="flex
+                    <div className="flex
                         justify-center
                         mt-auto
+                        outline-none
                         "
-                        to="/"
                     >
-                        <button
+                        <Link
+                            to="/"
                             className="w-auto
                             text-white
                             bg-primary-600
@@ -99,8 +112,7 @@ function History() {
                             focus:ring-4 focus:outline-none 
                             focus:ring-primary-300 font-medium rounded-lg 
                             text-sm px-5 py-2.5 text-center mb-4">
-                        
-                            {t("btnToHome")}</button></Link>
+                            {t("btnToHome")}</Link></div>
                 </div>
             </div>
         </div>

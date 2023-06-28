@@ -13,8 +13,7 @@ export default function(workbook,user,exportOptions){
     
         // init style cho các cell
         const middle = { vertical: 'middle', horizontal: 'center' };
-        const vertical_middle = { vertical: 'middle'};
-        const middle_right = { vertical: 'middle' , horizontal: 'right' };
+        const middle_left = { vertical: 'middle' , horizontal: 'left' };
     
         // init các cell có chung style về màu và border
         const cell_ = [
@@ -70,19 +69,19 @@ export default function(workbook,user,exportOptions){
         const b3_cell = worksheet.getCell('B3')
         b3_cell.border = border_cel;      
         b3_cell.value = FormatDate(toDay,"YYYY年MM月DD日");
-        b3_cell.alignment =middle_right;
+        b3_cell.alignment =middle_left;
     
         // deparment cell
         const b4_cell =  worksheet.getCell('B4')
         b4_cell.value = user.department
         b4_cell.border = border_cel;
-        b4_cell.alignment = middle_right;
+        b4_cell.alignment = middle_left;
         
         // user name cell
         const e4_cell =  worksheet.getCell('E4')
         e4_cell.value = user.fullname
         e4_cell.border = border_cel;
-        e4_cell.alignment =  middle_right;
+        e4_cell.alignment =  middle_left;
     
         // add empty row
         worksheet.addRow([]);
@@ -90,7 +89,7 @@ export default function(workbook,user,exportOptions){
         // tô màu, giá trị, style, border cho các ô cần
         cell_.map((key) => {
             worksheet.getCell(key.position).border = border_cel;
-            worksheet.getCell(key.position).alignment = vertical_middle;
+            worksheet.getCell(key.position).alignment = middle;
             worksheet.getCell(key.position).value = key.header
             worksheet.getCell(key.position).fill = {
                 type: 'pattern',
@@ -103,7 +102,7 @@ export default function(workbook,user,exportOptions){
         // add item on row and style cell
         exportOptions.map(item=>{
             let row = worksheet.addRow(item);
-            row.alignment = vertical_middle;
+            row.alignment = middle_left;
             row.eachCell({ includeEmpty: true }, function(cell) {
                 worksheet.getCell(cell.address).border = border_cel;
             })
@@ -122,7 +121,7 @@ export default function(workbook,user,exportOptions){
         const cost = worksheet.getCell(`G${exportOptions.length + 7}`);
         cost.value = handleTotalCost();
         cost.border = border_cel 
-        cost.alignment = vertical_middle
+        cost.alignment = middle_left
     
         worksheet.eachRow({ includeEmpty: false }, function(row, rowNumber) {
            row.height = 29.2
