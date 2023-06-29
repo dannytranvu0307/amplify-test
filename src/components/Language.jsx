@@ -2,15 +2,16 @@ import { useTranslation } from 'react-i18next';
 import {useEffect, useState} from 'react';
 const Language = () => {
     const {t,i18n} = useTranslation();
-    const [select,setSelect] = useState(localStorage.getItem('language') || 'jp'); 
     const handleChange = (e) => {
-        setSelect(e.target.value)
+        i18n.changeLanguage(e.target.value)
+        localStorage.setItem('language',e.target.value)
     }
-
-    useEffect(()=>{
-        localStorage.setItem('language', select);
-        i18n.changeLanguage(select)
-    },[select])
+   useEffect(()=>{
+    if(localStorage.getItem('language')!=='jp'){ 
+        i18n.changeLanguage(localStorage.getItem('language'))
+    }
+   },[])
+    
 
     return (          
         <div className="language-options hover:cursor-pointer relative inline-flex self-center hover:text-gray-600 rounded pr-2">
@@ -22,7 +23,7 @@ const Language = () => {
             </label>
             <select
             onChange={(e)=>handleChange(e) }
-            defaultValue={select}
+            defaultValue={localStorage.getItem('language')? localStorage.getItem('language'):'jp'}
             className="
             text-base font-bold rounded 
             border-2 border-white

@@ -1,6 +1,6 @@
 import {  createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-// export const baseURL = `https://api.vtitransports.link/api/v1`;
+// export const baseURL = `https://api.vtitransport.com/api/v1`;
 export const baseURL = 'http://localhost:8080/api/v1';
 
 // get cookie accesstoken/ refresh token
@@ -100,11 +100,10 @@ export const logout = createAsyncThunk(
     'login/logout',
     async () => {
         try {
-
-            const response = await axios.get(`${baseURL}/auth/logout`, {withCredentials: true} )
+            const response = await axios.get(`${baseURL}/auth/logout`, {withCredentials: true})
             return response
         }catch(err){
-            return err.response
+            return err.response;
         }
     }
 )
@@ -117,8 +116,7 @@ const authSlice = createSlice({
                     activeError: null,
                     registerError: null,
                     sendMailNotification: null,
-                    isAuthenticated:false,
-                    checkPass: false,
+                    isAuthenticated:localStorage.getItem('auth')||false,
                     isLoading: true, 
                     // acctive parameter
                     isActiveMessage: null,
@@ -141,7 +139,6 @@ const authSlice = createSlice({
         builder.addCase(login.pending, (state,action)=> {
             state.error = null
             state.isLoading = true
-            state.checkPass = false
         }),
         builder.addCase(login.fulfilled, (state,action)=> {
             if(action.payload.status === 200){
@@ -160,6 +157,7 @@ const authSlice = createSlice({
             if(action.payload.status === 200){
             state.isLoading = false
             state.isAuthenticated = true
+             localStorage.setItem('auth',true)
             state.user = action.payload.data.data
             }else if (action.payload.status === 401){
                 state.isLoading = false
@@ -263,6 +261,7 @@ const authSlice = createSlice({
                 state.isLoading = false
                 state.user = null
                 state.isAuthenticated = false
+                localStorage.removeItem('auth')
             }
         })
 

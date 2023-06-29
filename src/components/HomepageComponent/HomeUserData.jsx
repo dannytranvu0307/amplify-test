@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 function HomeUserData(){
     const { t } = useTranslation();
     const user= useSelector(state =>state.login.user)
-   
     return (
     <div className="w-full">
        {user&&<div className='flex gap-x-20 flex-col md:flex-row'>

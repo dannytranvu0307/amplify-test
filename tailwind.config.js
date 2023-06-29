@@ -13,7 +13,8 @@ module.exports = {
         customgray: {"notication":"#D9D9D9"}
       },
       fontFamily: {
-      'body': [
+      body: [
+        'ＭＳ Ｐゴシック',
       'Inter', 
       'ui-sans-serif', 
       'system-ui', 
@@ -30,7 +31,7 @@ module.exports = {
       'Segoe UI Symbol', 
       'Noto Color Emoji'
     ],
-        'sans': [
+        sans: [
       'Inter', 
       'ui-sans-serif', 
       'system-ui', 
@@ -64,8 +65,7 @@ module.exports = {
       animation: {
         fadeLeft: 'fadeLeft .3s ease-in-out',
         fadeRight: 'fadeLeft .3s ease-in-out',
-        showNotation: 'showNotation 3s ease-in-out'
-      
+        showNotation: 'showNotation 5s ease-in-out'
       },
       keyframes: {
         fadeLeft: {
@@ -92,8 +92,7 @@ module.exports = {
           '100%': { 
             opacity: "0"
           }
-        }
-      
+        },
       }
     }
   },

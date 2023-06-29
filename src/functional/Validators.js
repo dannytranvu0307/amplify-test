@@ -3,7 +3,8 @@
 function Validators (formId,options,value){
     value = value.trim()
     const error = {}
-    const loginEmail = /.+@.+\..+/gm
+    // const loginEmail = /.+@.+\..+/gm
+    const loginEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/gm
     const regex_email = /^[a-z]{1,15}[.][a-z]{1,30}([0-9]{0,3})@(vti.com.vn)$/gm;
     const regex_name_vietnamese = /^[A-Z ]{1,}[A-Z]$/m;
     const regex_password = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W){8,24}/g; //regex cần có dấu kí tự đặt biệt
@@ -65,7 +66,6 @@ function Validators (formId,options,value){
                 error.id = "confirm_password"
                 error.name = "er_input_confirm_password"
             }
-            
             else {
                 error.name = ""
             }
@@ -129,14 +129,6 @@ function Validators (formId,options,value){
                 error.id = "start"
                 error.name = "er_input_empty"
             }
-            // else if (!regex_japanese.test(value)){
-            //     error.id = "start"
-            //     error.name = "er_input_japanese"
-            // }
-            // else if (value.length < 2){
-            //     error.id = "start"
-            //     error.name = "er_input_search_length"
-            // }
             else {
                 error.name = ""
             }
@@ -147,34 +139,10 @@ function Validators (formId,options,value){
                 error.id = "goal"
                 error.name = "er_input_empty"
             }
-            // else if (!regex_japanese.test(value)){
-            //     error.id = "goal"
-            //     error.name = "er_input_japanese"
-            // }
-            // else if (value.length < 2){
-            //     error.id = "goal"
-            //     error.name = "er_input_search_length"
-            // }
             else {
                 error.name = ""
             }
         };
-        if (options.name === "via"){
-            if (value === ""){
-                error.id = "via"
-                error.name = "er_input_empty"
-            }
-            else if (!regex_japanese.test(value)){
-                error.name = "er_input_japanese"
-            }
-            else if (value.length < 2){
-                error.id = "goal"
-                error.name = "er_input_search_length"
-            }
-            else {
-                error.name = ""
-            }
-        };  
         
         if ( options.getAttribute("exclude") && `${options.getAttribute("exclude")}`.includes(formId.id)){
             if (value === ""){
