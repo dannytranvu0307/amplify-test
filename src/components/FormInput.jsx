@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useState,useRef,memo,useEffect } from "react";
+import { useState,useRef,memo,useEffect, useCallback } from "react";
 import Validators from "../functional/Validators";
 import { departments  ,selectDepartments} from '../features/department/departmentsSlice';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,10 +12,19 @@ const FormInput = (props) => {
         checkShow(!show)
     }
 
-
     useEffect(()=>{
-        dispatch(departments())
+        if (type === "departmentId"){
+            dispatch(departments())
+        }
     },[])
+
+
+    const handlePast = useCallback((e) => {
+        let name = e.target.name 
+        if (name=== "password" || name=== "confirm_password" || name === "confirm_new_password" || name === "new_password" || name === "current_password"){
+            e.preventDefault();
+        }
+    },[label]);
  
     const [show,checkShow] = useState(true)
     const [error, setError]= useState({ id:"", name:"",});
@@ -23,12 +32,17 @@ const FormInput = (props) => {
     const ref = useRef();
     const { t } = useTranslation();
 
-    const onFocus = e => {
+    const onFocus = useCallback(e =>{
         setHidden(true)
-    }   
+    },[])
 
     const onBlur = () => {
-        setError(Validators(ref.current.parentElement.parentElement,ref.current,ref.current.value))}
+        setError(Validators(ref.current.parentElement.parentElement,ref.current,ref.current.value))
+        if (error.name === ""){
+            ref.current.classList.remove("border-red-500","bg-red-100"); 
+            ref.current.parentNode.querySelector("span").innerHTML = "";
+        }
+    }
     return (
         <div id="input-field"  className= "grid  relative">
             <label 
@@ -48,8 +62,9 @@ const FormInput = (props) => {
                         value={value}
                         type = { type ==='password' && show ? 'password':'text'}
                         placeholder={t(placeholder)}
+                        onPaste={handlePast}
                         className={`
-                        peer
+                        peer select-none
                         bg-gray-50 border border-gray-300 
                         text-gray-900 sm:text-sm rounded-lg 
                         disabled:text-gray-600
@@ -66,11 +81,12 @@ const FormInput = (props) => {
                     {...inputProps}
                     className={`
                     disabled:appearance-none
+                    cursor-pointer
                     bg-gray-50 border border-gray-300 
                     text-gray-700 sm:text-sm rounded-lg 
                     focus:ring-primary-600
                     focus:border-primary-600 w-full p-2.5 ${error.name && ("border-red-500 bg-red-100")}`}>
-                <option value = "" >{t("chooseDepartmentId")}</option>
+                    <option className="cursor-pointer" value = "" >{t("chooseDepartmentId")}</option>
                     {departments_lst.map((item,key)=>(
                         <option key={key} value={item.departmentId}>{t(`D${item.departmentId}`)}</option>
                     ))}
@@ -79,14 +95,12 @@ const FormInput = (props) => {
                 <span className={`text-red-500 text-xs`}>{t("") || t(error.name)}</span>
                 {
                     type === "password" && hidden &&
-                    <div className="absolute cursor-pointer right-2 top-9" onClick={handleCheckShow}>
+                    <div className={`absolute cursor-pointer right-2 top-9 ${show ? "after:absolute after:content-[''] after:w-8 after:rounded after:h-[2px] after:bg-black after:-rotate-45 after:top-1/2 after:-translate-x-1":""}`} onClick={handleCheckShow}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 peer">
                     <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
                     <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" clipRule="evenodd" />
                     </svg>
                 </div>}
-                
-           
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, memo} from "react";
+import { useState, memo,useEffect} from "react";
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,10 +7,9 @@ import {email, password} from "../instaces"
 import Modal from "../components/Modal";
 import FormInput from "../components/FormInput";
 import ValidatorSubmit from "../functional/ValidatorSubmit";
-import { login, authenticate,changeActive,
+import { login, authenticate,
     selectIsActive,selectIsActiveMessage,
-    selectActiveError } from "../features/auth/loginSlice";
-
+    selectActiveError , changeActive  } from "../features/auth/loginSlice";
 function Login(){
     // change language
     const { t } = useTranslation();
@@ -19,7 +18,6 @@ function Login(){
     const isActiveMessage = useSelector(selectIsActiveMessage)
     const isActiveError = useSelector(selectActiveError)
     const isActive = useSelector(selectIsActive)
-
     // input elements
     const inputs = [{...email,type:'text'}, password]
     // init function to dispatch action
@@ -32,6 +30,7 @@ function Login(){
 
     // input change
     const onChange = e => {
+        setErrSever()
         setForm({...form, [e.target.name] : e.target.value})
     }
 
@@ -39,18 +38,14 @@ function Login(){
     const handleCheck = (e) =>{
         setRemember(!remember)
     }
-    
     // send form
     const onSubmit = async e => {
         e.preventDefault();
         const $ = document.querySelector.bind(document)
-
-        // get elements
         const submitEmail = $("input#email")
         const submitPassword = $("input#password")
         const formSubmit = $("#login")
-        // pass or not
-        if (ValidatorSubmit(formSubmit,[submitEmail,submitPassword])){        
+            if (ValidatorSubmit(formSubmit,[submitEmail,submitPassword],t)){        
             dispatch(login({...form, ["remember"]:remember}))
             .unwrap()
             .then(res=>{
@@ -62,11 +57,15 @@ function Login(){
                 }else {
                     setErrSever('Unauthorized')
                 }}) 
-            }
-            else{
-                setErrSever('')
-            }
+                }
+
     }
+    useEffect(()=>{
+        return ()=>{
+        dispatch(changeActive())
+        }
+    },[])
+   // const resetPassword = useMemo(()=><Link to="/register" className="font-medium text-primary-600 hover:underline">{t("sign_up_link")}</Link>,[localStorage.getItem('language')])
 
     return (
         <>
@@ -74,11 +73,11 @@ function Login(){
         data-aos="fade-right"
         data-aos-offset="3"
         data-aos-easing="ease-in-sine"
-        className="bg-gray-50 dark:bg-gray-900"
+        className="bg-gray-50"
         key="login"
         >
             <div className="flex flex-col items-center justify-center px-2 md:px-6 py-8 mx-auto md:h-screen lg:py-0">
-            <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
+            <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 ">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
                         {t("login")}
@@ -98,10 +97,10 @@ function Login(){
                                 <div className="ml-3 text-sm">
                                     <label htmlFor="remember" 
                     
-                                    className="text-gray-500 dark:text-gray-300">{t("remember")}</label>
+                                    className="text-gray-500">{t("remember")}</label>
                                 </div>
                             </div>
-                            <Link to="/passwordreset" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">{t("forgot_password")}</Link>
+                            <Link to="/passwordreset" className="text-sm font-medium text-primary-600 hover:underline">{t("forgot_password")}</Link>
                         </div>
                         <div>
 
@@ -114,12 +113,14 @@ function Login(){
                         text-white 
                         bg-primary-600
                         hover:bg-primary-500
-                        focus:ring-4 focus:outline-none 
-                        focus:ring-primary-500 font-medium rounded-lg 
+                        focus:outline-none 
+                        font-medium rounded-lg 
                         text-sm px-5 py-2.5 text-center ">{t("login")}</button>
+
                         <p className="text-sm font-light text-gray-500">
                         {t("sign_up_description")}
-                        <Link to="/register" className="font-medium text-primary-600 hover:underline dark:text-primary-500">{t("sign_up_link")}</Link>
+                        <Link to="/register" className="font-medium text-primary-600 hover:underline">{t("sign_up_link")}</Link>
+                    
                         </p>
                     </form>
                 </div>
@@ -127,7 +128,7 @@ function Login(){
             </div>
        
         </section>  
-        {isActive &&  <ErrorNotification>{isActiveMessage}</ErrorNotification>}
+        {isActive && <ErrorNotification>{isActiveMessage}</ErrorNotification>}
         {isActiveError && <Modal />}
     </>
     )
